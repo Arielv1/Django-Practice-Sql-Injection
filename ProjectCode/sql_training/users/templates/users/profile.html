@@ -1,0 +1,40 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% load django_tables2 %}
+{% load bootstrap3 %}
+{% load render_table from django_tables2 %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+    <div class="content-section">
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.username }}</h2>
+          <p class="text-secondary">{{ user.email }}</p>
+        </div>
+      </div>
+      <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Profile Info</legend>
+              {{ u_form|crispy }}
+              {{ p_form|crispy }}
+          </fieldset>
+          <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Update</button>
+          </div>
+      </form>
+      <h2> The Table </h2>
+
+      {% if filter %}
+      <form action="" method="GET" class="form form-inline">
+         {% bootstrap_form filter.form layout='inline' %}
+         {% bootstrap_button 'filter' %}
+      </form>
+        {% endif %}
+        {% render_table table 'django_tables2/bootstrap.html' %}
+    </div>
+{% endblock content %}
