@@ -7,4 +7,6 @@ from . import views as user_views
 urlpatterns = [
     path('', views.home, name='home'),
     path('about', views.about, name='about'),
+    path('learn', views.learn, name='learn'),
+    path('problems', views.problems_list, name='problems_list'),
 ]

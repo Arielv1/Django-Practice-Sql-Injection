@@ -1,8 +1,8 @@
 import logging
 from django.shortcuts import render, redirect
 
-
 # Create your views here.
+from home.models import ProblemReference, Difficulty, InjectionTypes
 
 
 def home(request):
@@ -16,5 +16,24 @@ def home(request):
 
     return render(request, 'home/home.html')
 
+
 def about(request):
     return render(request, 'home/about.html')
+
+
+def learn(request):
+    return render(request, 'home/learn.html')
+
+
+def problems_list(request):
+    context = {'problem_list':
+                   [ProblemReference(Difficulty.EASY, "First Problem", InjectionTypes.IN_BAND.value, "problems/1"),
+                    ProblemReference(Difficulty.MEDIUM, "Second Problem", InjectionTypes.BLIND.value, "problems/2"),
+                    ProblemReference(Difficulty.HARD, "Third Problem", InjectionTypes.UNION.value, "problems/3"),
+                    ProblemReference(Difficulty.EASY, "Login Problem", InjectionTypes.IN_BAND.value, "problems/login_problem")],
+               'EASY': Difficulty.EASY,
+               'MEDIUM': Difficulty.MEDIUM,
+               'HARD': Difficulty.HARD,
+               }
+
+    return render(request, 'home/problems.html', context)

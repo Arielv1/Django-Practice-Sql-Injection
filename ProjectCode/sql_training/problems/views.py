@@ -22,15 +22,6 @@ def problem_login(request):
         # logger.error(request.body.__getitem__())
         logger.error(request.POST.get("username"))
 
-
-
-
-
-
-
-
-
-
     #     form = UserRegisterForm(request.POST)
     #     if form.is_valid():
     #         form.save()
@@ -40,3 +31,15 @@ def problem_login(request):
     # else:
     #     form = UserRegisterForm()
     return render(request, 'problems/login.html')
+
+
+def first_problem(request):
+    return render(request, 'problems/1.html')
+
+
+def second_problem(request):
+    return render(request, 'problems/2.html')
+
+
+def third_problem(request):
+    return render(request, 'problems/3.html')
