@@ -21,7 +21,6 @@ alldata = [
     FirstProblem(input1="scxzc", input2="something6"),
     FirstProblem(input1="somzxczxcething", input2="something8"),
     FirstProblem(input1="this is_the_answer", input2="answer"),
-
 ]
 
 
@@ -41,6 +40,7 @@ def first_problem(request):
     logger.error(" problem_login view called ")
     cursor1 = connections['problems_db'].cursor()
 
+    # make data permanent in the database
     # for data in alldata:
     #     data.save(using="problems_db")
     if request.method == 'POST':
