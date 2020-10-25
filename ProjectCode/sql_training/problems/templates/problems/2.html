@@ -1,3 +1,37 @@
-<h4>
-    Clothing Store - Medium
-</h4>
+
+{% extends "home/base.html" %}
+{% block content %}
+
+<body>
+<h2> The Clothing Store - Medium Problem </h2>
+    <form id="hamami" method="POST">
+                  {% csrf_token %}
+                    <p>
+                        <label>First Name</label>
+                        <input type="text" name="first_name">
+                    </p>
+                     <p>
+                        <label>Last Name</label>
+                        <input type="text" name="last_name">
+                    </p>
+        <button type="submit">Search</button>
+    </form>
+
+
+    {% for value in result %}
+        <p>
+            <h6>{{forloop.counter}}. ID: {{value.0}}</h6>
+            <h6>First Name: {{value.1}}</h6>
+            <h6>Last Name: {{value.2}}</h6>
+        </p>
+        <h4> </h4>
+    {% endfor %}
+
+    {% comment %}
+        <h4>Sql: {{raw_sql}}</h4>
+        <h4>Input Request: {{input_request}}</h4>
+        <h4>result: {{result}}</h4>
+    {% endcomment %}
+
+</body>
+{% endblock content %}
