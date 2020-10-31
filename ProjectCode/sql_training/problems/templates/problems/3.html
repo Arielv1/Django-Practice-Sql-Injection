@@ -1,3 +1,35 @@
-<h4>
-    Clothing Store - Hard
-</h4>
+{% extends "home/base.html" %}
+{% block content %}
+
+<body>
+<h2> The Clothing Store - Hard Problem </h2>
+    <form id="form_id" method="POST">
+                  {% csrf_token %}
+                    <p>
+                        <label>Barcode</label>
+                        <input type="text" name="item_name">
+                    </p>
+        <button type="submit">Search</button>
+    </form>
+    {% if error is not null %}
+        <h8>{{error}}</h8>
+    {% endif %}
+
+    {% for value in result %}
+        <p>
+            <h6>{{forloop.counter}}. Barcode: {{value.0}}</h6>
+        </p>
+            <h6>Item Name: {{value.1}}</h6>
+            <h6>Manufacturer: {{value.2}}</h6>
+            <h6>Price: {{value.3}}$</h6>
+    {% endfor %}
+
+    {% comment %}
+        <h4>Sql: {{raw_sql}}</h4>
+        <h4>Input Request: {{input_request}}</h4>
+        <h4>result: {{result}}</h4>
+    {% endcomment %}
+
+
+</body>
+{% endblock content %}

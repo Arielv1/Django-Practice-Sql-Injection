@@ -174,6 +174,53 @@ def second_problem(request):
                        'input_request': first_name_request}
     return render(request, 'problems/2.html', context)
 
+def third_problem_database():
+    employees = [
+        ThirdProblem(803654786, "T-Shirt", "Nike", 25.23),
+        ThirdProblem(987124123, "Jeans", "H&o", 22.10),
+        ThirdProblem(300125487, "Sweat Pants", "Diadora", 28.99),
+    ]
+    for data in employees:
+        data.save(using="problems_db")
 
+
+'''
+    Input: bigint barcode field
+    Output: Item properties
+    
+'''
 def third_problem(request):
-    return render(request, 'problems/3.html')
+    key_words = ['or', 'and', 'union', 'inner join']
+    context = dict()
+    logger = logging.getLogger(__name__)
+    cursor1 = connections['problems_db'].cursor()
+
+    #add columns to database
+    third_problem_database()
+
+    if request.method == 'POST':
+        with cursor1 as cursor:
+            item_name_request = request.POST.get("item_name").lower()
+
+            for kw in item_name_request:
+                if kw in item_name_request:
+                    item_name_request = "1"
+                    break
+
+            sql = f"SELECT * FROM db_items WHERE barcode = {item_name_request}"
+            err = Exception
+            try:
+                cursor.execute(sql)
+            except Exception as e:
+                sql = f"SELECT * FROM db_items WHERE item_name LIKE 'a'"
+                cursor.execute(sql)
+                err = e
+                print(err)
+            result = cursor.fetchall()
+            logger.error("result of sql query " + result.__str__())
+            cursor.close()
+            context = {'raw_sql': sql,
+                       'result': result,
+                       'item_name_request': item_name_request,
+                        'error': err}
+    return render(request, 'problems/3.html', context)

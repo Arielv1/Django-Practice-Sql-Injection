@@ -27,3 +27,15 @@ class SecondProblem(models.Model):
 
     #class Meta:
     #    db_table = 'HR'
+
+class ThirdProblem(models.Model):
+    barcode = models.BigIntegerField(primary_key=True, unique=True, default=0, null=False)
+    item_name = models.TextField(max_length=200, null=True)
+    manufacturer = models.CharField(max_length=200, null=True)
+    price = models.FloatField(null=True)
+
+    def __str__(self):
+        return f'{self.id, self.first_name, self.last_name, self.age}'
+
+    class Meta:
+        db_table = "db_items"
