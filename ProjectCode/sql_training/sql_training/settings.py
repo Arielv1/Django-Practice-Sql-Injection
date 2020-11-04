@@ -11,9 +11,19 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join(PROJECT_ROOT, 'ProjectCode'))
+lib_path = os.path.abspath(os.path.join(__file__, '..', '..', '..', 'sql_training/users', 'sql_training/problems',
+                                        'sql_training/users/models', 'sql_training/problems/models'))
+sys.path.append(lib_path)
+# print(sys.path)
+
+# sys.path.append(PROJECT_ROOT)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

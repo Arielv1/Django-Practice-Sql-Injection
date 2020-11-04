@@ -4,16 +4,24 @@
 
 <body>
 <h2> The Clothing Store - Easy Problem </h2>
+
+    {% include 'problems/problem_answer.html' %}
+
+    <div id="just-line-break"></div>
+
+    <br/>
+
+    <div id="line-break-and-tab"></div>
+
     <form id="hamami" method="POST">
                   {% csrf_token %}
         <p>
+
             <label>Input2</label>
             <input type="text" name="input1">
+
         </p>
-<!--        <p>-->
-<!--            <label>Input2</label>-->
-<!--            <input type="text" name="input2">-->
-<!--        </p>-->
+
         <button type="submit">Search</button>
     </form>
 

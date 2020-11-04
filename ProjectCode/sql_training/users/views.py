@@ -1,39 +1,10 @@
-from django.shortcuts import render
-import django_tables2 as tables
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-# Create your views here.
-from django.shortcuts import render
 import logging
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-# from django_tables2 import SingleTableView
-from django_filters.views import FilterView
-from django_tables2 import SingleTableMixin, SingleTableView
-from django.views.generic import ListView
-from django.contrib.auth.models import User
-
 from .forms import UserRegisterForm
-from .models import SqlProblem
-
-# Create your views here.
-from .tables import SqlProblemTable
-from .filters import SqlProblemFilter
-
-
-p1 = SqlProblem(name="First problem", rank=1)
-p2 = SqlProblem(name="Second problem", rank=2)
-p3 = SqlProblem(name="Third problem", rank=3)
-p4 = SqlProblem(name="Fourth problem", rank=4)
-
-problems = [p1, p3, p4, p2]
-
-
-# class PersonListView(SingleTableView):
-#     model = SqlProblem
-#     table_class = SqlProblemTable(problems)
-#     template_name = "users/profile.html"
+from .models import SqlProblem, UsersProblems, Profile
 
 
 def register(request):
@@ -49,38 +20,56 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
+def create_problems():
+    logger = logging.getLogger(__name__)
+    logger.error(" create_problems called ")
+    SqlProblem(name="problem1").save()
+    SqlProblem(name="problem2").save()
+    SqlProblem(name="problem3").save()
+    SqlProblem(name="problem4").save()
+    SqlProblem(name="problem5").save()
+    SqlProblem(name="problem6").save()
+
+
 @login_required
 def profile(request):
     logger = logging.getLogger(__name__)
     logger.error(" profile view called ")
+    # create_problems()
     user = request.user
-    sqlproblems = SqlProblem.objects.all()
+    print(user)
+    # p1 = SqlProblem.objects.get(name="problem1")
+    # UsersProblems(user=user.profile, problem=p1).save()
+    # all = UsersProblems.objects.all()
+    # all.delete()
+    user_problems = UsersProblems.objects.filter(user=user.profile)
+    print(user_problems)
+    # sqlproblems = SqlProblem.objects.all()
     # sqlproblems = SqlProblem.objects.filter(user=user)
     # logger.error(" User is: " + str(user.username) + "sqlproblems: " + str(sqlproblems))
 
-    table = SqlProblemTable(sqlproblems)
-
-    filter = SqlProblemFilter(request.GET, queryset=sqlproblems)
-    sqlproblems = filter.qs
-    # sorted = request.query_params.get('sort', '')
-    sorted = request.GET.get('sort', '')
-    # print("sorted is : " + str(sorted))
-    if sorted:
-        # print(" we want to sort lets check it")
-        if sorted == 'name':
-            # print(" we want to sort of name")
-            sqlproblems = sqlproblems.order_by('name')
-        elif sorted == 'rank':
-            # print(" we want to sort of rank")
-            sqlproblems = sqlproblems.order_by('rank')
-
-    table = SqlProblemTable(sqlproblems)
-
-    context = {"table": table, "filter": filter, 'sqlproblems': sqlproblems}
+    # table = SqlProblemTable(sqlproblems)
+    #
+    # filter = SqlProblemFilter(request.GET, queryset=sqlproblems)
+    # sqlproblems = filter.qs
+    # # sorted = request.query_params.get('sort', '')
+    # sorted = request.GET.get('sort', '')
+    # # print("sorted is : " + str(sorted))
+    # if sorted:
+    #     # print(" we want to sort lets check it")
+    #     if sorted == 'name':
+    #         # print(" we want to sort of name")
+    #         sqlproblems = sqlproblems.order_by('name')
+    #     # elif sorted == 'rank':
+    #     #     # print(" we want to sort of rank")
+    #     #     sqlproblems = sqlproblems.order_by('rank')
+    #
+    # table = SqlProblemTable(sqlproblems)
+    context = {'user_problems': user_problems}
+    # context = {"table": table, "filter": filter, 'sqlproblems': sqlproblems}
     # return render(request, 'users/profile.html', {"filter": filter})
     return render(request, 'users/profile.html', context)
     # return render(request, 'users/profile.html', {"table": table})
-
 
 # class FilteredSqlProblemListView(LoginRequiredMixin, tables.SingleTableView):
 # class FilteredSqlProblemListView(LoginRequiredMixin, tables.SingleTableView, FilterView, ListView):

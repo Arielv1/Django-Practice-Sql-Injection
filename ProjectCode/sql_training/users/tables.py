@@ -13,7 +13,7 @@ class SqlProblemTable(tables.Table):
     class Meta:
         model = SqlProblem
         template_name = "django_tables2/bootstrap.html"
-        fields = ("name", "rank",)
+        # fields = ("name", "rank",)
 
 
 

@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from home.models import ProblemReference, Difficulty, InjectionTypes
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -24,7 +25,7 @@ def about(request):
 def learn(request):
     return render(request, 'home/learn.html')
 
-
+@login_required
 def problems_list(request):
     context = {'problem_list':
                    [ProblemReference(Difficulty.EASY, "First Problem", InjectionTypes.IN_BAND.value, "problems/1"),
@@ -36,5 +37,4 @@ def problems_list(request):
                'MEDIUM': Difficulty.MEDIUM,
                'HARD': Difficulty.HARD,
                }
-
     return render(request, 'home/problems.html', context)

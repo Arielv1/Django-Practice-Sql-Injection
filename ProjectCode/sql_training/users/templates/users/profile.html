@@ -27,14 +27,18 @@
               <button class="btn btn-outline-info" type="submit">Update</button>
           </div>
       </form>
-      <h2> The Table </h2>
+        <h2> Problems we Did:</h2>
+        {% for problem in user_problems %}
+         <tr>
+            <td>
+                <p> Name: {{problem.name}}</p>
+                <p> User: {{problem.user.user}}</p>
+                <p> Problem Name: {{problem.problem.name}}</p>
 
-      {% if filter %}
-      <form action="" method="GET" class="form form-inline">
-         {% bootstrap_form filter.form layout='inline' %}
-         {% bootstrap_button 'filter' %}
-      </form>
-        {% endif %}
-        {% render_table table 'django_tables2/bootstrap.html' %}
+            </td>
+        </tr>
+
+
+        {% endfor %}
     </div>
 {% endblock content %}

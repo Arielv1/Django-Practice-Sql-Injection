@@ -30,13 +30,13 @@
               <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
               <a class="nav-item nav-link" href="{% url 'about' %}">About</a>
               <a class="nav-item nav-link" href="{% url 'learn' %}">Learn</a>
-              <a class="nav-item nav-link" href="{% url 'problems_list' %}">Problems</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
+                <a class="nav-item nav-link" href="{% url 'problems_list' %}">Problems</a>
                 <a class="nav-item nav-link" href=#>Change Password</a>
-                <a class="nav-item nav-link" href=#>Profile</a>
+                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
