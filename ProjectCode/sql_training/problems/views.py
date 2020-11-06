@@ -232,6 +232,39 @@ def third_problem(request):
 
 
 @login_required
+def forth_problem(request):
+    # for first time we will do it
+    global_logger.error(" forth_problem view called ")
+    context = {
+        'message': ""
+    }
+    cursor2 = connections['problems_db'].cursor()
+    if request.method == 'POST':
+        global_logger.error(" request is Post ")
+        input1_request = request.POST.get("input1")
+        global_logger.error("input1 is: " + input1_request)
+        with cursor2 as cursor:
+            sql = f"SELECT * FROM problems_firstproblem WHERE input2 LIKE '{input1_request}';"
+            cursor.execute(sql)
+            # cursor.execute('SELECT * FROM problems_firstproblem WHERE input2=?' % input1_request)
+            # cursor.execute("select input1, input2 from problems_firstproblem where input2=%s", [input1_request])
+            result = cursor.fetchall()
+            if result is not None and len(result) != 0:
+                global_logger.error("There is customer with this name")
+                context = {
+                    'message': "There is customer with this name"
+                }
+            else:
+                global_logger.error("no customer")
+                context = {
+                    'message': "no customer"
+                }
+            global_logger.error(result)
+            cursor.close()
+    return render(request, 'problems/4.html', context)
+
+
+@login_required
 def problem_login(request):
     logger = logging.getLogger(__name__)
     logger.error(" problem_login view called ")
