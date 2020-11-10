@@ -167,7 +167,6 @@ def second_problem(request):
     return render(request, 'problems/2.html', context)
 
 
-@login_required
 def third_problem_database():
     employees = [
         ThirdProblem(803654786, "T-Shirt", "Nike", 25.23),
@@ -181,7 +180,7 @@ def third_problem_database():
 '''
     Input: bigint barcode field
     Output: Item properties
-    
+    Solution: 1; select * from db_items
 '''
 
 
@@ -263,6 +262,42 @@ def forth_problem(request):
             cursor.close()
     return render(request, 'problems/4.html', context)
 
+
+
+def fill_fifth_problem_database():
+    items = [
+        FifthProblem(803654786, ClothingItem.SHOES.value, "Nike", 25.23),
+        FifthProblem(987124123, ClothingItem.SHIRTS.value, "H&O", 22.10),
+        FifthProblem(300125487, ClothingItem.PANTS.value, "Diadora", 33.99),
+        FifthProblem(159845362, ClothingItem.SUITS.value, "Diadora", 99.99),
+        FifthProblem(198742178, ClothingItem.TROUSERS.value, "Diadora", 19.99),
+    ]
+    for data in items:
+        data.save(using="problems_db")
+
+@login_required
+def fifth_problem(request):
+    context = dict()
+    logger = logging.getLogger(__name__)
+    cursor1 = connections['problems_db'].cursor()
+
+    context = {
+        'items': ClothingItem.get_values()
+    }
+    # add rows to the database
+    fill_fifth_problem_database()
+    if request.method == 'POST':
+        with cursor1 as cursor:
+            item_name_request = request.POST.get("item_select")
+            logger.error(item_name_request)
+            sql = f"SELECT * FROM db_clothing_store WHERE item_name LIKE '{item_name_request}'"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            logger.error(result)
+            context['result'] = result
+
+
+    return render(request, 'problems/5.html', context)
 
 @login_required
 def problem_login(request):

@@ -8,5 +8,5 @@ urlpatterns = [
     path('2', views.second_problem, name='second'),
     path('3', views.third_problem, name='third'),
     path('4', views.forth_problem, name='forth'),
-
+    path('5', views.fifth_problem, name='fifth'),
 ]
