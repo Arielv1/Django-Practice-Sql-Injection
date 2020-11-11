@@ -1,0 +1,32 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<body>
+<h2> 6th - Blind Medium Problem </h2>
+
+    {% include 'problems/problem_answer.html' %}
+
+    <div id="just-line-break"></div>
+
+    <br/>
+
+    <div id="line-break-and-tab"></div>
+
+    <form id="hamami" method="POST">
+                          {% csrf_token %}
+
+        <p>
+            <label>Input1</label>
+            <input type="text" name="input1">
+        </p>
+        <button type="submit">Search</button>
+    </form>
+
+        <article class="media content-section">
+            <div class="article-metadata">
+              <p class="mr-2"> {{ message }}</p>
+            </div>
+        </article>
+
+</body>
+{% endblock content %}
