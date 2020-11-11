@@ -1,10 +1,41 @@
 import logging
 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm
-from .models import SqlProblem, UsersProblems, Profile
+from .forms import UserRegisterForm, ImageForm
+from .models import SqlProblem, UsersProblems, Profile, Hotel
+
+'''
+def display_hotel_images(request):
+    if request.method == 'GET':
+        # getting all the objects of hotel.
+        Hotels = Hotel.objects.filter(name__startswith="a")
+        return render(request, 'users/display.html', {'hotel_images' : Hotels})
+        '''
+
+    # Create your views here.
+def hotel_image_view(request):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            current_user = request.user
+            logger = logging.getLogger(__name__)
+            Profiles = Profile.objects.get(user=current_user.id)
+            logger.error(Profiles)
+            form.save(commit=False)
+            return redirect('success')
+    else:
+        form = ImageForm()
+    return render(request, 'users/index.html', {'form': form})
+
+
+def success(request):
+    logger = logging.getLogger(__name__)
+
+    return HttpResponse('successfully uploaded')
 
 
 def register(request):
@@ -33,54 +64,19 @@ def create_problems():
 
 @login_required
 def profile(request):
-    logger = logging.getLogger(__name__)
-    logger.error(" profile view called ")
-    # create_problems()
     user = request.user
-    print(user)
-    # p1 = SqlProblem.objects.get(name="problem1")
-    # UsersProblems(user=user.profile, problem=p1).save()
-    # all = UsersProblems.objects.all()
-    # all.delete()
     user_problems = UsersProblems.objects.filter(user=user.profile)
-    print(user_problems)
-    # sqlproblems = SqlProblem.objects.all()
-    # sqlproblems = SqlProblem.objects.filter(user=user)
-    # logger.error(" User is: " + str(user.username) + "sqlproblems: " + str(sqlproblems))
-
-    # table = SqlProblemTable(sqlproblems)
-    #
-    # filter = SqlProblemFilter(request.GET, queryset=sqlproblems)
-    # sqlproblems = filter.qs
-    # # sorted = request.query_params.get('sort', '')
-    # sorted = request.GET.get('sort', '')
-    # # print("sorted is : " + str(sorted))
-    # if sorted:
-    #     # print(" we want to sort lets check it")
-    #     if sorted == 'name':
-    #         # print(" we want to sort of name")
-    #         sqlproblems = sqlproblems.order_by('name')
-    #     # elif sorted == 'rank':
-    #     #     # print(" we want to sort of rank")
-    #     #     sqlproblems = sqlproblems.order_by('rank')
-    #
-    # table = SqlProblemTable(sqlproblems)
     context = {'user_problems': user_problems}
-    # context = {"table": table, "filter": filter, 'sqlproblems': sqlproblems}
-    # return render(request, 'users/profile.html', {"filter": filter})
-    return render(request, 'users/profile.html', context)
-    # return render(request, 'users/profile.html', {"table": table})
 
-# class FilteredSqlProblemListView(LoginRequiredMixin, tables.SingleTableView):
-# class FilteredSqlProblemListView(LoginRequiredMixin, tables.SingleTableView, FilterView, ListView):
-#     table_class = SqlProblemTable
-#     queryset = SqlProblem.objects.all()
-#     template_name = "users/profile.html"
-#     filterset_class = SqlProblemFilter
-#
-#     def get_context_data(self, **kwargs):
-#         filter = SqlProblemFilter(self.request.GET, queryset=SqlProblem.objects.all())
-#         context = super(FilteredSqlProblemListView, self).get_context_data()
-#         filter = filter.qs
-#         context['filter'] = filter
-#         return context
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            logger = logging.getLogger(__name__)
+            logger(form)
+            return redirect('users/profile')
+    else:
+        form = ImageForm()
+    context['form'] = form
+    return render(request, 'users/profile.html', context)

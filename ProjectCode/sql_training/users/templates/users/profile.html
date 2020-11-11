@@ -4,6 +4,8 @@
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
 {% block content %}
+
+
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
@@ -14,10 +16,13 @@
         <div class="media-body">
           <h2 class="account-heading">{{ user.username }}</h2>
           <p class="text-secondary">{{ user.email }}</p>
+            {{user}}
         </div>
       </div>
+        <a class="btn btn-info" href="{% url 'index' %}" role="button">Upload Profile Picture</a>
       <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
+
           <fieldset class="form-group">
               <legend class="border-bottom mb-4">Profile Info</legend>
               {{ u_form|crispy }}
