@@ -9,4 +9,6 @@ urlpatterns = [
     path('3', views.third_problem, name='third'),
     path('4', views.forth_problem, name='forth'),
     path('5', views.fifth_problem, name='fifth'),
+    path('6', views.sixth_problem, name='sixth'),
+
 ]

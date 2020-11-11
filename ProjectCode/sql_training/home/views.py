@@ -33,6 +33,8 @@ def problems_list(request):
                     ProblemReference(Difficulty.HARD, "Third Problem", InjectionTypes.UNION.value, "problems/3"),
                     ProblemReference(Difficulty.EASY, "Forth Problem", InjectionTypes.BLIND.value, "problems/4"),
                     ProblemReference(Difficulty.MEDIUM, "Fifth Problem", InjectionTypes.IN_BAND.value, "problems/5"),
+                    ProblemReference(Difficulty.MEDIUM, "Sixth Problem", InjectionTypes.BLIND.value, "problems/6"),
+
                     ProblemReference(Difficulty.EASY, "Login Problem", InjectionTypes.IN_BAND.value, "problems"
                                                                                                      "/login_problem")],
                'EASY': Difficulty.EASY,

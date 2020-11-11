@@ -65,3 +65,9 @@ class FifthProblem(models.Model):
 
     class Meta:
         db_table = 'db_clothing_store'
+
+class SixthProblem(models.Model):
+    answer = models.TextField(max_length=200, null=True)
+
+    class Meta:
+        db_table = "sixth_answer"
