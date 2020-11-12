@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, ImageForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import SqlProblem, UsersProblems, Profile, Hotel
 
 '''
@@ -15,21 +15,21 @@ def display_hotel_images(request):
         return render(request, 'users/display.html', {'hotel_images' : Hotels})
         '''
 
-    # Create your views here.
-def hotel_image_view(request):
-    if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            current_user = request.user
-            logger = logging.getLogger(__name__)
-            Profiles = Profile.objects.get(user=current_user.id)
-            logger.error(Profiles)
-            form.save(commit=False)
-            return redirect('success')
-    else:
-        form = ImageForm()
-    return render(request, 'users/index.html', {'form': form})
+#     # Create your views here.
+# def hotel_image_view(request):
+#     if request.method == 'POST':
+#         form = ImageForm(request.POST, request.FILES)
+#
+#         if form.is_valid():
+#             current_user = request.user
+#             logger = logging.getLogger(__name__)
+#             Profiles = Profile.objects.get(user=current_user.id)
+#             logger.error(Profiles)
+#             form.save(commit=False)
+#             return redirect('success')
+#     else:
+#         form = ImageForm()
+#     return render(request, 'users/index.html', {'form': form})
 
 
 def success(request):
@@ -64,19 +64,25 @@ def create_problems():
 
 @login_required
 def profile(request):
-    user = request.user
-    user_problems = UsersProblems.objects.filter(user=user.profile)
-    context = {'user_problems': user_problems}
-
     if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
+        # instance=request.user fill the fields with the user data
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES,
+                                         instance=request.user.profile)
 
-        if form.is_valid():
-            form.save()
-            logger = logging.getLogger(__name__)
-            logger(form)
-            return redirect('users/profile')
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, f'Your account has been been updated')
+            return redirect('profile')
     else:
-        form = ImageForm()
-    context['form'] = form
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    user_problems = UsersProblems.objects.filter(user=request.user.profile)
+    context = {
+            'user_problems': user_problems,
+            'user_form': user_form,
+            'profile_form': profile_form
+        }
     return render(request, 'users/profile.html', context)

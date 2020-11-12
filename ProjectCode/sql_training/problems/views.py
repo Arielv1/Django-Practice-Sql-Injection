@@ -149,7 +149,6 @@ def second_problem(request):
         if first_name_request is not None and first_name_request != "":
             logger.error("user entered first name")
             with cursor1 as cursor:
-
                 # id_request = request.POST.get("id_request")
                 # sql = f"SELECT '{input_request}' FROM problems_secondproblem WHERE first_name LIKE 'Ariel'"
                 sql = f"SELECT id, first_name, last_name FROM problems_secondproblem WHERE first_name LIKE '{first_name_request}' and last_name LIKE '{last_name_request}'"
@@ -257,7 +256,6 @@ def forth_problem(request):
     return render(request, 'problems/4.html', context)
 
 
-
 def fill_fifth_problem_database():
     items = [
         FifthProblem(803654786, ClothingItem.SHOES.value, "Nike", 25.23),
@@ -268,6 +266,7 @@ def fill_fifth_problem_database():
     ]
     for data in items:
         data.save(using="problems_db")
+
 
 @login_required
 def fifth_problem(request):
@@ -290,8 +289,8 @@ def fifth_problem(request):
             logger.error(result)
             context['result'] = result
 
-
     return render(request, 'problems/5.html', context)
+
 
 @login_required
 def sixth_problem(request):

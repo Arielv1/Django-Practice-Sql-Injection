@@ -25,6 +25,7 @@ def about(request):
 def learn(request):
     return render(request, 'home/learn.html')
 
+
 @login_required
 def problems_list(request):
     context = {'problem_list':

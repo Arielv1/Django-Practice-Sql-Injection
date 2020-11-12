@@ -9,16 +9,14 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('register/', user_views.register, name='register'),
     path('profile/', user_views.profile, name='profile'),
-    # path('profile/', FilteredSqlProblemListView.as_view(template_name='users/profile.html'), name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
-
-    path('index/', views.hotel_image_view, name='index'),
-    path('success/', views.success, name='success'),
+    #
+    # path('index/', views.hotel_image_view, name='index'),
+    # path('success/', views.success, name='success'),
 
 
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                              document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
