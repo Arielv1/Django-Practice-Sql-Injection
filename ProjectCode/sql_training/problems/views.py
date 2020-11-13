@@ -17,8 +17,8 @@ from users.models import UsersProblems, SqlProblem
 
 # TODO put each problem his answer here
 
-answers = ["something", "this is_the_answer", "second answer"]
-problems_names = ["no problem", "problem1", "problem2", "problem3", "problem4"]
+answers = ["something", "this is_the_answer", "second answer", "3answer", "4answer", "5answer", "6answer"]
+problems_names = ["no problem", "Problem1", "Problem2", "Problem3", "Problem4", "Problem5", "Problem6"]
 global_logger = logging.getLogger(__name__)
 alldata = [
     FirstProblem(input1="1", input2="2"),
@@ -91,21 +91,7 @@ def first_problem(request):
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 logger.error(result)
-                # logger.error("result of sql querry: " + result.__str__())
                 cursor.close()
-                # allProblems = []
-                # for data in result:
-                #     allProblems.append(FirstProblem(input1=data.input1,input2=data.input2))
-                # context = {
-                #     'problems': allProblems
-                # }
-                # if result is not None and len(result) != 0:
-                #     if result[0].input1 == "this is_the_answer" and result[0].input2 == "answer":
-                #         logger.error("GOOOOOOOOOD JOBBBBBBBB")
-                #     else:
-                #         logger.error("memememememememememememe WRONGGGGGGGGGGGGGG")
-                # else:
-                #     logger.error("result is None Probably Or Size = 0")
 
     return render(request, 'problems/1.html', context)
 
@@ -236,7 +222,11 @@ def forth_problem(request):
     if request.method == 'POST':
         global_logger.error(" request is Post ")
         input1_request = request.POST.get("input1")
-        global_logger.error("input1 is: " + input1_request)
+        global_logger.error("input1 is: " + str(input1_request))
+        user_answer = request.POST.get("problem_answer")
+        is_answer = check_answer_input(answers[4], str(user_answer))
+        if is_answer:
+            update_answer_for_user(request.user, problem_name=problems_names[4])
         with cursor2 as cursor:
             sql = f"SELECT * FROM problems_firstproblem WHERE input2 LIKE '{input1_request}';"
             cursor.execute(sql)

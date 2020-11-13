@@ -3,19 +3,13 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 
-class Hotel(models.Model):
-    name = models.CharField(max_length=50)
-    hotel_Main_Img = models.ImageField(upload_to='profile_pics/delete_this/')
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     sqlproblems = models.ManyToManyField('SqlProblem', through='UsersProblems')
 
-
     def __str__(self):
-        return f"{self.user, self.image_name, self.image, self.sqlproblems}"
+        return f"{self.user, self.image, self.sqlproblems}"
 
     def save(self, *args, **kwargs):
         # run the save of the default function of save
@@ -29,10 +23,28 @@ class Profile(models.Model):
             img.save(self.image.path)
 
 
-
-
 class SqlProblem(models.Model):
     name = models.CharField(max_length=100, verbose_name="full name")
+    TYPE_CHOICES = (
+        ("BLIND", "Blind"),
+        ("IN_BAND", "In_Band"),
+        ("OUT_BAND", "Out_Band")
+    )
+
+    type = models.CharField(
+        max_length=10,
+        choices=TYPE_CHOICES,
+        default='BLIND')
+    Difficult_CHOICES = (
+        ("EASY", "Easy"),
+        ("MEDIUM", "Medium"),
+        ("HARD", "Hard")
+    )
+
+    difficult = models.CharField(
+        max_length=7,
+        choices=Difficult_CHOICES,
+        default='IN_BAND')
     users = models.ManyToManyField('Profile', through='UsersProblems')
 
 

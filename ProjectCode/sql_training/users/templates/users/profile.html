@@ -3,12 +3,17 @@
 {% load django_tables2 %}
 {% load bootstrap3 %}
 {% load render_table from django_tables2 %}
+{% load static %}
 {% block content %}
 
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">-->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'users/main.css' %}">-->
+
+
+<!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>-->
+
 
     <div class="content-section">
       <div class="media">
@@ -19,6 +24,7 @@
             {{user}}
         </div>
       </div>
+    </div>
 
         <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
@@ -33,18 +39,67 @@
           </div>
       </form>
 
-        <h2> Problems we Did:</h2>
-        {% for problem in user_problems %}
-         <tr>
-            <td>
-                <p> Name: {{problem.name}}</p>
-                <p> User: {{problem.user.user}}</p>
-                <p> Problem Name: {{problem.problem.name}}</p>
+        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+          <thead>
+            <tr>
+              <th class="th-sm">Difficult</th>
+              <th class="th-sm">Name</th>
+              <th class="th-sm">Type</th>
+              <th class="th-sm">Completed</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for problem in user_problems %}
+            <tr>
+              <td>{{problem.problem.difficult}}</td>
+              <td>{{problem.problem.name}}</td>
+              <td>{{problem.problem.type}}</td>
+               <td>Yes</td>
+            </tr>
+          {% endfor %}
+          {% for problem in rest_of_problems %}
+            <tr>
+              <td>{{problem.difficult}}</td>
+              <td>{{problem.name}}</td>
+              <td>{{problem.type}}</td>
+               <td>No</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+            <tr>
+              <th>Difficult</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Completed</th>
+            </tr>
+          </tfoot>
+        </table>
+<!--                JS              -->
 
-            </td>
-        </tr>
+    <!-- jQuery -->
+<script type="text/javascript" src="{% static 'home/js/jquery.min.js' %}"></script>
+<!-- Popper.js -->
+<script type="text/javascript" src="{% static 'home/js/popper.min.js' %}"></script>
 
+<!-- Bootstrap -->
+<script type="text/javascript" src="{% static 'home/js/bootstrap.min.js' %}"></script>
 
-        {% endfor %}
-    </div>
+<!-- Material Design for Bootstrap -->
+<script type="text/javascript" src="{% static 'home/js/mdb.min.js' %}"></script>
+
+<!-- MDBootstrap Datatables  -->
+<script type="text/javascript" src="{% static 'home/js/addons/datatables2.min.js' %}"></script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+$('#dtBasicExample').DataTable(
+{
+  "searching":false
+}
+);
+$('.dataTables_length').addClass('bs-select');
+});
+</script>
 {% endblock content %}

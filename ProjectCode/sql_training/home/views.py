@@ -1,7 +1,5 @@
 import logging
 from django.shortcuts import render, redirect
-
-# Create your views here.
 from home.models import ProblemReference, Difficulty, InjectionTypes
 from django.contrib.auth.decorators import login_required
 
@@ -9,11 +7,6 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     logger = logging.getLogger(__name__)
     logger.error(" home view called ")
-
-    # context = {
-    #      'customers': Customer.objects.all()
-    # }
-    #  logger.error(" first Customer :" + Customer.objects.first().first_name)
 
     return render(request, 'home/home.html')
 
