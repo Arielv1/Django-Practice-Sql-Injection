@@ -58,6 +58,9 @@ def update_answer_for_user(user, problem_name):
     UsersProblems(user=user.profile, problem=problem).save()
 
 
+'''
+    get all information about the table
+'''
 @login_required
 def first_problem(request):
     context = {
@@ -98,9 +101,10 @@ def first_problem(request):
 
 def second_problem_database():
     employees = [
-        SecondProblem(205476765, "Ariel", "Vainshtein", 25),
-        SecondProblem(306252136, "Abe", "Kelson", 22),
+        SecondProblem(205476765, "Ariel", "Vainshtein", 26),
+        SecondProblem(306252136, "Joshua", "Graham", 30),
         SecondProblem(268451234, "Abraham", "Yalkovitch", 28),
+
     ]
     for data in employees:
         data.save(using="problems_db")
@@ -145,6 +149,7 @@ def second_problem(request):
                 cursor.close()
                 context = {'raw_sql': sql,
                            'result': result,
+                           'num_items': len(result),
                            'input_request': first_name_request}
     return render(request, 'problems/2.html', context)
 
@@ -179,11 +184,8 @@ def third_problem(request):
     if request.method == 'POST':
         with cursor1 as cursor:
             item_name_request = request.POST.get("item_name").lower()
-            logger.error("after lower")
-            logger.error(item_name_request)
 
             for kw in item_name_request:
-                # logger.error(kw)
                 if kw in key_words:
                     logger.error("changing item_name_request")
                     item_name_request = "1"
@@ -199,19 +201,26 @@ def third_problem(request):
                 sql = f"SELECT * FROM db_items WHERE item_name LIKE 'a'"
                 cursor.execute(sql)
                 err = e
-                logger.error("we got error")
-                print(err)
+
             result = cursor.fetchall()
-            logger.error("result of sql query " + result.__str__())
-            logger.error(result)
             cursor.close()
             context = {'raw_sql': sql,
                        'result': result,
+                       'num_items': len(result),
                        'item_name_request': item_name_request,
                        'error': err}
     return render(request, 'problems/3.html', context)
 
 
+
+
+# TODO put each problem his answer here
+
+'''
+
+    objective: get the name of the table
+    
+'''
 @login_required
 def forth_problem(request):
     global_logger.error(" forth_problem view called ")
@@ -258,14 +267,14 @@ def fill_fifth_problem_database():
         data.save(using="problems_db")
 
 
+
 @login_required
 def fifth_problem(request):
-    context = dict()
     logger = logging.getLogger(__name__)
     cursor1 = connections['problems_db'].cursor()
 
     context = {
-        'items': ClothingItem.get_values()
+        'items': ClothingItem.get_values(),
     }
     # add rows to the database
     fill_fifth_problem_database()
@@ -278,6 +287,8 @@ def fifth_problem(request):
             result = cursor.fetchall()
             logger.error(result)
             context['result'] = result
+            context['num_items'] = len(result)
+
 
     return render(request, 'problems/5.html', context)
 
@@ -310,6 +321,8 @@ def sixth_problem(request):
             global_logger.error(result)
             cursor.close()
     return render(request, 'problems/6.html', context)
+
+
 
 
 @login_required

@@ -5,38 +5,35 @@
 
 <br>
 
-		<div class="row">
-			<div class="col-md">
-				<div class="card card-body">
-					<h5>Products</h5>
-				</div>
-				<div class="card card-body">
-					<table class="table">
-						<tr>
-							<th>Difficulty</th>
-							<th>Name</th>
-							<th>Type</th>
-						</tr>
-
-                        {% for problem in problem_list %}
-                         <tr>
-                            <td>
-                                {% if problem.difficulty == EASY %}
-                                    <a class="btn btn-info btn-lg btn-block" href="{{problem.ref}}" role="button">Easy</a>
-                                {% elif problem.difficulty == MEDIUM %}
-                                    <a class="btn btn-warning btn-lg btn-block" href="{{problem.ref}}" role="button">Medium</a>
-                                {% else %}
-                                    <a class="btn btn-danger btn-lg btn-block" href="{{problem.ref}}" role="button">Hard</a>
-                                {% endif %}
-                            </td>
-							 <th><a href="{{problem.ref}}">{{problem.details}}</a></th>
-							 <th><a>{{problem.type}}</a></th>
-                        </tr>
-
-
-                        {% endfor %}
-					</table>
-				</div>
-			</div>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<h5>Products</h5>
 		</div>
+			<div class="card card-body">
+			<table class="table">
+				<tr>
+				<th class="font-weight-bold text-primary">Difficulty</th>
+				<th class="font-weight-bold text-primary">Name</th>
+				<th class="font-weight-bold text-primary">Type</th>
+				</tr>
+                      {% for problem in problem_list %}
+                       <tr>
+            	           <td>
+                              {% if problem.difficulty == 1 %}
+                                   <a class="btn btn-info btn-lg btn-block font-weight-bold" href="{{problem.hreference}}" role="button">Easy</a>
+                               {% elif problem.difficulty == 2 %}
+                                   <a class="btn btn-warning btn-lg btn-block font-weight-bold" href="{{problem.hreference}}" role="button">Medium</a>
+                               {% else %}
+                                   <a class="btn btn-danger btn-lg btn-block font-weight-bold" href="{{problem.hreference}}" role="button">Hard</a>
+                               {% endif %}
+                          </td>
+						 <th><u><a href="{{problem.hreference}}" class="font-weight-bold text-info">{{problem.name}}</a></u></th>
+						 <th><a class="font-weight-bold">{{problem.type}}</a></th>
+                      </tr>
+                      {% endfor %}
+				</table>
+			</div>
+	</div>
+</div>
 {% endblock content %}

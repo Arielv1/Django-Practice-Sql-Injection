@@ -1,0 +1,44 @@
+{% extends "home/base.html" %}
+{% block content %}
+<h4>In-Band (Classic) SQL Injections</h4>
+
+
+<div>
+    <p>
+        In-Band, also known as 'Classic' SQL Injection are performed
+        by running SQL commands on the same interface and communication
+        that is used to interact with the database.
+        <br><br>
+        For example, assume a login interface where the user needs to enter
+        his username and a password - The attack will use those two text fields
+        for his injection attemps.
+    </p>
+    <br>
+    <p>
+        <h4>1. Base Example</h4>
+        <p>
+            <label>Username:</label>
+            <input type="text" name="input1">
+                <br>
+            <label>Password:</label>
+            <input type="text" name="intpu2">
+        </p>
+        Let's continue with our example of login:
+        <br>Assume we have two attributes 'username' and 'password'
+        <br>Lets further assume that we know the table that user
+        data is stored 'db_users'
+        <br>If we make another outrages assumption that we know
+            how the SQL commands looks like:
+            <br><br>
+            <h6 class="text-success">SELECT * FROM db_users WHERE first_name LIKE input1 and password LIKE input2</h6>
+            Where input1 and input2 are the identifiers of both text fields.
+
+            <br><br>The initial approach should be trying to abuse the commands of the SQL
+            languages against it - for this example we can abuse the wildcard: '%'
+            If behind the scenes there's no input checking or validation simply
+            entering '%' for both input fields will return all the users in the database.
+            <br><a href="https://www.w3schools.com/sql/sql_wildcards.asp">See wildcards tutorials for more info</a>
+
+    </p>
+</div>
+{% endblock%}
