@@ -1,6 +1,6 @@
 import logging
 from django.shortcuts import render, redirect
-from home.models import ProblemReference, Difficulty, InjectionTypes
+from home.models import ProblemReference, Difficulty, InjectionTypes, ProblemData
 from django.contrib.auth.decorators import login_required
 
 
@@ -15,24 +15,28 @@ def about(request):
     return render(request, 'home/about.html')
 
 
-def learn(request):
-    return render(request, 'home/learn.html')
 
+
+
+
+def fill_references():
+    items = [
+        ProblemData(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'Classic'),
+        ProblemData(2, Difficulty.MEDIUM.value, 'problems/2', 'Second Problem', 'Classic'),
+        ProblemData(3, Difficulty.MEDIUM.value, 'problems/3', 'Third Problem', 'Classic'),
+        ProblemData(4, Difficulty.HARD.value, 'problems/4', 'Forth Problem', 'Classic'),
+        ProblemData(5, Difficulty.HARD.value, 'problems/5', 'Fifth Problem', 'Classic'),
+        ProblemData(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Classic'),
+        ProblemData(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
+
+    ]
+    for data in items:
+        data.save()
+
+    return items
 
 @login_required
 def problems_list(request):
-    context = {'problem_list':
-                   [ProblemReference(Difficulty.EASY, "First Problem", InjectionTypes.IN_BAND.value, "problems/1"),
-                    ProblemReference(Difficulty.MEDIUM, "Second Problem", InjectionTypes.IN_BAND.value, "problems/2"),
-                    ProblemReference(Difficulty.HARD, "Third Problem", InjectionTypes.UNION.value, "problems/3"),
-                    ProblemReference(Difficulty.EASY, "Forth Problem", InjectionTypes.BLIND.value, "problems/4"),
-                    ProblemReference(Difficulty.MEDIUM, "Fifth Problem", InjectionTypes.IN_BAND.value, "problems/5"),
-                    ProblemReference(Difficulty.MEDIUM, "Sixth Problem", InjectionTypes.BLIND.value, "problems/6"),
+    context = {'problem_list': fill_references()}
 
-                    ProblemReference(Difficulty.EASY, "Login Problem", InjectionTypes.IN_BAND.value, "problems"
-                                                                                                     "/login_problem")],
-               'EASY': Difficulty.EASY,
-               'MEDIUM': Difficulty.MEDIUM,
-               'HARD': Difficulty.HARD,
-               }
-    return render(request, 'home/problems.html', context)
+    return render(request, "home/problems.html", context)

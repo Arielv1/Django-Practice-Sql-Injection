@@ -36,3 +36,17 @@ class ProblemReference(models.Model):
 
     def __str__(self):
         return f'{self.problem_id, self.difficulty, self.details, self.ref, self.type}'
+
+class ProblemData(models.Model):
+    #id = models.IntegerField(primary_key=True, unique=True, default=0, null=False)
+    difficulty = models.CharField(max_length=200, null=True)
+    hreference = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200, null=True)
+    type = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return f'{self.id ,self.difficulty, self.hreference, self.name, self.type}'
+
+
+    class Meta:
+        db_table = 'db_problem_reference'
