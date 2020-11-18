@@ -21,14 +21,21 @@
       <strong>Success!</strong> You've Got The Right Answer!
     </div>
     {% endif %}
+
+    {% if num_items == num_resulted_items %}
+    <br>
+    <div class="alert alert-success">
+      <strong>Success!</strong> You've Got The Right Answer!
+    </div>
+    {% endif %}
     <div>
         {% for objects in result%}
                  {{objects.value}}
         <p>
-            <h4>{{forloop.counter}}. Barcode: {{objects.0}}</h4>
-            <h4>Item Type: {{objects.1}}</h4>
-            <h4>Manufacturer: {{objects.2}}</h4>
-            <h4>Price: {{objects.3}}$</h4>
+            <h6 class="text-info">{{forloop.counter}}. Barcode: {{objects.0}}</h6>
+            <h6 class="text-info">Item Type: {{objects.1}}</h6>
+            <h6 class="text-info">Manufacturer: {{objects.2}}</h6>
+            <h6 class="text-info">Price: {{objects.3}}$</h6>
         </p>
         {% endfor %}
     </div>

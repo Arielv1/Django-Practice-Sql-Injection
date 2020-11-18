@@ -3,8 +3,7 @@
 {% block content %}
 
 <body>
-<h2> The Clothing Store - Medium Problem </h2>
-
+    <br>
     {% include 'problems/problem_answer.html' %}
 
     <div id="just-line-break"></div>
@@ -16,18 +15,19 @@
     <form method="POST">
                   {% csrf_token %}
                     <p>
+                        <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
                         <label>First Name</label>
                         <input type="text" name="first_name">
-                    </p>
-                     <p>
+                        <br>
                         <label>Last Name</label>
                         <input type="text" name="last_name">
                     </p>
         <button type="submit">Search</button>
     </form>
-
-
-    {% if num_items is not none and num_items is 3 %}
+    Items: {{items}}
+    <br>
+    Result: {{result}}
+    {% if num_items == num_resulted_items %}
     <br>
     <div class="alert alert-success">
 
@@ -37,18 +37,11 @@
 
     {% for value in result %}
         <p>
-            <h4>{{forloop.counter}}. ID: {{value.0}}</h4>
-            <h4>First Name: {{value.1}}</h4>
-            <h4>Last Name: {{value.2}}</h4>
+            <h6 class="text-info">{{forloop.counter}}. ID: {{value.0}}</h6>
+            <h6 class="text-info">First Name: {{value.1}}</h6>
+            <h6 class="text-info">Last Name: {{value.2}}</h6>
         </p>
-        <h4> </h4>
     {% endfor %}
-
-    {% comment %}
-        <h4>Sql: {{raw_sql}}</h4>
-        <h4>Input Request: {{input_request}}</h4>
-        <h4>result: {{result}}</h4>
-    {% endcomment %}
 
 </body>
 {% endblock content %}

@@ -3,7 +3,6 @@
 {% block content %}
 
 <body>
-<h2> The Clothing Store - Easy Problem </h2>
 
     {% include 'problems/problem_answer.html' %}
 
@@ -13,26 +12,36 @@
 
     <div id="line-break-and-tab"></div>
 
-    <form id="hamami" method="POST">
+    <form method="POST">
                   {% csrf_token %}
         <p>
-
-            <label>Input2</label>
-            <input type="text" name="input1">
+            <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
+            <label>ID:</label>
+            <input type="text" name="input_id">
 
         </p>
 
         <button type="submit">Search</button>
     </form>
 
-        {% for problem in problems %}
-        <article class="media content-section">
-            <div class="article-metadata">
-              <p class="mr-2"> input1: {{ problem.input1 }}</p>
-              <p class="mr-2"> input2: {{ problem.input2 }}</p>
-            </div>
-        </article>
-    {% endfor %}
+    {% if num_items == num_resulted_items %}
+        <br>
+        <div class="alert alert-success">
+
+          <strong>Success!</strong> You've Got The Right Answer!
+        </div>
+    {% endif %}
+
+    {% if result is not None %}
+         {% for value in result %}
+        <p>
+            <h6 class="text-danger">{{forloop.counter}}. ID: {{value.0}}</h6>
+            <h6 class="text-danger">First Name: {{value.1}}</h6>
+            <h6 class="text-danger">Last Name: {{value.2}}</h6>
+        </p>
+        {% endfor %}
+    {% endif %}
+
 
 </body>
 {% endblock content %}

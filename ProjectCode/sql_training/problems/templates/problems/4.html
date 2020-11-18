@@ -12,14 +12,13 @@
 
     <div id="line-break-and-tab"></div>
 
-    <form id="hamami" method="POST">
-                          {% csrf_token %}
-
+    <form method="POST">
+        {% csrf_token %}
         <p>
-            <label>Input2</label>
-            <input type="text" name="input1">
+            <h5>Your objective here is to find out the table name</h5>
+            <input type="text" name="input_manufacturer">
+            <button type="submit">Search</button>
         </p>
-        <button type="submit">Search</button>
     </form>
 
         <article class="media content-section">

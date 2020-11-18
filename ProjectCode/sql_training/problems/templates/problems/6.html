@@ -2,7 +2,6 @@
 {% block content %}
 
 <body>
-<h2> 6th - Blind Medium Problem </h2>
 
     {% include 'problems/problem_answer.html' %}
 
@@ -12,14 +11,14 @@
 
     <div id="line-break-and-tab"></div>
 
-    <form id="hamami" method="POST">
-                          {% csrf_token %}
-
+    <form method="POST">
+        {% csrf_token %}
         <p>
-            <label>Input1</label>
-            <input type="text" name="input1">
+            <label>First Name:</label>
+            <input type="text" name="input_first_name">
+            <button type="submit">Search</button>
         </p>
-        <button type="submit">Search</button>
+
     </form>
 
         <article class="media content-section">
