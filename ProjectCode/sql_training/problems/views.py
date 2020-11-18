@@ -262,12 +262,19 @@ def fifth_problem(request):
     return render(request, 'problems/5.html', context)
 
 
+def init_secret_db():
+    item = BlindSecret(1, 'Bingo')
+    item.save()
+
 
 @login_required
 def sixth_problem(request):
     context = {
-        'message': ""
+        'secret_value': BlindSecret.objects.filter(id=1)[0].secret
     }
+
+    init_secret_db()
+
     cursor2 = connections['problems_db'].cursor()
     if request.method == 'POST':
         first_name_request = request.POST.get("input_first_name")
@@ -275,14 +282,11 @@ def sixth_problem(request):
             sql = f"SELECT * FROM db_employees WHERE first_name LIKE '{first_name_request}';"
             cursor.execute(sql)
             result = cursor.fetchall()
+            context['result'] = result
             if result is not None and len(result) != 0:
-                context = {
-                    'message': "No Employee With This Name"
-                }
+                context['message'] = "There's Employee With This Name"
             else:
-                context = {
-                    'message': "There's Employee With This Name"
-                }
+                context['message'] = "No Employee With This Name"
             cursor.close()
     return render(request, 'problems/6.html', context)
 

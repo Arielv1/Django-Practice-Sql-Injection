@@ -3,7 +3,7 @@
 
 <form class="dropdown" id="drop_down_form" method="POST">
     {% csrf_token %}
-    <label for="item_select">Please Select ...</label>
+    <h5>Using any means necessary, retrieve the entire store catalog.</h5>
     <select name="item_select" id="item_select" class="form-control">
          {% for item in items %}
             <option value="{{item}}">{{item}}</option>

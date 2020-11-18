@@ -14,12 +14,22 @@
     <form method="POST">
         {% csrf_token %}
         <p>
+            <h5>Given 'db_employees' table, by any means, find the secret value in a another secret table.</h5>
+            <br>
             <label>First Name:</label>
             <input type="text" name="input_first_name">
             <button type="submit">Search</button>
         </p>
 
     </form>
+
+    {%if secret_value in result%}
+         <br>
+        <div class="alert alert-success">
+          <strong>Success!</strong> You've Got The Right Answer!
+        </div>
+    {%endif%}
+
 
         <article class="media content-section">
             <div class="article-metadata">
