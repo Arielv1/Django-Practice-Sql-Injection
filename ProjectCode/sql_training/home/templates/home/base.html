@@ -18,57 +18,40 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'home/css/style.css' %}">
 
-<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-<!--&lt;!&ndash;    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">&ndash;&gt;-->
-
-<!--    &lt;!&ndash;                CSS              &ndash;&gt;-->
-
-<!--    &lt;!&ndash; Bootstrap &ndash;&gt;-->
-<!--    <link href="{% static 'home/css/bootstrap.min.css' %}" rel="stylesheet">-->
-
-<!--    &lt;!&ndash; Material Design for Bootstrap &ndash;&gt;-->
-<!--    <link href="{% static 'home/css/mdb.min.css' %}" rel="stylesheet">-->
-
-<!--    &lt;!&ndash; MDBootstrap Datatables  &ndash;&gt;-->
-<!--    <link href="{% static 'home/css/addons/datatables2.min.css' %}" rel="stylesheet">-->
-
-<!--    <link rel="stylesheet" type="text/css" href="{% static 'users/main.css' %}">-->
-
-
 </head>
 <body>
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-            <div class="navbar-nav">
+        <nav class="navbar navbar-expand-sm navbar-light navbar-inverse fixed-top first-nav">
+            <div class="container">
                 {% if user.is_authenticated %}
                     <a class="navbar-brand mr-4" href="{% url 'home' %}">Welcome Back, {{request.user}} </a>
                 {% endif %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar1">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse mr-auto" id="navbar1">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'learn' %}">Learn</a></li>
+                </ul>
+                <ul class="navbar-nav mr-auto">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'problems_list' %}">Problems</a></li>
+                        <li class="nav-item"><a class="nav-link" href=#>Change Password</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    {% endif %}
+                </ul>
             </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
-              <a class="nav-item nav-link" href="{% url 'about' %}">About</a>
-              <a class="nav-item nav-link" href="{% url 'learn' %}">Learn</a>
             </div>
-            <!-- Navbar Right Side -->
-            <div class="navbar-nav">
-              {% if user.is_authenticated %}
-                <a class="nav-item nav-link" href="{% url 'problems_list' %}">Problems</a>
-                <a class="nav-item nav-link" href=#>Change Password</a>
-                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-              {% else %}
-                <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </nav>
+        </nav>
+        {% block header %}{% endblock %}
+
     </header>
     <main role="main" class="container">
       <div class="row">
@@ -86,5 +69,20 @@
     </main>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
+<style>
+.first-nav{
+    background: bg-steel;
+
+}
+.topnav-right {
+  float: right;
+}
+.second-nav{
+    top: 50px;
+}
+</style>
 </html>

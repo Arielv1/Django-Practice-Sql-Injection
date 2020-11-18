@@ -1,33 +1,13 @@
 {% extends "home/base.html" %}
-{% block content %}
 {% load static %}
 
-<!--                CSS              -->
-<!-- Font Awesome -->
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">-->
-<!--&lt;!&ndash; Bootstrap &ndash;&gt;-->
-<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">-->
-<!--&lt;!&ndash; Material Design for Bootstrap &ndash;&gt;-->
-<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.16/css/mdb.min.css" rel="stylesheet">-->
 
-<!--&lt;!&ndash; databasese try Material Design for Bootstrap &ndash;&gt;-->
-<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.16/css/addons/datatables2.min.css" rel="stylesheet">-->
+{% block header %}
 
-<!--<link rel="stylesheet" type="text/css" href="{% static 'home/css/style.css' %}">-->
+{% include 'learn/learn_nav.html' %}
 
-
-<!--&lt;!&ndash; Bootstrap &ndash;&gt;-->
-<!--<link href="{% static 'home/css/bootstrap.min.css' %}" rel="stylesheet">-->
-
-<!--&lt;!&ndash; Material Design for Bootstrap &ndash;&gt;-->
-<!--<link href="{% static 'home/css/mdb.min.css' %}" rel="stylesheet">-->
-
-<!--&lt;!&ndash; MDBootstrap Datatables  &ndash;&gt;-->
-<!--<link href="{% static 'home/css/addons/datatables2.min.css' %}" rel="stylesheet">-->
-
-<!--<link rel="stylesheet" type="text/css" href="{% static 'home/css/style.css' %}">-->
-
-<!--<link rel="stylesheet" type="text/css" href="{% static 'users/main.css' %}">-->
+{% endblock %}
+{% block content %}
 
 <h3>What is SQL Injection</h3>
 <p>SQL Injection, also known as SQLI, is a common attack vector that uses malicious SQL code execution for backend database manipulation.</p>

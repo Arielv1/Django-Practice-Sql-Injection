@@ -6,4 +6,6 @@ urlpatterns = [
     path('inband', views.inband, name='inband'),
     path('blind', views.blind, name='blind'),
     path('outband', views.outband, name='outband'),
+    path('check', views.check, name='check'),
+
 ]

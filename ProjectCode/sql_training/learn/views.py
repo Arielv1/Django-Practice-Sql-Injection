@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+
 # Create your views here.
 
 
@@ -17,3 +18,7 @@ def blind(request):
 
 def outband(request):
     return render(request, 'learn/outband.html')
+
+
+def check(request):
+    return render(request, 'learn/check.html')
