@@ -6,4 +6,54 @@
 {% endblock %}
 {% block content %}
 <h4>Blind SQL Injections</h4>
+
+<p>
+    First of all Read the Learn Section.<br>
+    Here we will show example of Sql Blind Injection.
+    As we Know Blind Sql Injection come handy
+    when websites return no output data. or at least not a normal one.<br>
+    Just something that you know if the sql query behind was true or false.<br>
+    Then we need to use Blind Sql Injection.
+</p>
+            <h4>Example</h4>
+
+<h6> For this example this will be the sql query the website send.</h6>
+<pre>
+    Select streets from cities where city = '{user_input}'
+</pre>
+<p> the respond from website is can be: <br>
+    There is streets in the city , or there is no streets in this city
+    Assuming there is no streets in city called Tel Aviv.
+
+    if the user input will be : Tel Aviv' or '1'='1
+    the query behind will be:
+</p>
+
+<pre>
+        Select streets from cities where city = 'Tel Aviv' or '1'='1'
+</pre>
+<p>
+
+    if the website respond will be : There is streets in the city.<br>
+    that's means this website vulnerable to sql injection. and for blind sql injection specifically.<br>
+    blind sql injection in thie exmaple is the way to attack.<br>
+    This example is Content-based Blind sql injection because the attacker know the answer of the database<br>
+    based on the respond content of the website.
+
+    There is another type of Blind sql Injection called Time-based. on those.
+    the attacker try to make a query using a command that makes a delay if the query return true or vice versa.<br>
+
+    Good example of this can be :
+</p>
+<pre>
+    1 UNION SELECT IF(SUBSTRING(user_password,1,1) = CHAR(50),<br>    BENCHMARK(5000000,ENCODE('MSG','by 5 seconds')),null)
+    FROM users WHERE user_id = 1;
+</pre>
+<p>
+    If the database response took a long time, we may expect that the first user password character with user_id = 1 is character ‘2’.
+    using a Substring with Benchmark (time delay command) and IF(to do the checks) make the attacker option
+    to guess or brute force with a nice script every user password in this example.
+    <br><a href="https://owasp.org/www-community/attacks/Blind_SQL_Injection">Check it out for more info</a>
+
+</p>
 {% endblock%}
