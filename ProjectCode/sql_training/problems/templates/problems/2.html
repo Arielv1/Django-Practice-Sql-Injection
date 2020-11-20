@@ -16,7 +16,9 @@
                   {% csrf_token %}
                     <p>
                         <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
+                        <hr class="divider">
                         <label>First Name</label>
+
                         <input type="text" name="first_name">
                         <br>
                         <label>Last Name</label>
@@ -24,9 +26,7 @@
                     </p>
         <button type="submit">Search</button>
     </form>
-    Items: {{items}}
-    <br>
-    Result: {{result}}
+
     {% if num_items == num_resulted_items %}
     <br>
     <div class="alert alert-success">
@@ -37,9 +37,9 @@
 
     {% for value in result %}
         <p>
-            <h6 class="text-info">{{forloop.counter}}. ID: {{value.0}}</h6>
-            <h6 class="text-info">First Name: {{value.1}}</h6>
-            <h6 class="text-info">Last Name: {{value.2}}</h6>
+            <h6 class="text-danger">{{forloop.counter}}. ID: {{value.0}}</h6>
+            <h6 class="text-danger">First Name: {{value.1}}</h6>
+            <h6 class="text-danger">Last Name: {{value.2}}</h6>
         </p>
     {% endfor %}
 

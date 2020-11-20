@@ -18,16 +18,10 @@
         his username and a password - The attack will use those two text fields
         for his injection attemps.
     </p>
-    <br>
+    <hr class="divider">
     <p>
         <h4>1. Base Example</h4>
-        <p>
-            <label>Username:</label>
-            <input type="text" name="input1">
-                <br>
-            <label>Password:</label>
-            <input type="text" name="intpu2">
-        </p>
+
         Let's continue with our example of login:
         <br>Assume we have two attributes 'username' and 'password'
         <br>Lets further assume that we know the table that user
@@ -42,8 +36,54 @@
             languages against it - for this example we can abuse the wildcard: '%'
             If behind the scenes there's no input checking or validation simply
             entering '%' for both input fields will return all the users in the database.
-            <br><a href="https://www.w3schools.com/sql/sql_wildcards.asp">See wildcards tutorials for more info</a>
+        <br>
+        <p>
+            <form method="POST">
+                  {% csrf_token %}
+                <p>
+                    <h6>Given the table 'db_users', please retrieve all of the users</h6>
+                    <label>Username:</label>
+                    <input type="text" name="input1">
+                    <br>
+                    <label>Password:</label>
+                    <input type="text" name="input2">
+                </p>
+                <button type="submit">Search</button>
+            </form>
 
+        {% if num_resulted_items == num_items %}
+            <br>
+            <div class="alert alert-success">
+                <strong>Success!</strong> You've Got The Right Answer!
+            </div>
+        {% endif %}
+
+        {% for entry in result %}
+            <h6 class="text-danger">{{forloop.counter}}. Username: {{entry.0}}
+            Password: {{entry.1}}</h6>
+        {% endfor %}
+
+        </p>
+    <hr class="divider">
+    <h4>2. The Union Way</h4>
+        <h6>Another approach to solve the same problem is using the 'UNION' function:
+        <br>
+        We'll insert dummy data in the input fields and use the UNION keyword in the
+        'passwords' input field.
+        <br>Note: Whether the dummy data we insert actually exists in the database or not is irrelevant.
+        <br>So the injection will look like this:</h6>
+        <h5>Username: a</h5>
+        <h5>Password b' UNION SELECT * from db_users ;--</h5>
+        <h6>This will be translated as the following SQL query:</h6>
+        <h6 class="text-success">SELECT * FROM db_users WHERE username LIKE 'a' and password LIKE 'b' UNION SELECT * from db_users ;--'</h6>
+        <h6>What's happening here? We're inserting dummy data 'a','b' into the input fields then run another
+        SQL query through UNION to get all the User entries from the database.</h6>
+        <h6>Note: We use b' since the SQL query uses the 'LIKE' command on strings and chars.
+        As a result we must close the char tag ('') ourselves, enter the UNION command and in order to execute the query
+        without errors we add the ;-- signs which means the rest of the query is a comment and to ignore the rest of it.</h6>
     </p>
+
+    <br><a href="https://www.w3schools.com/sql/sql_wildcards.asp">See wildcards tutorials for more info</a>
+
 </div>
 {% endblock%}

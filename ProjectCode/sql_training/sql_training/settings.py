@@ -111,6 +111,15 @@ DATABASES = {
         'PORT': '5432'
     },
 
+    'learning_db': {
+        'NAME': 'postgres',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    },
+
     'problems_db_read_user': {
         'NAME': 'postgres',
         'ENGINE': 'django.db.backends.postgresql',

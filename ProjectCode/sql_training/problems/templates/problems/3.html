@@ -11,13 +11,14 @@
 
     <div id="line-break-and-tab"></div>
 
-    <form id="form_id" method="POST">
-                  {% csrf_token %}
-                    <p>
-                        <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
-                        <label>Barcode</label>
-                        <input type="text" name="item_name">
-                    </p>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <h6>Given unknown table, retrieve all its rows.</h6>
+            <hr class="divider">
+            <label>Barcode:</label>
+            <input type="text" name="item_name">
+        </p>
         <button type="submit">Search</button>
     </form>
     {% if num_items == num_resulted_items %}

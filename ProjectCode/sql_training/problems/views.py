@@ -24,13 +24,14 @@ global_logger = logging.getLogger(__name__)
 
 def fill_employee_database():
     employees = [
-        Employee(205476765, "Ariel", "Vainshtein", 26),
+        Employee(115161598, "Ariel", "Vainshtein", 26),
         Employee(306252136, "Joshua", "Graham", 30),
         Employee(268451234, "Abraham", "Yalkovitch", 28),
 
     ]
     for data in employees:
         data.save(using="problems_db")
+
 
 def fill_clothing_store_db():
     items = [
@@ -41,7 +42,7 @@ def fill_clothing_store_db():
         ClothingStore(198742178, ClothingItem.TROUSERS.value, "Diadora", 19.99),
     ]
     for data in items:
-        data.save()
+        data.save(using="problems_db")
 
 
 def fill_vehicle_db():
@@ -51,6 +52,7 @@ def fill_vehicle_db():
     ]
     for data in items:
         data.save(using="problems_db")
+
 
 def check_answer_input(real_answer, user_answer):
     logger = logging.getLogger(__name__)
@@ -77,13 +79,16 @@ def update_answer_for_user(user, problem_name):
     answer:
     1 UNION SELECT * from db_employees
 '''
+
+
 @login_required
 def first_problem(request):
-    #fill_employee_database()
+    fill_employee_database()
     context = {
         'problems': [],
-        'num_items': len(Employee.objects.all())
+        'num_items': len(Employee.objects.using('problems_db').all())
     }
+
     # for first time we will do it
     logger = logging.getLogger(__name__)
     logger.error(" problem_login view called ")
@@ -100,16 +105,17 @@ def first_problem(request):
         if input_id_request is not None and input_id_request != "":
             with cursor1 as cursor:
                 sql = f"SELECT * FROM db_employees WHERE id = {input_id_request};"
-
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                context['result'] = result
-                context['num_resulted_items'] = len(result)
-                logger.error(result)
-                cursor.close()
+                try:
+                    cursor.execute(sql)
+                    result = cursor.fetchall()
+                    context['result'] = result
+                    context['num_resulted_items'] = len(result)
+                    logger.error(result)
+                    cursor.close()
+                except:
+                    pass
 
     return render(request, 'problems/1.html', context)
-
 
 
 '''
@@ -117,16 +123,16 @@ def first_problem(request):
     First Name: %
     Last Name:: %
 '''
+
+
 @login_required
 def second_problem(request):
-    context = {
-        'num_items': len(Employee.objects.all())
-    }
-    logger = logging.getLogger(__name__)
-    cursor1 = connections['problems_db'].cursor()
-    # add columns to database
-    # second_problem_database()
     fill_employee_database()
+
+    cursor1 = connections['problems_db'].cursor()
+
+    context = {'num_items': len(Employee.objects.using('problems_db').all())}
+
     if request.method == 'POST':
         first_name_request = request.POST.get("first_name")
         last_name_request = request.POST.get("last_name")
@@ -134,17 +140,19 @@ def second_problem(request):
         is_answer = check_answer_input(answers[2], str(user_answer))
         if is_answer:
             update_answer_for_user(request.user, problem_name=problems_names[2])
-        if first_name_request is not None and first_name_request != "":
-            with cursor1 as cursor:
-                sql = f"SELECT id, first_name, last_name FROM db_employees WHERE first_name LIKE '{first_name_request}' and last_name LIKE '{last_name_request}'"
+        with cursor1 as cursor:
+            sql = f"SELECT id, first_name, last_name FROM db_employees WHERE first_name LIKE '{first_name_request}' and last_name LIKE '{last_name_request}'"
+            try:
                 cursor.execute(sql)
                 result = cursor.fetchall()
-                logger.error("result of sql query " + result.__str__())
                 cursor.close()
-                context = {'result': result,
-                           'num_resulted_items': len(result),
-                           'input_request': first_name_request}
+                context['result'] = result
+                context['num_resulted_items'] = len(result)
+            except:
+                pass
+
     return render(request, 'problems/2.html', context)
+
 
 '''
     Step #1:
@@ -159,16 +167,17 @@ def second_problem(request):
 
 @login_required
 def third_problem(request):
+    fill_clothing_store_db()
     key_words = ['or', 'and', 'union', 'inner join']
     context = {
-        'num_items': len(ClothingStore.objects.all()),
+        'num_items': len(ClothingStore.objects.using('problems_db').all()),
     }
     logger = logging.getLogger(__name__)
     cursor1 = connections['problems_db'].cursor()
 
     # add columns to database
-    #fill_clothing_store_db()
-    #ClothingStore.objects.all().delete()
+    # fill_clothing_store_db()
+    # ClothingStore.objects.all().delete()
     if request.method == 'POST':
         with cursor1 as cursor:
             item_name_request = request.POST.get("item_name").lower()
@@ -188,77 +197,63 @@ def third_problem(request):
                 err = e
             result = cursor.fetchall()
             cursor.close()
-            context = {'raw_sql': sql,
-                       'result': result,
-                       'num_resulted_items': len(result),
-                       'item_name_request': item_name_request,
-                       'error': err}
+            context['result'] = result
+            context['num_resulted_items'] = len(result)
+            context['error'] = err
+
     return render(request, 'problems/3.html', context)
 
 
-
-
-
 '''
-
     objective: get the name of the table
-    
 '''
 @login_required
 def forth_problem(request):
     global_logger.error(" forth_problem view called ")
-    context = {
-        'message': ""
-    }
-
-    #fill_vehicle_db()
+    context = {'message': "Out of stock"}
+    # fill_vehicle_db()
 
     cursor2 = connections['problems_db'].cursor()
     if request.method == 'POST':
-        manufacturer_request = request.POST.get("input_manufacturer").lower()
+        manufacturer_request = request.POST.get("input_manufacturer")
         user_answer = request.POST.get("problem_answer")
         is_answer = check_answer_input(answers[4], str(user_answer))
         if is_answer:
             update_answer_for_user(request.user, problem_name=problems_names[4])
         with cursor2 as cursor:
-            sql = f"SELECT * FROM db_vehicles where lower(manufacturer) like '{manufacturer_request}'"
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            if result is not None and len(result) != 0:
-
-                context = {
-                    'message': "Exists in storage"
-                }
-            else:
-                context = {
-                    'message': "Out of stock"
-                }
-            cursor.close()
+            sql = f"SELECT * FROM db_vehicles WHERE lower(manufacturer) LIKE '{manufacturer_request}'"
+            try:
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                if result is not None and len(result) != 0:
+                    context['message'] = "Exists in storage"
+                cursor.close()
+            except:
+                context['message'] = 'Invalid Input'
     return render(request, 'problems/4.html', context)
-
 
 
 @login_required
 def fifth_problem(request):
+    fill_clothing_store_db()
     logger = logging.getLogger(__name__)
-    cursor1 = connections['problems_db'].cursor()
+    cursor = connections['problems_db'].cursor()
 
     context = {
         'items': ClothingItem.get_values(),
-        'num_items': len(ClothingStore.objects.all()),
+        'num_items': len(ClothingStore.objects.using('problems_db').all()),
     }
     # add rows to the database
-    fill_clothing_store_db()
-    if request.method == 'POST':
-        with cursor1 as cursor:
-            item_name_request = request.POST.get("item_select")
-            logger.error(item_name_request)
-            sql = f"SELECT * FROM db_clothing_store WHERE item_name LIKE '{item_name_request}'"
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            context['result'] = result
-            context['num_items'] = len(result)
 
+    if request.method == 'POST':
+        item_name_request = request.POST.get("item_select")
+        logger.error(item_name_request)
+        sql = f"SELECT * FROM db_clothing_store WHERE item_name LIKE '{item_name_request}'"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        context['result'] = result
+        context['num_items'] = len(result)
+           
     return render(request, 'problems/5.html', context)
 
 
@@ -289,7 +284,6 @@ def sixth_problem(request):
                 context['message'] = "No Employee With This Name"
             cursor.close()
     return render(request, 'problems/6.html', context)
-
 
 
 @login_required
