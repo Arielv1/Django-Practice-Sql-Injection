@@ -6,18 +6,21 @@ from .models import DummyUser
 def init_dummy_db():
     items = [
         DummyUser(username='user1', password='password1'),
-        DummyUser(username='asd', password='password2')
+        DummyUser(username='user2', password='password2')
     ]
     for item in items:
-        item.save('learning_db')
+        item.save(using='learning_db')
 
 def learn(request):
-    #DummyUser.objects.using('learning_db').all().delete()
-    init_dummy_db()
+    #DummyUser.objects.all().delete()
+    #init_dummy_db()
+    #print(DummyUser.objects.all())
     return render(request, 'learn/learn.html')
 
 
 def inband(request):
+
+    #print(DummyUser.objects.using('learning_db').all())
     context = {'num_items': len(DummyUser.objects.using('learning_db').all())}
     if request.method == 'POST':
         input1_request = request.POST.get("input1")
@@ -28,7 +31,7 @@ def inband(request):
             cursor.execute(sql)
             result = cursor.fetchall()
             context['result'] = result
-            context['num_items'] = len(result)
+            context['num_resulted_items'] = len(result)
             cursor.close()
         except:
             pass

@@ -8,7 +8,7 @@
 <h4>In-Band (Classic) SQL Injections</h4>
 
 
-<div>
+<body>
     <p>
         In-Band, also known as 'Classic' SQL Injection are performed
         by running SQL commands on the same interface and communication
@@ -23,25 +23,27 @@
         <h4>1. Base Example</h4>
 
         Let's continue with our example of login:
-        <br>Assume we have two attributes 'username' and 'password'
-        <br>Lets further assume that we know the table that user
-        data is stored 'db_users'
-        <br>If we make another outrages assumption that we know
-            how the SQL commands looks like:
-            <br><br>
-            <h6 class="text-success">SELECT * FROM db_users WHERE first_name LIKE input1 and password LIKE input2</h6>
-            Where input1 and input2 are the identifiers of both text fields.
+        <br>Assume we have two attributes
+        <span class="text text-success">username</span> and <span class="text text-success">password</span>.
+        <br>Lets further assume that we know the table that user data is stored <span class="text text-success">db_users</span>.
+        <br>If we make another outrages assumption that we know how the SQL commands looks like:
+        <br><br>
+        <div class="alert alert-primary">
+            <pre>SELECT * FROM db_users WHERE first_name LIKE input1 and password LIKE input2</pre>
+        </div>
 
-            <br><br>The initial approach should be trying to abuse the commands of the SQL
-            languages against it - for this example we can abuse the wildcard: '%'
-            If behind the scenes there's no input checking or validation simply
-            entering '%' for both input fields will return all the users in the database.
+        Where <span class="text text-success">input1</span> and <span class="text text-success">input2</span> are the identifiers of both text fields.
+
+        <br><br>The initial approach should be trying to abuse the commands of the SQL
+        languages against it - for this example we can abuse the wildcard: <span class="text text-success">%</span>
+        If behind the scenes there's no input checking or validation simply
+        entering <span class="text text-success">%</span> for both input fields will return all the users in the database.
         <br>
         <p>
             <form method="POST">
                   {% csrf_token %}
                 <p>
-                    <h6>Given the table 'db_users', please retrieve all of the users</h6>
+                    <h6>Given the table <span class="text text-success">db_users</span>, please retrieve all of the users</h6>
                     <label>Username:</label>
                     <input type="text" name="input1">
                     <br>
@@ -54,7 +56,7 @@
         {% if num_resulted_items == num_items %}
             <br>
             <div class="alert alert-success">
-                <strong>Success!</strong> You've Got The Right Answer!
+                <pre>Success!</pre> You've Got The Right Answer!
             </div>
         {% endif %}
 
@@ -65,25 +67,30 @@
 
         </p>
     <hr class="divider">
-    <h4>2. The Union Way</h4>
-        <h6>Another approach to solve the same problem is using the 'UNION' function:
-        <br>
-        We'll insert dummy data in the input fields and use the UNION keyword in the
-        'passwords' input field.
-        <br>Note: Whether the dummy data we insert actually exists in the database or not is irrelevant.
+    <h4>2. Unions And Comments</h4>
+    <h6>Another approach to solve the same problem is using the <span class="text text-success">UNION</span> function:
+        <h6>We'll insert dummy data in the input fields and use the <span class="text text-success">UNION</span> keyword in the
+        <span class="text text-success">passwords</span> input field.</h6>
+        <h6>Note: Whether the dummy data we insert actually exists in the database or not is irrelevant.
         <br>So the injection will look like this:</h6>
-        <h5>Username: a</h5>
-        <h5>Password b' UNION SELECT * from db_users ;--</h5>
+
+        <div class="alert alert-primary">
+            <pre>Username: a</pre>
+            <pre>Password: b' UNION SELECT * from db_users ;--</pre>
+        </div>
+
         <h6>This will be translated as the following SQL query:</h6>
-        <h6 class="text-success">SELECT * FROM db_users WHERE username LIKE 'a' and password LIKE 'b' UNION SELECT * from db_users ;--'</h6>
-        <h6>What's happening here? We're inserting dummy data 'a','b' into the input fields then run another
-        SQL query through UNION to get all the User entries from the database.</h6>
-        <h6>Note: We use b' since the SQL query uses the 'LIKE' command on strings and chars.
-        As a result we must close the char tag ('') ourselves, enter the UNION command and in order to execute the query
-        without errors we add the ;-- signs which means the rest of the query is a comment and to ignore the rest of it.</h6>
+        <div class="alert alert-primary">
+            <pre class="text-bold">SELECT * FROM db_users <br>WHERE username LIKE 'a' and password LIKE 'b' UNION SELECT * from db_users ;--'</pre>
+        </div>
+        <h6>What's happening here? We're inserting dummy data  <span class="text text-success">a, b</span> into the input fields then run another
+        SQL query through <span class="text text-success">UNION</span> to get all the User entries from the database.</h6>
+        <h6>Note: We use  <span class="text text-success">b'</span> since the SQL query uses the  <span class="text text-success">LIKE</span> command on strings and chars.
+        As a result we must close the char tag ('') ourselves, enter the <span class="text text-success">UNION</span> command and in order to execute the query
+        without errors we add the <span class="text text-success">;--</span> signs which means the rest of the query is a comment so it won't be executed.</h6>
     </p>
 
     <br><a href="https://www.w3schools.com/sql/sql_wildcards.asp">See wildcards tutorials for more info</a>
 
-</div>
+</body>
 {% endblock%}

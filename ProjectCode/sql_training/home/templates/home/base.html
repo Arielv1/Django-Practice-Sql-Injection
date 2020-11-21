@@ -21,7 +21,7 @@
 </head>
 <body>
     <header class="site-header">
-        <nav class="navbar navbar-expand-sm navbar-light navbar-inverse fixed-top first-nav">
+        <nav class="navbar navbar-expand-sm bg-primary navbar-light navbar-inverse fixed-top first-nav">
             <div class="container">
                 {% if user.is_authenticated %}
                     <a class="navbar-brand mr-4" href="{% url 'home' %}">Welcome Back, {{request.user}} </a>

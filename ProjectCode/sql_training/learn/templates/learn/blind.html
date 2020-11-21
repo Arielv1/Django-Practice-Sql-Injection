@@ -8,52 +8,66 @@
 <h4>Blind SQL Injections</h4>
 
 <p>
-    First of all Read the Learn Section.<br>
-    Here we will show example of Sql Blind Injection.
-    As we Know Blind Sql Injection come handy
-    when websites return no output data. or at least not a normal one.<br>
-    Just something that you know if the sql query behind was true or false.<br>
-    Then we need to use Blind Sql Injection.
+    It is recommended to skim over the overview of what blind SQL Injection is in the base 'Learn' page.
+    <br><br>
+    Blind Sql Injection come handy when websites return no output data. or at least not a normal one.<br>
+    Instead the output is a generic message or value to let the user know if an action was successful or not.
+    It boils downs to either True of False for either the query returned a valid result or not<br>
 </p>
-            <h4>Example</h4>
+<h4>Introduction</h4>
 
-<h6> For this example this will be the sql query the website send.</h6>
-<pre>
-    Select streets from cities where city = '{user_input}'
+<h6> Lets view a simple SQL query:</h6>
+<div class="alert alert-primary">
+            <pre>
+    Select streets from cities where city like '{user_input}'
 </pre>
-<p> the respond from website is can be: <br>
-    There is streets in the city , or there is no streets in this city
-    Assuming there is no streets in city called Tel Aviv.
+</div>
 
-    if the user input will be : Tel Aviv' or '1'='1
-    the query behind will be:
+<p> A response from website is can be: <br>
+    There are streets in the city - True, or there aren't streets in this city - False, with the given input
+    <br>
+    For our example lets use the city of Tel-Aviv and lets assume that it contains no streets at all.
+    If we'll look at a possible input:
+    <span class="text text-success">Tel Aviv' or '1'='1</span>
+    The query will be translated as:
 </p>
 
-<pre>
+<div class="alert alert-primary">
+    <pre>
         Select streets from cities where city = 'Tel Aviv' or '1'='1'
-</pre>
+    </pre>
+</div>
+
 <p>
-
-    if the website respond will be : There is streets in the city.<br>
-    that's means this website vulnerable to sql injection. and for blind sql injection specifically.<br>
-    blind sql injection in thie exmaple is the way to attack.<br>
-    This example is Content-based Blind sql injection because the attacker know the answer of the database<br>
-    based on the respond content of the website.
-
-    There is another type of Blind sql Injection called Time-based. on those.
-    the attacker try to make a query using a command that makes a delay if the query return true or vice versa.<br>
-
-    Good example of this can be :
+    Since this querry use the <span class="text text-success">'1'='1'</span> logic, it will always yield a 'True' result.
+    <br>
+    In this case the website could respond with a generic message of 'There're street by that name.' -
+    That's means the website vulnerable to sql injection and for blind sql injection specifically.<br>
+    blind sql injection in this example is the way to attack.
 </p>
-<pre>
-    1 UNION SELECT IF(SUBSTRING(user_password,1,1) = CHAR(50),<br>    BENCHMARK(5000000,ENCODE('MSG','by 5 seconds')),null)
-    FROM users WHERE user_id = 1;
-</pre>
 <p>
-    If the database response took a long time, we may expect that the first user password character with user_id = 1 is character ‘2’.
-    using a Substring with Benchmark (time delay command) and IF(to do the checks) make the attacker option
+    This example is <span class="text text-success">Content-based</span> Blind SQL injection because the attacker knows the answer of the database
+    is based on the response content of the website (True/False type messages).
+</p>
+    There's another type of Blind sql Injection called <span class="text text-success">Time-based</span> -
+    the attacker tries to make a query using a command that makes a delay if the query return True value or vice versa.<br>
+    Lets view an example:
+</p>
+<div class="alert alert-primary">
+    <pre>
+        1 UNION SELECT IF(SUBSTRING(user_password,1,1) = CHAR(50),
+            BENCHMARK(5000000,ENCODE('MSG','by 5 seconds')),null)
+            FROM users WHERE user_id = 1;
+    </pre>
+</div>
+<p>
+    If the database response takes too long, we may expect that the first character of the users'
+    password with user_id = 1 is the character ‘2’.
+    <br>
+    Using a Substring with <span class="text text-success">BENCHMARK</span> (time delay command) and
+    <span class="text text-primary">IF</span> (to do the checks) gives the attacker option
     to guess or brute force with a nice script every user password in this example.
-    <br><a href="https://owasp.org/www-community/attacks/Blind_SQL_Injection">Check it out for more info</a>
-
+    <br>
 </p>
+<a href="https://owasp.org/www-community/attacks/Blind_SQL_Injection">More about Blind SQL Injections</a>
 {% endblock%}
