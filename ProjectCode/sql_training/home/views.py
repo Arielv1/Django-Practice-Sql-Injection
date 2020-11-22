@@ -1,7 +1,11 @@
 import logging
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from home.models import ProblemReference, Difficulty, InjectionTypes, ProblemData
+from .models import ProblemReference, Difficulty, InjectionTypes, ProblemData
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.mail import send_mail, BadHeaderError
 
 
 def home(request):
@@ -15,8 +19,29 @@ def about(request):
     return render(request, 'home/about.html')
 
 
+# todo Setup AWS Email when we can. and add support email.
+def contact_us(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject', '')
+        message = request.POST.get('message', '')
+        from_email = request.POST.get('from_email', '')
+        support_email = ""
+        name = request.POST.get('name', '')
 
-
+        from_email = request.POST.get('from_email', '')
+        # if subject and message and from_email:
+        #     if name:
+        #         subject = "{} - {}".format(name, subject)
+        #     try:
+        #         send_mail(subject, message, from_email, [support_email])
+        #     except BadHeaderError:
+        #         return HttpResponse('Invalid header found.')
+        #     messages.success(request, f'Thanks for the Email')
+        #     return redirect('home')
+        # else:
+        #     messages.error(request, f'Please fill Subject and message')
+        #     return redirect('contact_us')
+    return render(request, 'home/contact_us.html')
 
 
 def fill_references():
@@ -34,6 +59,7 @@ def fill_references():
         data.save()
 
     return items
+
 
 @login_required
 def problems_list(request):

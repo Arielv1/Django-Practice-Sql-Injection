@@ -164,6 +164,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+FONTAWESOME_CSS_URL = '//cdn.example.com/fontawesome-min.css'  # absolute url
+
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

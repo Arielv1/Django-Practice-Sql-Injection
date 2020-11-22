@@ -18,8 +18,6 @@ class CheckProblems(models.Model):
         '''
 
 
-
-
 class Employee(models.Model):
     id = models.BigIntegerField(primary_key=True, unique=True, default=0, null=False)
     first_name = models.TextField(max_length=200, null=True)
@@ -54,7 +52,8 @@ class ClothingItem(Enum):
     SUITS = 'Suits'
 
     def get_values():
-        return [ClothingItem.SHIRTS.value, ClothingItem.PANTS.value, ClothingItem.TROUSERS.value, ClothingItem.SHOES.value, ClothingItem.SUITS.value]
+        return [ClothingItem.SHIRTS.value, ClothingItem.PANTS.value, ClothingItem.TROUSERS.value,
+                ClothingItem.SHOES.value, ClothingItem.SUITS.value]
 
 
 class ClothingStore(models.Model):

@@ -285,6 +285,9 @@ def sixth_problem(request):
             cursor.close()
     return render(request, 'problems/6.html', context)
 
+@login_required
+def seventh_problem(request):
+    return render(request, 'problems/7.html')
 
 @login_required
 def problem_login(request):

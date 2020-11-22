@@ -44,7 +44,7 @@ class SqlProblem(models.Model):
     difficult = models.CharField(
         max_length=7,
         choices=Difficult_CHOICES,
-        default='IN_BAND')
+        default='EASY')
     users = models.ManyToManyField('Profile', through='UsersProblems')
 
 

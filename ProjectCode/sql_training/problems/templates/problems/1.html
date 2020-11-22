@@ -1,48 +1,49 @@
 
 {% extends "home/base.html" %}
-{% block content %}
 
-<body>
+
+
+{% block problem_description %}
+
+        <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
+
+{% endblock %}
+{% block content %}
 
     {% include 'problems/problem_answer.html' %}
 
-    <div id="just-line-break"></div>
+<br>
 
-    <br/>
+<br/>
 
-    <div id="line-break-and-tab"></div>
+<form method="POST">
+              {% csrf_token %}
+    <p>
+        <hr class="divider">
+        <label>ID:</label>
+        <input type="text" name="input_id">
 
-    <form method="POST">
-                  {% csrf_token %}
-        <p>
-            <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
-            <hr class="divider">
-            <label>ID:</label>
-            <input type="text" name="input_id">
+    </p>
 
-        </p>
+    <button class="btn btn-primary btn-sm" type="submit">Search</button>
+</form>
 
-        <button type="submit">Search</button>
-    </form>
+{% if num_items == num_resulted_items %}
+    <br>
+    <div class="alert alert-success">
 
-    {% if num_items == num_resulted_items %}
-        <br>
-        <div class="alert alert-success">
+      <strong>Success!</strong> You've Got The Right Answer!
+    </div>
+{% endif %}
 
-          <strong>Success!</strong> You've Got The Right Answer!
-        </div>
-    {% endif %}
+{% if result is not None %}
+     {% for value in result %}
+    <p>
+        <h6 class="text-danger">{{forloop.counter}}. ID: {{value.3}}</h6>
+        <h6 class="text-danger">First Name: {{value.2}}</h6>
+        <h6 class="text-danger">Last Name: {{value.0}}</h6>
+    </p>
+    {% endfor %}
+{% endif %}
 
-    {% if result is not None %}
-         {% for value in result %}
-        <p>
-            <h6 class="text-danger">{{forloop.counter}}. ID: {{value.3}}</h6>
-            <h6 class="text-danger">First Name: {{value.2}}</h6>
-            <h6 class="text-danger">Last Name: {{value.0}}</h6>
-        </p>
-        {% endfor %}
-    {% endif %}
-
-
-</body>
 {% endblock content %}
