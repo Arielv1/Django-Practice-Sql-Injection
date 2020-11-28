@@ -21,12 +21,12 @@
         </p>
         <button type="submit">Search</button>
     </form>
-    {% if num_items == num_resulted_items %}
-    <br>
-    <div class="alert alert-success">
-      <strong>Success!</strong> You've Got The Right Answer!
-    </div>
 
+    {% if num_items == num_resulted_items %}
+        <br>
+        <div class="alert alert-success">
+          <strong>Success!</strong> You've Got The Right Answer!
+        </div>
     {% endif %}
 
     {% if error is not null %}
@@ -34,13 +34,25 @@
         <h5 class="text-danger">{{error}}</h5>
     {% endif %}
 
-    {% for value in result %}
-        <p>
-            <h6 class="text-info">{{forloop.counter}}. Barcode: {{value.0}}</h6>
-            <h6 class="text-info">Item Name: {{value.1}}</h6>
-            <h6 class="text-info">Manufacturer: {{value.2}}</h6>
-            <h6 class="text-info">Price: {{value.3}}$</h6>
-        </p>
-    {% endfor %}
+    {% if result %}
+         <table class="table">
+                <tr>
+                    <th class="font-weight-bold text-primary">Barcode</th>
+                    <th class="font-weight-bold text-primary">Item Name</th>
+                    <th class="font-weight-bold text-primary">Manufacturer</th>
+                    <th class="font-weight-bold text-primary">Price</th>
+                </tr>
+
+            {% for value in result %}
+             <tr>
+                 <td class="text-danger">{{value.0}}</td>
+                 <td class="text-danger">{{value.1}}</td>
+                 <td class="text-danger">{{value.2}}</td>
+                 <td class="text-danger">{{value.3}}$</td>
+             </tr>
+            {% endfor %}
+         </table>
+    {% endif %}
+
 </body>
 {% endblock content %}

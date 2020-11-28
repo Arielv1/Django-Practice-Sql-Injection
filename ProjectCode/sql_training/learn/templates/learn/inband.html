@@ -56,19 +56,31 @@
         {% if num_resulted_items == num_items %}
             <br>
             <div class="alert alert-success">
-                <pre>Success!</pre> You've Got The Right Answer!
+                <pre>Success! You've Got The Right Answer!</pre>
             </div>
         {% endif %}
 
-        {% for entry in result %}
-            <h6 class="text-danger">{{forloop.counter}}. Username: {{entry.0}}
-            Password: {{entry.1}}</h6>
-        {% endfor %}
+        {% if result %}
+            <table class="table table-warning">
+                <tr>
+                    <th class="font-weight-bold text-primary">Username</th>
+                    <th class="font-weight-bold text-primary">Password</th>
+
+                </tr>
+
+                {% for entry in result %}
+                 <tr>
+                     <td class="text-danger">{{entry.0}}</td>
+                     <td class="text-danger">{{entry.1}}</td>
+                 </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
 
         </p>
     <hr class="divider">
     <h4>2. Unions And Comments</h4>
-    <h6>Another approach to solve the same problem is using the <span class="text text-success">UNION</span> function:
+    <h6>Another approach to solve the same problem is using the <span class="text text-success">UNION</span> function:</h6>
         <h6>We'll insert dummy data in the input fields and use the <span class="text text-success">UNION</span> keyword in the
         <span class="text text-success">passwords</span> input field.</h6>
         <h6>Note: Whether the dummy data we insert actually exists in the database or not is irrelevant.

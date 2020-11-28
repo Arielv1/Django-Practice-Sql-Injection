@@ -46,14 +46,14 @@ def contact_us(request):
 
 def fill_references():
     items = [
-        ProblemData(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'Classic'),
-        ProblemData(2, Difficulty.MEDIUM.value, 'problems/2', 'Second Problem', 'Classic'),
-        ProblemData(3, Difficulty.MEDIUM.value, 'problems/3', 'Third Problem', 'Classic'),
-        ProblemData(4, Difficulty.HARD.value, 'problems/4', 'Forth Problem', 'Classic'),
-        ProblemData(5, Difficulty.HARD.value, 'problems/5', 'Fifth Problem', 'Classic'),
-        ProblemData(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Classic'),
+        ProblemData(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'In Band'),
+        ProblemData(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band'),
+        ProblemData(3, Difficulty.EASY.value, 'problems/3', 'Third Problem', 'In Band'),
+        ProblemData(4, Difficulty.MEDIUM.value, 'problems/4', 'Forth Problem', 'Blind'),
+        ProblemData(5, Difficulty.MEDIUM.value, 'problems/5', 'Fifth Problem', 'Out Band'),
+        ProblemData(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Blind'),
         ProblemData(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
-
+        ProblemData(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'Classic'),
     ]
     for data in items:
         data.save()
@@ -66,3 +66,4 @@ def problems_list(request):
     context = {'problem_list': fill_references()}
 
     return render(request, "home/problems.html", context)
+

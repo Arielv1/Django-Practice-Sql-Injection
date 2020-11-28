@@ -53,6 +53,10 @@ def fill_vehicle_db():
     for data in items:
         data.save(using="problems_db")
 
+def init_secret_db():
+    item = BlindSecret(1, 'Bingo')
+    item.save()
+
 
 def check_answer_input(real_answer, user_answer):
     logger = logging.getLogger(__name__)
@@ -85,7 +89,6 @@ def update_answer_for_user(user, problem_name):
 def first_problem(request):
     fill_employee_database()
     context = {
-        'problems': [],
         'num_items': len(Employee.objects.using('problems_db').all())
     }
 
@@ -257,18 +260,15 @@ def fifth_problem(request):
     return render(request, 'problems/5.html', context)
 
 
-def init_secret_db():
-    item = BlindSecret(1, 'Bingo')
-    item.save()
 
 
 @login_required
 def sixth_problem(request):
+    init_secret_db()
+
     context = {
         'secret_value': BlindSecret.objects.filter(id=1)[0].secret
     }
-
-    init_secret_db()
 
     cursor2 = connections['problems_db'].cursor()
     if request.method == 'POST':
@@ -288,6 +288,20 @@ def sixth_problem(request):
 @login_required
 def seventh_problem(request):
     return render(request, 'problems/7.html')
+
+@login_required
+def eighth_problem(request):
+    fill_employee_database()
+
+    context = {
+        'items': ClothingItem.get_values(),
+        'num_items': len(Employee.objects.using('problems_db').all())
+    }
+    print(context['items'][0])
+    if request.method == 'POST':
+        pass
+
+    return render(request, 'problems/8.html', context)
 
 @login_required
 def problem_login(request):

@@ -7,4 +7,4 @@ class DummyUser(models.Model):
     password = models.TextField(max_length=200, null=False)
 
     class Meta:
-        db_table = 'db_users'
+        db_table = 'db_dummy_users'

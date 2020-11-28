@@ -26,7 +26,7 @@ def inband(request):
         input1_request = request.POST.get("input1")
         input2_request = request.POST.get("input2")
         cursor = connections['learning_db'].cursor()
-        sql = f"SELECT * FROM db_users WHERE username LIKE '{input1_request}' AND password LIKE '{input2_request}'"
+        sql = f"SELECT * FROM db_dummy_users WHERE username LIKE '{input1_request}' AND password LIKE '{input2_request}'"
         try:
             cursor.execute(sql)
             result = cursor.fetchall()

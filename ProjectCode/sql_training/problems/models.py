@@ -20,9 +20,10 @@ class CheckProblems(models.Model):
 
 class Employee(models.Model):
     id = models.BigIntegerField(primary_key=True, unique=True, default=0, null=False)
-    first_name = models.TextField(max_length=200, null=True)
+    first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
     age = models.IntegerField(null=True)
+    role = models.CharField(max_length=200, null=False, default='User')
 
     def __str__(self):
         return f'{self.id, self.first_name, self.last_name, self.age}'
@@ -86,3 +87,12 @@ class BlindSecret(models.Model):
 
     class Meta:
         db_table = 'db_secret'
+
+
+class User(models.Model):
+    username = models.CharField(max_length=200, null=True)
+    password = models.CharField(max_length=200, null=True)
+    role = models.CharField(max_length=200, null=True)
+
+    class Meta:
+        db_table = 'db_users'

@@ -29,7 +29,7 @@
 
 <body>
     <header class="site-header">
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark navbar-inverse fixed-top first-nav">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary navbar-inverse fixed-top first-nav">
             <div class="container">
                 {% if user.is_authenticated %}
                     <a class="navbar-brand mr-4" href="{% url 'home' %}">Welcome Back, {{request.user}} </a>
@@ -78,9 +78,11 @@
         </div>
       </div>
     </main>
+        {% comment %}
 <footer class="page-footer font-small purple py-4 white-text fixed-footer">
 
   <!-- Footer Elements -->
+
   <div class="container">
 
     <div class="row">
@@ -101,6 +103,7 @@
   <!-- Footer Elements -->
 
 </footer>
+        {% endcomment %}
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

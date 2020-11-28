@@ -14,14 +14,7 @@
     <button type="submit">Search</button>
 </form>
 
-{% if result is not none %}
-    <br>
-    {% if num_items is not none and num_items is 5 %}
-    <div class="alert alert-success">
-
-      <strong>Success!</strong> You've Got The Right Answer!
-    </div>
-    {% endif %}
+{% if result %}
 
     {% if num_items == num_resulted_items %}
     <br>
@@ -29,16 +22,23 @@
       <strong>Success!</strong> You've Reached The Truth!
     </div>
     {% endif %}
-    <div>
-        {% for objects in result%}
-        <p>
-            <h6 class="text-danger">{{forloop.counter}}. Barcode: {{objects.0}}</h6>
-            <h6 class="text-danger">Item Type: {{objects.1}}</h6>
-            <h6 class="text-danger">Manufacturer: {{objects.2}}</h6>
-            <h6 class="text-danger">Price: {{objects.3}}$</h6>
-        </p>
+    <table class="table">
+        <tr>
+            <th class="font-weight-bold text-primary">Barcode</th>
+            <th class="font-weight-bold text-primary">Item Name</th>
+            <th class="font-weight-bold text-primary">Manufacturer</th>
+            <th class="font-weight-bold text-primary">Price</th>
+        </tr>
+
+        {% for value in result %}
+        <tr>
+            <td class="text-danger">{{value.0}}</td>
+            <td class="text-danger">{{value.1}}</td>
+            <td class="text-danger">{{value.2}}</td>
+            <td class="text-danger">{{value.3}}$</td>
+        </tr>
         {% endfor %}
-    </div>
+    </table>
 {% endif %}
 
 {% endblock content %}

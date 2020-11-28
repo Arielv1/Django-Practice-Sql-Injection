@@ -22,9 +22,7 @@
         <hr class="divider">
         <label>ID:</label>
         <input type="text" name="input_id">
-
     </p>
-
     <button class="btn btn-primary btn-sm" type="submit">Search</button>
 </form>
 
@@ -36,14 +34,22 @@
     </div>
 {% endif %}
 
-{% if result is not None %}
-     {% for value in result %}
-    <p>
-        <h6 class="text-danger">{{forloop.counter}}. ID: {{value.3}}</h6>
-        <h6 class="text-danger">First Name: {{value.2}}</h6>
-        <h6 class="text-danger">Last Name: {{value.0}}</h6>
-    </p>
-    {% endfor %}
+{% if result %}
+    <table class="table">
+        <tr>
+            <th class="font-weight-bold text-primary">ID</th>
+            <th class="font-weight-bold text-primary">First Name</th>
+            <th class="font-weight-bold text-primary">Last Name</th>
+        </tr>
+
+        {% for value in result %}
+        <tr>
+            <td class="text-danger">{{value.3}}</td>
+            <td class="text-danger">{{value.2}}</td>
+            <td class="text-danger">{{value.0}}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endif %}
 
 {% endblock content %}

@@ -28,6 +28,7 @@
     </form>
 
     {% if num_items == num_resulted_items %}
+
     <br>
     <div class="alert alert-success">
 
@@ -35,13 +36,28 @@
     </div>
     {% endif %}
 
-    {% for value in result %}
-        <p>
-            <h6 class="text-danger">{{forloop.counter}}. ID: {{value.0}}</h6>
-            <h6 class="text-danger">First Name: {{value.1}}</h6>
-            <h6 class="text-danger">Last Name: {{value.2}}</h6>
-        </p>
-    {% endfor %}
+
+
+    {% if result is not None %}
+         <table class="table">
+            <tr>
+                <th class="font-weight-bold text-primary">ID</th>
+                <th class="font-weight-bold text-primary">First Name</th>
+                <th class="font-weight-bold text-primary">Last Name</th>
+            </tr>
+
+             {% for value in result %}
+                <tr>
+                    <td class="text-danger">{{forloop.counter}}{{value.0}}</td>
+                    <td class="text-danger">{{value.1}}</td>
+                    <td class="text-danger">{{value.2}}</td>
+                </tr>
+              {% endfor %}
+        </table>
+
+
+    {% endif %}
+
 
 </body>
 {% endblock content %}
