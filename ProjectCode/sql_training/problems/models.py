@@ -23,7 +23,6 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=200, null=True)
     last_name = models.CharField(max_length=200, null=True)
     age = models.IntegerField(null=True)
-    role = models.CharField(max_length=200, null=False, default='User')
 
     def __str__(self):
         return f'{self.id, self.first_name, self.last_name, self.age}'
@@ -67,7 +66,7 @@ class ClothingStore(models.Model):
         return f'{self.barcode, self.item_name, self.manufacturer, self.price}'
 
     class Meta:
-        db_table = 'db_clothing_store'
+        db_table = 'db_clothing_shop'
 
 
 class Vehicle(models.Model):

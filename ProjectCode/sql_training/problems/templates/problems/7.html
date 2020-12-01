@@ -1,2 +1,34 @@
 {% extends "home/base.html" %}
 {% block content %}
+<h2> 7th - Out-Band Medium Problem - User-Agent </h2>
+
+
+<br><br>
+
+<form method="POST">
+              {% csrf_token %}
+    <p>
+        <hr class="divider">
+        <label>ID:</label>
+        <input type="text" name="input_first_name">
+
+    </p>
+
+    <button class="btn btn-primary btn-sm" type="submit">Search</button>
+</form>
+              <p class="mr-2"> {{ message }}</p>
+
+
+{% if result is not None %}
+     {% for value in result %}
+    <p>
+        <h6 class="text-danger">{{forloop.counter}}. ID: {{value.3}}</h6>
+        <h6 class="text-danger">First Name: {{value.2}}</h6>
+        <h6 class="text-danger">Last Name: {{value.0}}</h6>
+    </p>
+    {% endfor %}
+
+{% endif %}
+
+
+{% endblock content %}

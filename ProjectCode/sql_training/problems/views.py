@@ -4,6 +4,9 @@ from django.shortcuts import render
 import logging
 import os
 import sys
+import re
+from psycopg2.extensions import quote_ident
+import psycopg2
 
 from django.shortcuts import render, redirect
 from django.db import connections
@@ -53,6 +56,7 @@ def fill_vehicle_db():
     for data in items:
         data.save(using="problems_db")
 
+
 def init_secret_db():
     item = BlindSecret(1, 'Bingo')
     item.save()
@@ -79,15 +83,17 @@ def update_answer_for_user(user, problem_name):
 # TODO - implement error checking
 '''
     get all information about the table
-    
+    remove hint
     answer:
-    1 UNION SELECT * from db_employees
+    1 or 1=1
+    
+    
 '''
 
 
 @login_required
 def first_problem(request):
-    fill_employee_database()
+    # fill_employee_database()
     context = {
         'num_items': len(Employee.objects.using('problems_db').all())
     }
@@ -96,7 +102,6 @@ def first_problem(request):
     logger = logging.getLogger(__name__)
     logger.error(" problem_login view called ")
     cursor1 = connections['problems_db'].cursor()
-
     if request.method == 'POST':
         # logger.error(" request is Post ")
         input_id_request = request.POST.get("input_id")
@@ -128,17 +133,30 @@ def first_problem(request):
 '''
 
 
+def escaping(a_string):
+    escaped = a_string.translate(str.maketrans({"=": r"\=",
+                                                "]": r"\]",
+                                                "\\": r"\\",
+                                                "^": r"\^",
+                                                ";": r"\;",
+                                                "*": r"\*",
+                                                ".": r"\."}))
+    return escaped
+
+
 @login_required
 def second_problem(request):
     fill_employee_database()
 
     cursor1 = connections['problems_db'].cursor()
-
     context = {'num_items': len(Employee.objects.using('problems_db').all())}
 
     if request.method == 'POST':
         first_name_request = request.POST.get("first_name")
         last_name_request = request.POST.get("last_name")
+        first_name_request = escaping(first_name_request)
+        last_name_request = escaping(last_name_request)
+
         user_answer = request.POST.get("problem_answer")
         is_answer = check_answer_input(answers[2], str(user_answer))
         if is_answer:
@@ -164,14 +182,14 @@ def second_problem(request):
     WHERE table_schema LIKE 'public'
     
     Step #2:
-    1; select * from db_clothing_store
+    1; select * from db_clothing_shop
 '''
 
 
 @login_required
 def third_problem(request):
     fill_clothing_store_db()
-    key_words = ['or', 'and', 'union', 'inner join']
+    key_words = ['or', 'and', ';', 'inner join', '=']
     context = {
         'num_items': len(ClothingStore.objects.using('problems_db').all()),
     }
@@ -183,14 +201,14 @@ def third_problem(request):
     # ClothingStore.objects.all().delete()
     if request.method == 'POST':
         with cursor1 as cursor:
-            item_name_request = request.POST.get("item_name").lower()
-
-            for kw in item_name_request:
-                if kw in key_words:
+            item_name_request = request.POST.get("item_name")
+            print(item_name_request)
+            for kw in key_words:
+                if kw in item_name_request:
                     logger.error("changing item_name_request")
                     item_name_request = "1"
                     break
-            sql = f"SELECT * FROM db_clothing_store WHERE barcode = {item_name_request}"
+            sql = f"SELECT * FROM db_clothing_store WHERE barcode = '{item_name_request}'"
             err = Exception
             try:
                 cursor.execute(sql)
@@ -199,6 +217,7 @@ def third_problem(request):
                 cursor.execute(sql)
                 err = e
             result = cursor.fetchall()
+            print(result)
             cursor.close()
             context['result'] = result
             context['num_resulted_items'] = len(result)
@@ -210,6 +229,8 @@ def third_problem(request):
 '''
     objective: get the name of the table
 '''
+
+
 @login_required
 def forth_problem(request):
     global_logger.error(" forth_problem view called ")
@@ -256,10 +277,8 @@ def fifth_problem(request):
         result = cursor.fetchall()
         context['result'] = result
         context['num_items'] = len(result)
-           
+
     return render(request, 'problems/5.html', context)
-
-
 
 
 @login_required
@@ -285,9 +304,41 @@ def sixth_problem(request):
             cursor.close()
     return render(request, 'problems/6.html', context)
 
+
 @login_required
 def seventh_problem(request):
-    return render(request, 'problems/7.html')
+    # print(request.method)
+    # print(request.headers)
+    # print(request.headers["User-Agent"])
+    context = {}
+    # input_first_name = request.POST.get("input_first_name")
+    cursor2 = connections['problems_db'].cursor()
+    connection = psycopg2.connect(
+        host="localhost",
+        database="postgres",
+        user="postgres",
+        password="postgres")
+    cursor2 = connection.cursor()
+    if request.method == 'POST':
+        input_first_name = request.POST.get("input_first_name")
+        with cursor2 as cursor:
+            print("Before input: {} ".format(input_first_name))
+            # input_first_name = quote_ident(input_first_name, connection)
+            # input_first_name = re.escape(input_first_name)
+            # print("After input: {} ".format(input_first_name))
+            sql = f"SELECT * FROM db_employees WHERE first_name LIKE '{input_first_name}';"
+            print(sql)
+            cursor.execute(sql)
+            # cursor.execute(f"select * FROM db_employees WHERE \"last_name\" LIKE %s;" % quote_ident(input_first_name, connection))
+            result = cursor.fetchall()
+            context['result'] = result
+            if result is not None and len(result) != 0:
+                context['message'] = "There's Employee With This Name"
+            else:
+                context['message'] = "Not Good User-Agent"
+            cursor.close()
+    return render(request, 'problems/7.html', context)
+
 
 @login_required
 def eighth_problem(request):
@@ -302,6 +353,7 @@ def eighth_problem(request):
         pass
 
     return render(request, 'problems/8.html', context)
+
 
 @login_required
 def problem_login(request):
