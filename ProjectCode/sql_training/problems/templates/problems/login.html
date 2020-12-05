@@ -1,6 +1,6 @@
 {% extends "home/base.html" %}
 {% block content %}
-<body>
+
 <h2> The Login Problem </h2>
     <form id="hamami" method="POST">
                   {% csrf_token %}
@@ -15,6 +15,5 @@
         </p>
         <button type="submit">Login</button>
     </form>
-</body>
 
-</html>{% endblock content %}
+{% endblock content %}

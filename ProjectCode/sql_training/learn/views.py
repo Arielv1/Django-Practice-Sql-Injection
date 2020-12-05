@@ -2,6 +2,7 @@ from django.db import connections
 from django.shortcuts import render
 from .models import DummyUser
 
+
 # Create your views here.
 def init_dummy_db():
     items = [
@@ -11,16 +12,16 @@ def init_dummy_db():
     for item in items:
         item.save(using='learning_db')
 
+
 def learn(request):
-    #DummyUser.objects.all().delete()
-    #init_dummy_db()
-    #print(DummyUser.objects.all())
+    # DummyUser.objects.all().delete()
+    # init_dummy_db()
+    # print(DummyUser.objects.all())
     return render(request, 'learn/learn.html')
 
 
 def inband(request):
-
-    #print(DummyUser.objects.using('learning_db').all())
+    # print(DummyUser.objects.using('learning_db').all())
     context = {'num_items': len(DummyUser.objects.using('learning_db').all())}
     if request.method == 'POST':
         input1_request = request.POST.get("input1")
@@ -45,6 +46,14 @@ def blind(request):
 
 def outband(request):
     return render(request, 'learn/outband.html')
+
+
+def tools(request):
+    return render(request, 'learn/tools.html')
+
+
+def protection(request):
+    return render(request, 'learn/protection.html')
 
 
 def check(request):
