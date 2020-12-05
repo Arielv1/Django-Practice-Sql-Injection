@@ -2,15 +2,7 @@
 {% block content %}
 
 <body>
-<h2> 4th - Blind Easy Problem </h2>
-
-    {% include 'problems/problem_answer.html' %}
-
-    <div id="just-line-break"></div>
-
-    <br/>
-
-    <div id="line-break-and-tab"></div>
+    <br>
 
     <form method="POST">
         {% csrf_token %}
@@ -18,15 +10,8 @@
             <h6>Your objective here is to find out which database is used for this problem:</h6>
             <hr class="divider">
             <input type="text" name="input_manufacturer">
-            <button type="submit">Search</button>
+            <button class="btn btn-primary btn-sm" type="submit">Search</button>
         </p>
     </form>
-
-        <article class="media content-section">
-            <div class="article-metadata">
-              <p class="mr-2"> {{ message }}</p>
-            </div>
-        </article>
-
 </body>
 {% endblock content %}

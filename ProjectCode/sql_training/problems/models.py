@@ -67,7 +67,7 @@ class ClothingStore(models.Model):
         return f'{self.barcode, self.item_name, self.manufacturer, self.price}'
 
     class Meta:
-        db_table = 'db_clothing_store'
+        db_table = 'db_clothing_shop'
 
 
 class Vehicle(models.Model):
@@ -89,10 +89,24 @@ class BlindSecret(models.Model):
         db_table = 'db_secret'
 
 
+class Safe(models.Model):
+    secret_pass = models.CharField(max_length=200, null=True)
+    prize = models.IntegerField(null=True)
+
+    class Meta:
+        db_table = 'secret_safe'
+
+
 class User(models.Model):
     username = models.CharField(max_length=200, null=True)
+    email = models.CharField(max_length=200, null=True)
     password = models.CharField(max_length=200, null=True)
     role = models.CharField(max_length=200, null=True)
 
     class Meta:
         db_table = 'db_users'
+
+class UserRole(Enum):
+    USER = 'User'
+    MANAGER = 'Manager'
+    ADMIN = 'Admin'

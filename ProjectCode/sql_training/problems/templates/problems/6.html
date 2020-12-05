@@ -2,23 +2,18 @@
 {% block content %}
 
 <body>
-
-    {% include 'problems/problem_answer.html' %}
-
+    <br>
     <div id="just-line-break"></div>
-
-    <br/>
-
     <div id="line-break-and-tab"></div>
 
     <form method="POST">
         {% csrf_token %}
         <p>
-            <h5>Given 'db_employees' table, by any means, find the secret value in a another secret table.</h5>
-            <br>
+            <h6>Given 'db_employees' table, by any means, find the secret value in a another secret table.</h6>
+            <hr>
             <label>First Name:</label>
             <input type="text" name="input_first_name">
-            <button type="submit">Search</button>
+            <button class="btn btn-primary btn-sm" type="submit">Search</button>
         </p>
 
     </form>

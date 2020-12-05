@@ -1,44 +1,48 @@
 {% extends "home/base.html" %}
 {% block content %}
 
-<form class="dropdown" id="drop_down_form" method="POST">
-    {% csrf_token %}
-    <h6>Using any means necessary, retrieve the entire store catalog.</h6>
-    <hr class="divider">
-    <select name="item_select" id="item_select" class="form-control">
-         {% for item in items %}
-            <option value="{{item}}">{{item}}</option>
-         {% endfor %}
-    </select>
+<body>
     <br>
-    <button type="submit">Search</button>
-</form>
+    <form class="dropdown" id="drop_down_form" method="POST">
+        {% csrf_token %}
+        <h6>Using any means necessary, retrieve the entire store catalog.</h6>
+        <hr class="divider">
+        <select name="item_select" id="item_select" class="form-control">
+             {% for item in items %}
+                <option value="{{item}}">{{item}}</option>
+             {% endfor %}
+        </select>
+        <br>
+        <button class="btn btn-primary btn-sm" type="submit">Search</button>
+    </form>
 
-{% if result %}
+    {% if result %}
 
-    {% if num_items == num_resulted_items %}
-    <br>
-    <div class="alert alert-success">
-      <strong>Success!</strong> You've Reached The Truth!
-    </div>
+        {% if num_items == num_resulted_items %}
+        <br>
+        <div class="alert alert-success">
+          <strong>Success!</strong> You've Reached The Truth!
+        </div>
+        {% endif %}
+        <table class="table">
+            <tr>
+                <th class="font-weight-bold text-primary">Barcode</th>
+                <th class="font-weight-bold text-primary">Item Name</th>
+                <th class="font-weight-bold text-primary">Manufacturer</th>
+                <th class="font-weight-bold text-primary">Price</th>
+            </tr>
+
+            {% for value in result %}
+            <tr>
+                <td class="text-danger">{{value.0}}</td>
+                <td class="text-danger">{{value.1}}</td>
+                <td class="text-danger">{{value.2}}</td>
+                <td class="text-danger">{{value.3}}$</td>
+            </tr>
+            {% endfor %}
+        </table>
     {% endif %}
-    <table class="table">
-        <tr>
-            <th class="font-weight-bold text-primary">Barcode</th>
-            <th class="font-weight-bold text-primary">Item Name</th>
-            <th class="font-weight-bold text-primary">Manufacturer</th>
-            <th class="font-weight-bold text-primary">Price</th>
-        </tr>
 
-        {% for value in result %}
-        <tr>
-            <td class="text-danger">{{value.0}}</td>
-            <td class="text-danger">{{value.1}}</td>
-            <td class="text-danger">{{value.2}}</td>
-            <td class="text-danger">{{value.3}}$</td>
-        </tr>
-        {% endfor %}
-    </table>
-{% endif %}
+</body>
 
 {% endblock content %}

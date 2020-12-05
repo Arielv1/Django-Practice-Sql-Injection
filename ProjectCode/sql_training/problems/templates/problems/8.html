@@ -1,0 +1,44 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<!-- Material unchecked -->
+<body>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <h6>Crack the safe and claim the secret code:</h6>
+            <hr class="divider">
+            <input type="text" name="secret_password">
+            <button class="btn btn-primary btn-sm" type="submit">Search</button>
+        </p>
+    </form>
+
+    {% if error %}
+         <div class="alert alert-danger">
+          <strong>{{error}}</strong>
+        </div>
+    {% endif %}
+
+    {% if result %}
+        <table class="table">
+            {% for value in result %}
+            <tr>
+                <td class="text-danger">{{value.1}}</td>
+                <td class="text-danger">{{value.4}}</td>
+                <td class="text-danger">{{value.3}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if secret_result == secret%}
+        <div class="alert alert-success">
+          <strong>Success!</strong> You've Got The Right Answer!
+            <br>You've Won {{secret}}$!
+        </div>
+    {% endif %}
+</body>
+
+
+{% endblock %}

@@ -1,55 +1,51 @@
 
 {% extends "home/base.html" %}
-
-
-
-{% block problem_description %}
-
-        <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
-
-{% endblock %}
 {% block content %}
-
-    {% include 'problems/problem_answer.html' %}
-
-<br>
-
-<br/>
-
-<form method="POST">
-              {% csrf_token %}
-    <p>
-        <hr class="divider">
-        <label>ID:</label>
-        <input type="text" name="input_id">
-    </p>
-    <button class="btn btn-primary btn-sm" type="submit">Search</button>
-</form>
-
-{% if num_items == num_resulted_items %}
+<body>
     <br>
-    <div class="alert alert-success">
+    <h4>Problem #1: In-Band</h4>
+    <label>Find a way to retrieve all values of the current connected table</label>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <hr class="divider">
+            <label>ID:</label>
+            <input type="text" name="input_id">
+        </p>
+        <button class="btn btn-primary btn-sm" type="submit">Search</button>
+    </form>
 
-      <strong>Success!</strong> You've Got The Right Answer!
-    </div>
-{% endif %}
+    {% if num_items == num_resulted_items %}
+        <br>
+        <div class="alert alert-success">
+          <strong>Success!</strong> You've Got The Right Answer!
+        </div>
+    {% endif %}
 
-{% if result %}
-    <table class="table">
-        <tr>
-            <th class="font-weight-bold text-primary">ID</th>
-            <th class="font-weight-bold text-primary">First Name</th>
-            <th class="font-weight-bold text-primary">Last Name</th>
-        </tr>
+    {% if error %}
+        <div class="alert alert-danger">
+          <strong>{{error}}</strong>
+        </div>
+    {% endif %}
 
-        {% for value in result %}
-        <tr>
-            <td class="text-danger">{{value.3}}</td>
-            <td class="text-danger">{{value.2}}</td>
-            <td class="text-danger">{{value.0}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-{% endif %}
+    {% if result %}
+        <table class="table">
+            <tr>
+                <th class="font-weight-bold text-primary">ID</th>
+                <th class="font-weight-bold text-primary">First Name</th>
+                <th class="font-weight-bold text-primary">Last Name</th>
+            </tr>
+
+            {% for value in result %}
+            <tr>
+                <td class="text-danger">{{value.3}}</td>
+                <td class="text-danger">{{value.2}}</td>
+                <td class="text-danger">{{value.0}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</body>
+
 
 {% endblock content %}

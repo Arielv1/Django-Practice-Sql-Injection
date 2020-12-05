@@ -2,15 +2,7 @@
 {% block content %}
 
 <body>
-    <br>
-    {% include 'problems/problem_answer.html' %}
-
-    <div id="just-line-break"></div>
-
-    <br/>
-
     <div id="line-break-and-tab"></div>
-
     <form method="POST">
         {% csrf_token %}
         <p>
@@ -19,7 +11,7 @@
             <label>Barcode:</label>
             <input type="text" name="item_name">
         </p>
-        <button type="submit">Search</button>
+        <button class="btn btn-primary btn-sm" type="submit">Search</button>
     </form>
 
     {% if num_items == num_resulted_items %}
@@ -29,9 +21,11 @@
         </div>
     {% endif %}
 
-    {% if error is not null %}
+    {% if error %}
         <br>
-        <h5 class="text-danger">{{error}}</h5>
+        <div class="alert alert-danger">
+          <strong>{{error}}</strong>
+        </div>
     {% endif %}
 
     {% if result %}
@@ -48,7 +42,7 @@
                  <td class="text-danger">{{value.0}}</td>
                  <td class="text-danger">{{value.1}}</td>
                  <td class="text-danger">{{value.2}}</td>
-                 <td class="text-danger">{{value.3}}$</td>
+                 <td class="text-danger">{{value.3}}</td>
              </tr>
             {% endfor %}
          </table>

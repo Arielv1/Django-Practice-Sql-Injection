@@ -4,28 +4,28 @@
 
 <body>
     <br>
-    {% include 'problems/problem_answer.html' %}
-
-    <div id="just-line-break"></div>
-
-    <br/>
-
+    <h4>Problem #2: In-Band</h4>
     <div id="line-break-and-tab"></div>
-
     <form method="POST">
-                  {% csrf_token %}
-                    <p>
-                        <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
-                        <hr class="divider">
-                        <label>First Name</label>
+        {% csrf_token %}
+            <p>
+                <h6>Given the table 'db_employees', please retrieve all of the employees</h6>
+                <hr class="divider">
+                <label>First Name</label>
 
-                        <input type="text" name="first_name">
-                        <br>
-                        <label>Last Name</label>
-                        <input type="text" name="last_name">
-                    </p>
+                <input type="text" name="first_name">
+                <br>
+                <label>Last Name</label>
+                <input type="text" name="last_name">
+            </p>
         <button class="btn btn-primary btn-sm" type="submit">Search</button>
     </form>
+
+    {% if error %}
+        <div class="alert alert-danger">
+          <strong>{{error}}</strong>
+        </div>
+    {% endif %}
 
     {% if num_items == num_resulted_items %}
 
@@ -48,7 +48,7 @@
 
              {% for value in result %}
                 <tr>
-                    <td class="text-danger">{{forloop.counter}}{{value.0}}</td>
+                    <td class="text-danger">{{value.0}}</td>
                     <td class="text-danger">{{value.1}}</td>
                     <td class="text-danger">{{value.2}}</td>
                 </tr>

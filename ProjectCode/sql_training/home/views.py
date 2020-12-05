@@ -2,16 +2,12 @@ import logging
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import ProblemReference, Difficulty, InjectionTypes, ProblemData
+from .models import Difficulty, InjectionTypes, ProblemData
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 
-
 def home(request):
-    logger = logging.getLogger(__name__)
-    logger.error(" home view called ")
-
     return render(request, 'home/home.html')
 
 
@@ -47,13 +43,13 @@ def contact_us(request):
 def fill_references():
     items = [
         ProblemData(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'In Band'),
-        ProblemData(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band'),
-        ProblemData(3, Difficulty.EASY.value, 'problems/3', 'Third Problem', 'In Band'),
+        ProblemData(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band - Escaping'),
+        ProblemData(3, Difficulty.EASY.value, 'problems/3', 'Third Problem', 'In Band - Escaping'),
         ProblemData(4, Difficulty.MEDIUM.value, 'problems/4', 'Forth Problem', 'Blind'),
         ProblemData(5, Difficulty.MEDIUM.value, 'problems/5', 'Fifth Problem', 'Out Band'),
         ProblemData(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Blind'),
         ProblemData(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
-        ProblemData(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'Classic'),
+        ProblemData(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'In Band - Escaping '),
     ]
     for data in items:
         data.save()
