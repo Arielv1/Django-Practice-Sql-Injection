@@ -43,17 +43,17 @@ def contact_us(request):
 def fill_references():
     items = [
         ProblemData(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'In Band'),
-        ProblemData(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band - Escaping'),
-        ProblemData(3, Difficulty.EASY.value, 'problems/3', 'Third Problem', 'In Band - Escaping'),
+        ProblemData(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band'),
+        ProblemData(3, Difficulty.EASY.value, 'problems/3', 'Third Problem', 'In Band'),
         ProblemData(4, Difficulty.MEDIUM.value, 'problems/4', 'Forth Problem', 'Blind'),
         ProblemData(5, Difficulty.MEDIUM.value, 'problems/5', 'Fifth Problem', 'Out Band'),
         ProblemData(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Blind'),
         ProblemData(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
-        ProblemData(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'In Band - Escaping '),
+        ProblemData(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'In Band'),
+        ProblemData(9, Difficulty.HARD.value, 'problems/9', 'Ninth Problem', 'TBD'),
     ]
     for data in items:
         data.save()
-
     return items
 
 

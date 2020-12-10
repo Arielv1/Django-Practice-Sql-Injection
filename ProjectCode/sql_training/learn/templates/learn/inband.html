@@ -1,14 +1,11 @@
 {% extends "home/base.html" %}
 {% block header %}
-
 {% include 'learn/learn_nav.html' %}
-
 {% endblock %}
 {% block content %}
-<h4>In-Band (Classic) SQL Injections</h4>
-
 
 <body>
+    <h4>In-Band (Classic) SQL Injections</h4>
     <p>
         In-Band, also known as 'Classic' SQL Injection are performed
         by running SQL commands on the same interface and communication
@@ -16,7 +13,7 @@
         <br><br>
         For example, assume a login interface where the user needs to enter
         his username and a password - The attack will use those two text fields
-        for his injection attemps.
+        for his injection attempts.
     </p>
     <hr class="divider">
     <p>
@@ -50,7 +47,9 @@
                     <label>Password:</label>
                     <input type="text" name="input2">
                 </p>
-                <button type="submit">Search</button>
+                <button name="btnForm1" class="btn btn-primary btn-sm" type="submit">Search</button>
+                <br><br>
+                <a href="https://www.w3schools.com/sql/sql_wildcards.asp">See more info and tutorials about wildcards</a>
             </form>
 
         {% if num_resulted_items == num_items %}
@@ -60,15 +59,21 @@
             </div>
         {% endif %}
 
-        {% if result %}
+        {% if error1 %}
+            <br>
+            <div class="alert alert-danger">
+                <pre>{{error1}}</pre>
+            </div>
+        {% endif %}
+
+        {% if result1 %}
             <table class="table table-warning">
                 <tr>
                     <th class="font-weight-bold text-primary">Username</th>
                     <th class="font-weight-bold text-primary">Password</th>
-
                 </tr>
 
-                {% for entry in result %}
+                {% for entry in result1 %}
                  <tr>
                      <td class="text-danger">{{entry.0}}</td>
                      <td class="text-danger">{{entry.1}}</td>
@@ -76,10 +81,9 @@
                 {% endfor %}
             </table>
         {% endif %}
-
-        </p>
     <hr class="divider">
-    <h4>2. Unions And Comments</h4>
+    <div>
+        <h4>2. Unions And Comments</h4>
     <h6>Another approach to solve the same problem is using the <span class="text text-success">UNION</span> function:</h6>
         <h6>We'll insert dummy data in the input fields and use the <span class="text text-success">UNION</span> keyword in the
         <span class="text text-success">passwords</span> input field.</h6>
@@ -100,9 +104,61 @@
         <h6>Note: We use  <span class="text text-success">b'</span> since the SQL query uses the  <span class="text text-success">LIKE</span> command on strings and chars.
         As a result we must close the char tag ('') ourselves, enter the <span class="text text-success">UNION</span> command and in order to execute the query
         without errors we add the <span class="text text-success">;--</span> signs which means the rest of the query is a comment so it won't be executed.</h6>
-    </p>
+    </div>
+    <hr class="divider">
+    <div>
+        <h4>3. Information & Table Schema</h4>
+        <p>
+            <h6>One of the most powerful tools we have in our disposal is the <span class="text text-success">INFORMATION_SCHEMA</span> command:
+            In general, the <span class="text text-success">INFORMATION_SCHEMA</span> provides access to database metadata, information about the database server such as the
+            name of a database or table, the data type of a column, or access privileges.</h6>
+            <br>
+            <h6>Some of the more useful commands of the information schema for our purposes are finding the
+            tables names in the database and the column name of a database.</h6>
+            <br>
+            <h6>Let's look at how to get all the tables that are available to the public, to everyone:</h6>
+            <div class="alert alert-primary">
+                <pre class="text-bold"> SELECT table_name FROM information_schema.tables WHERE table_schema LIKE 'public' ORDER BY table_schema,table_name;</pre>
+            </div>
+            <h6>Note: We could change the condition of which tables are returned if we change the
+            <span class="text text-success">LIKE</span> condition to the wildcard notation <span class="text text-success">%</span>.
+            In this case we'll many more tables that include metadata of the database, that are not always useful.</h6>
+            <br>
+            <h6>Another useful command of the <span class="text text-success">INFORMATION_SCHEMA</span> is getting the columns name
+                of a table:</h6>
+            <div class="alert alert-primary">
+                <pre class="text-bold">SELECT column_name FROM information_schema.columns WHERE table_name='TABLE_NAME'</pre>
+            </div>
+            <h6>Note: Just like before, we could add a wildcard notations not use a
+            <span class="text text-success">WHERE</span> condition at all and get all column names of all the tables.</h6>
+            <br>
+            <h6>Try these commands here:</h6>
 
-    <br><a href="https://www.w3schools.com/sql/sql_wildcards.asp">See wildcards tutorials for more info</a>
+            <form method="POST">
+                  {% csrf_token %}
+                <input type="text" name="input3">
+                <button name="btnForm2" class="btn btn-primary btn-sm" type="submit">Search</button>
+                <br>
+            </form>
 
+            {% if error2 %}
+                <br>
+                <div class="alert alert-danger">
+                    <pre>{{error2}}</pre>
+                </div>
+            {% endif %}
+
+            {% if result2 %}
+                <table class="table table-warning">
+                    {% for entry in result2 %}
+                     <tr>
+                         <td class="text-danger">{{entry.0}}</td>
+                         <td class="text-danger">{{entry.1}}</td>
+                     </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        </p>
+    </div>
 </body>
 {% endblock%}

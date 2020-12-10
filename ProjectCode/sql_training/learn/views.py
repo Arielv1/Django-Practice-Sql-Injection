@@ -6,37 +6,44 @@ from .models import DummyUser
 # Create your views here.
 def init_dummy_db():
     items = [
-        DummyUser(username='user1', password='password1'),
-        DummyUser(username='user2', password='password2')
+        DummyUser('user1', 'password1'),
+        DummyUser('user2', 'password2')
     ]
+    # TODO - change to learning_db
     for item in items:
-        item.save(using='learning_db')
-
+        item.save(using='problems_db')
 
 def learn(request):
     # DummyUser.objects.all().delete()
-    # init_dummy_db()
-    # print(DummyUser.objects.all())
+    init_dummy_db()
     return render(request, 'learn/learn.html')
 
 
 def inband(request):
-    # print(DummyUser.objects.using('learning_db').all())
-    context = {'num_items': len(DummyUser.objects.using('learning_db').all())}
-    if request.method == 'POST':
+    init_dummy_db()
+    context = {'num_items': len(DummyUser.objects.using('problems_db').all())}
+    cursor = connections['learning_db'].cursor()
+    if request.method == 'POST' and 'btnForm1' in request.POST:
         input1_request = request.POST.get("input1")
         input2_request = request.POST.get("input2")
-        cursor = connections['learning_db'].cursor()
         sql = f"SELECT * FROM db_dummy_users WHERE username LIKE '{input1_request}' AND password LIKE '{input2_request}'"
         try:
             cursor.execute(sql)
             result = cursor.fetchall()
-            context['result'] = result
+            context['result1'] = result
             context['num_resulted_items'] = len(result)
-            cursor.close()
-        except:
-            pass
-
+        except Exception as e:
+            context['error1'] = e
+    elif request.method == 'POST' and 'btnForm2' in request.POST:
+        input3_request = request.POST.get("input3")
+        sql = f"{input3_request}"
+        try:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            context['result2'] = result
+        except Exception as e:
+            context['error2'] = e
+    cursor.close()
     return render(request, 'learn/inband.html', context)
 
 

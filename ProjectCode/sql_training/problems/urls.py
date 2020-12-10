@@ -12,6 +12,7 @@ urlpatterns = [
     path('6', views.sixth_problem, name='sixth'),
     path('7', views.seventh_problem, name='seventh'),
     path('8', views.eighth_problem, name='eighth'),
+    path('9', views.ninth_problem, name='ninth'),
 
 ]
 if settings.DEBUG:
