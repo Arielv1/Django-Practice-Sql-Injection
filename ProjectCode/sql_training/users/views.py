@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import SqlProblem, UsersProblems, Profile
+from django.contrib.auth.forms import PasswordChangeForm
+from django.template.response import TemplateResponse
 
 
 def register(request):
@@ -22,7 +24,6 @@ def register(request):
 
 @login_required
 def profile(request):
-
     user_problems = UsersProblems.objects.filter(user=request.user.profile)
     all_problems = SqlProblem.objects.filter()
     rest_of_problems = []
@@ -83,3 +84,23 @@ def get_solved_of_difficult(user):
 
     result = [easy_solved, med_solved, hard_solved]
     return result
+
+
+@login_required
+def change_password(request,
+                    password_change_form=PasswordChangeForm):
+    logger = logging.getLogger(__name__)
+    logger.error("change_password called :")
+    if request.method == "POST":
+        form = password_change_form(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'The password has been changed successfully')
+            return redirect('profile')
+    else:
+        form = password_change_form(user=request.user)
+    context = {
+        'form': form,
+        'title': 'Password change',
+    }
+    return render(request, 'users/change_password.html', context)
