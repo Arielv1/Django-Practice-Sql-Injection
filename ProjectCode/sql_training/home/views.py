@@ -6,6 +6,8 @@ from .models import Difficulty, InjectionTypes, ProblemData
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
+import logging
+global_logger = logging.getLogger(__name__)
 
 def home(request):
     return render(request, 'home/home.html')
@@ -17,26 +19,27 @@ def about(request):
 
 # todo Setup AWS Email when we can. and add support email.
 def contact_us(request):
+    global_logger.error(" contact_us view called ")
     if request.method == 'POST':
+        name = request.POST.get('name', '')
+        user_email = request.POST.get('email', '')
         subject = request.POST.get('subject', '')
         message = request.POST.get('message', '')
-        from_email = request.POST.get('from_email', '')
-        support_email = ""
-        name = request.POST.get('name', '')
-
-        from_email = request.POST.get('from_email', '')
-        # if subject and message and from_email:
-        #     if name:
-        #         subject = "{} - {}".format(name, subject)
-        #     try:
-        #         send_mail(subject, message, from_email, [support_email])
-        #     except BadHeaderError:
-        #         return HttpResponse('Invalid header found.')
-        #     messages.success(request, f'Thanks for the Email')
-        #     return redirect('home')
-        # else:
-        #     messages.error(request, f'Please fill Subject and message')
-        #     return redirect('contact_us')
+        support_email = ['hamami2010@gmail.com']
+        if subject and message:
+            if name:
+                subject = "{} - {}".format(name, user_email)
+            try:
+                if user_email:
+                    message = "Sent from : {} \n {}".format(user_email, message)
+                send_mail(subject=subject, message=message, recipient_list=support_email, from_email=None)
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            messages.success(request, f'Thanks for the Email')
+            return redirect('home')
+        else:
+            messages.error(request, f'Please fill Subject and message')
+            return redirect('contact_us')
     return render(request, 'home/contact_us.html')
 
 
