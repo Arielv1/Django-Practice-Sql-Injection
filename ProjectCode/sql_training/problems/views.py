@@ -22,6 +22,24 @@ problems_names = ["no problem", "Problem1", "Problem2", "Problem3", "Problem4", 
 global_logger = logging.getLogger(__name__)
 
 
+def init_sqlproblems_db():
+    global_logger.error("init_sqlproblems_db called")
+    problems = [
+        SqlProblem(name="Problem1", score=1, type="IN_BAND", difficult='EASY'),
+        SqlProblem(name="Problem2", score=2, type="IN_BAND", difficult='EASY'),
+        SqlProblem(name="Problem3", score=3, type="IN_BAND", difficult='EASY'),
+        SqlProblem(name="Problem4", score=4, type="BLIND", difficult='MEDIUM'),
+        SqlProblem(name="Problem5", score=5, type="OUT_BAND", difficult='MEDIUM'),
+        SqlProblem(name="Problem6", score=6, type="BLIND", difficult='HARD'),
+        SqlProblem(name="Problem7", score=7, type="IN_BAND", difficult='HARD'),
+        SqlProblem(name="Problem8", score=8, type="IN_BAND", difficult='HARD'),
+        SqlProblem(name="Problem9", score=9, type="IN_BAND", difficult='HARD'),
+
+    ]
+    for problem in problems:
+        problem.save()
+
+
 def fill_employee_database():
     employees = [
         Employee(1, "Ariel", "Vainshtein", 26),
@@ -102,6 +120,7 @@ def update_answer_for_user(user, problem_name):
 
 @login_required
 def first_problem(request):
+    # init_sqlproblems_db()
     fill_employee_database()
     context = {
         'num_items': len(Employee.objects.using('problems_db').all())
@@ -155,7 +174,8 @@ def second_problem(request):
         is_answer = check_answer_input(answers[2], str(user_answer))
         if is_answer:
             update_answer_for_user(request.user, problem_name=problems_names[2])
-        sql = f"SELECT id, first_name, last_name FROM db_employees WHERE first_name LIKE '{first_name_request}' and last_name LIKE '{last_name_request}'"
+        sql = f"SELECT id, first_name, last_name FROM db_employees WHERE first_name LIKE '{first_name_request}' and " \
+              f"last_name LIKE '{last_name_request}' "
         try:
             cursor.execute(sql)
             result = cursor.fetchall()
@@ -324,12 +344,12 @@ def eighth_problem(request):
         if 'secret_safe' in secret_pass_request:
             per_flag = True
         for itr in context['result']:
- #           print(itr)
+            #           print(itr)
             if itr[0] == prize_amount:
                 per_flag = True
                 break
         if per_flag:
-#            print('jere')
+            #            print('jere')
             permission = User.objects.using("problems_db").get(pk=request.user.id).role == 'Admin'
             context['result'] = [] if permission is False else context['result']
             context['error'] = "You Don't Have Permission To View This Data" if permission is False else None

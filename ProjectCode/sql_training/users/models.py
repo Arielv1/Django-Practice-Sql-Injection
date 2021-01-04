@@ -25,6 +25,7 @@ class Profile(models.Model):
 
 class SqlProblem(models.Model):
     name = models.CharField(max_length=100, verbose_name="full name")
+    score = models.IntegerField(default=1)
     TYPE_CHOICES = (
         ("BLIND", "Blind"),
         ("IN_BAND", "In_Band"),

@@ -7,7 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
 import logging
+
 global_logger = logging.getLogger(__name__)
+
 
 def home(request):
     return render(request, 'home/home.html')
@@ -17,7 +19,6 @@ def about(request):
     return render(request, 'home/about.html')
 
 
-# todo Setup AWS Email when we can. and add support email.
 def contact_us(request):
     global_logger.error(" contact_us view called ")
     if request.method == 'POST':
@@ -65,4 +66,3 @@ def problems_list(request):
     context = {'problem_list': fill_references()}
 
     return render(request, "home/problems.html", context)
-

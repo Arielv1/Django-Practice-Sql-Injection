@@ -8,6 +8,7 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import SqlProblem, UsersProblems, Profile
 from django.contrib.auth.forms import PasswordChangeForm
 from django.template.response import TemplateResponse
+global_logger = logging.getLogger(__name__)
 
 
 def register(request):
@@ -24,8 +25,12 @@ def register(request):
 
 @login_required
 def profile(request):
+    global_logger.error(" profile view called ")
+
     user_problems = UsersProblems.objects.filter(user=request.user.profile)
-    all_problems = SqlProblem.objects.filter()
+    print(user_problems)
+    all_problems = SqlProblem.objects.all()
+    print(all_problems)
     rest_of_problems = []
     for problem in all_problems:
         if problem.name not in [user_problem.problem.name for user_problem in user_problems]:
@@ -70,6 +75,7 @@ def edit_profile(request):
 
 
 def get_solved_of_difficult(user):
+    global_logger.error(" get_solved_of_difficult called ")
     user_problems = UsersProblems.objects.filter(user=user)
     hard_solved = 0
     med_solved = 0
