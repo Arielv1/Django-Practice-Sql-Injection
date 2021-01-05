@@ -5,7 +5,7 @@
 
 {% endblock %}
 {% block content %}
-<h4>Blind SQL Injections</h4>
+<h3>Blind SQL Injections</h3>
 
 <p>
     It is recommended to skim over the overview of what blind SQL Injection is in the base 'Learn' page.
@@ -14,13 +14,11 @@
     Instead the output is a generic message or value to let the user know if an action was successful or not.
     It boils downs to either True of False for either the query returned a valid result or not<br>
 </p>
-<h4>Introduction</h4>
+<h4>Example</h4>
 
 <h6> Lets view a simple SQL query:</h6>
 <div class="alert alert-primary">
-            <pre>
-    Select streets from cities where city like '{user_input}'
-</pre>
+    <pre>Select streets from cities where city like '{user_input}'</pre>
 </div>
 
 <p> A response from website is can be: <br>
@@ -33,9 +31,7 @@
 </p>
 
 <div class="alert alert-primary">
-    <pre>
-        Select streets from cities where city = 'Tel Aviv' or '1'='1'
-    </pre>
+    <pre>Select streets from cities where city = 'Tel Aviv' or '1'='1'</pre>
 </div>
 
 <p>
@@ -54,12 +50,11 @@
     Lets view an example:
 </p>
 <div class="alert alert-primary">
-    <pre>
-        1 UNION SELECT IF(SUBSTRING(user_password,1,1) = CHAR(50),
-            BENCHMARK(5000000,ENCODE('MSG','by 5 seconds')),null)
-            FROM users WHERE user_id = 1;
-    </pre>
+    <pre>1 UNION SELECT IF(SUBSTRING(user_password,1,1) = CHAR(50),
+BENCHMARK(5000000,ENCODE('MSG','by 5 seconds')),null)
+FROM users WHERE user_id = 1;</pre>
 </div>
+
 <p>
     If the database response takes too long, we may expect that the first character of the users'
     password with user_id = 1 is the character ‘2’.

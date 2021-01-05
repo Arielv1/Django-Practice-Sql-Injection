@@ -52,12 +52,9 @@ WHERE ItemNumber = ItemNumber</pre>
 </p>
 
 <h3><strong>3. Out-band SQL injection</strong></h3>
-<p>The attacker uses the different channel of communication to launch their attacks and to gather their results.
-    <br>In order to perform this sort of injections the attack uses third party software in order to listen to
-    the communication to the database and modify the packets as they are being sent.
-    <br>One of the tools that are used for this type of injection is
-    <a href="https://portswigger.net/burp/communitydownload" target="_blank">Burpsuite</a>
-
+<p>The attacker uses a different channel of communication to launch their attacks and to gather their results.</p>
+<p> This attack is less common because it depends on features being enabled on the database server </p>
+<p>
     <br><br>Click here for more
     <a href="{% url 'outband' %}" target="_blank">information and examples about out-band injections</a>
 </p>
