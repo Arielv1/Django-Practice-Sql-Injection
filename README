@@ -1,0 +1,22 @@
+Requirments: Python 3 or above for usage of pip:
+
+Django installed:
+pip install Django
+
+Aditional libraries and tool:
+pip install social-auth-app-django
+pip install django-bootstrap4
+pip install django-crispy-forms
+pip install django-tables2
+pip install django-filter
+pip install django-bootstrap3
+pip install django-bootstrap4
+pip install user_agent
+
+After cloning the project, open terminal:
+cd ProjectCode/sql_training
+manage.py makemigrations home && manage.py makemigrations learn && manage.py makemigrations problems && manage.py makemigrations users
+manage.py migrate home && manage.py migrate --database=problems_db learn && manage.py migrate --database=problems_db problems && manage.py migrate users && manage.py migrate admin && manage.py migrate auth && manage.py migrate contenttypes && manage.py migrate sessions && manage.py migrate sites
+
+To run the project:
+manage.py runserver --> open browser --> localhost:8000
