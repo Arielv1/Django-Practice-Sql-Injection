@@ -6,7 +6,7 @@ from .models import Difficulty, InjectionTypes, ProblemData
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
-import logging
+import logging, datetime
 
 global_logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ def fill_references():
         ProblemData(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'In Band'),
         ProblemData(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band'),
         ProblemData(3, Difficulty.EASY.value, 'problems/3', 'Third Problem', 'In Band'),
-        ProblemData(4, Difficulty.MEDIUM.value, 'problems/4', 'Forth Problem', 'Blind'),
+        ProblemData(4, Difficulty.MEDIUM.value, 'problems/4', 'Fourth Problem', 'Blind'),
         ProblemData(5, Difficulty.MEDIUM.value, 'problems/5', 'Fifth Problem', 'Out Band'),
         ProblemData(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Blind'),
         ProblemData(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
@@ -64,5 +64,9 @@ def fill_references():
 @login_required
 def problems_list(request):
     context = {'problem_list': fill_references()}
+    response = render(request, "home/problems.html", context)
 
-    return render(request, "home/problems.html", context)
+    response.set_cookie('connection_time', datetime.datetime.now())
+    response.set_cookie('cookie_ready_time', datetime.datetime.now() + datetime.timedelta(hours=1))
+
+    return response

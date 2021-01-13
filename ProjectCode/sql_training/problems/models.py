@@ -49,9 +49,9 @@ class ClothingStore(models.Model):
 
 class Vehicle(models.Model):
     car_id = models.CharField(max_length=200, null=False, primary_key=True)
-    num_wheels = models.IntegerField(null=True)
-    manufacturer = models.CharField(max_length=200, null=True)
     num_of_accidents = models.IntegerField(null=True)
+    manufacturer = models.CharField(max_length=200, null=True)
+    price = models.FloatField(null=True)
     total_km = models.FloatField(null=True)
     is_automatic = models.BooleanField(null=False, default=True)
 

@@ -1,9 +1,73 @@
 {% extends "home/base.html" %}
 {% block content %}
 
+
 <body>
     <br>
-    <h4>Problem #9: To Be Implemented</h4>
+    <h4>Problem #9: To Be Completed</h4>
+    <hr>
+    {% if not baked_cookie %}
+        <strong>
+            <h6>Were you trying to access the problem?<br>
+            Sorry it's on a cookie break - check again in an hour.</h6>
+        </strong>
+    {% else %}
+            <form class="dropdown" id="drop_down_form" method="POST">
+            {% csrf_token %}
+
+            <h6>Using any means necessary, retrieve the entire store catalog.
+            <br>Be careful, there's some escaping involved.</h6>
+
+            <hr class="divider">
+
+            <select name="dropdown_option" class="form-control">
+                 {% for option in options %}
+                     {{option}}
+                    <option value="{{option}}">{{option}}</option>
+                 {% endfor %}
+            </select>
+            <br>
+            <h6></h6>
+            <h6>Price Range</h6>
+            <input class="margin" type="text" placeholder="Enter Minimum Price Here" name="min_input">
+                -
+            <input class="margin" type="text" placeholder="Enter Maximum Price Here" name="max_input">
+            <button class="btn btn-primary btn-sm" type="submit">Search</button>
+            </form>
+
+            {% if approve %}
+                <br>
+                <div class="alert alert-success">
+                  <strong>Success!</strong> You've Got The Right Answer!
+                </div>
+             {% endif %}
+            {% if result %}
+                <table class="table">
+                    <tr>
+                        <th class="font-weight-bold text-primary">Price</th>
+                        <th class="font-weight-bold text-primary">Num of accidents</th>
+                        <th class="font-weight-bold text-primary">Km</th>
+                    </tr>
+
+                    {% for value in result %}
+                    <tr>
+                        <td class="text-danger">{{value.0}}</td>
+                        <td class="text-danger">{{value.1}}</td>
+                        <td class="text-danger">{{value.2}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+    {% endif %}
+
+
 
 </body>
 {% endblock content %}
+
+<style>
+input.margin {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+</style>

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-import logging
+import datetime, logging
 import os
 import sys
 
@@ -22,7 +22,19 @@ problems_names = ["no problem", "Problem1", "Problem2", "Problem3", "Problem4", 
 global_logger = logging.getLogger(__name__)
 
 
-def init_sqlproblems_db():
+def escaping(a_string):
+    escaped = a_string.translate(str.maketrans({"=": r"\=",
+                                                "]": r"\]",
+                                                "\\": r"\\",
+                                                "^": r"\^",
+                                                ";": r"\;",
+                                                ".": r"\.",
+                                                "*": r"\["
+                                                }))
+    return escaped
+
+
+def _init_sqlproblems_db():
     global_logger.error("init_sqlproblems_db called")
     problems = [
         SqlProblem(name="Problem1", score=1, type="IN_BAND", difficult='EASY'),
@@ -40,7 +52,7 @@ def init_sqlproblems_db():
         problem.save()
 
 
-def fill_employee_database():
+def _fill_employee_database():
     employees = [
         Employee(1, "Ariel", "Vainshtein", 26),
         Employee(2, "Joshua", "Graham", 30),
@@ -51,7 +63,7 @@ def fill_employee_database():
         data.save(using="problems_db")
 
 
-def fill_clothing_store_db():
+def _fill_clothing_store_db():
     items = [
         ClothingStore(803654786, ClothingItem.SHOES.value, "Nike", 25.23),
         ClothingStore(987124123, ClothingItem.SHIRTS.value, "H&O", 22.10),
@@ -63,7 +75,7 @@ def fill_clothing_store_db():
         data.save(using="problems_db")
 
 
-def fill_vehicle_db():
+def _fill_vehicle_db():
     items = [
         Vehicle('111-22-333', 4, 'Toyota', 0, 10564.23, True),
         Vehicle('165-81-713', 4, 'BMW', 1, 9846.89, False),
@@ -72,7 +84,27 @@ def fill_vehicle_db():
         data.save(using="problems_db")
 
 
-def init_secret_db():
+def _fill_vehicle_db():
+    items = [
+        Vehicle('111-22-333', 4, 'Toyota', 5999.99, 10564.23, True),
+        Vehicle('165-81-713', 4, 'BMW', 6599.99, 9846.89, False),
+        Vehicle('148-879-003', 0, 'Lamborghini', 10999.99, 11003.89, False),
+        Vehicle('846-57-446', 2, 'Toyota', 7259.99, 8523.73, True),
+        Vehicle('087-918-224', 1, 'Honda', 8250.00, 7999.89, True),
+    ]
+    for data in items:
+        data.save(using="problems_db")
+
+
+def _get_car_manufacturers(vehicles):
+    manufacturers = []
+    for v in vehicles:
+        if v.manufacturer not in manufacturers:
+            manufacturers.append(v.manufacturer)
+    return manufacturers
+
+
+def _init_secret_db():
     item = BlindSecret(1, 'Bingo')
     item.save(using="problems_db")
 
@@ -121,7 +153,7 @@ def update_answer_for_user(user, problem_name):
 @login_required
 def first_problem(request):
     # init_sqlproblems_db()
-    fill_employee_database()
+    _fill_employee_database()
     context = {
         'num_items': len(Employee.objects.using('problems_db').all())
     }
@@ -157,7 +189,7 @@ def first_problem(request):
 
 @login_required
 def second_problem(request):
-    fill_employee_database()
+    _fill_employee_database()
     key_words = ['%', 'union', 'and', 'or']
     cursor = connections['problems_db'].cursor()
 
@@ -196,7 +228,7 @@ def second_problem(request):
 
 @login_required
 def third_problem(request):
-    fill_clothing_store_db()
+    _fill_clothing_store_db()
     key_words = ['or', 'and', '#', 'join', ';']
     context = {
         'num_items': len(ClothingStore.objects.using('problems_db').all()),
@@ -224,8 +256,8 @@ def third_problem(request):
 
 
 @login_required
-def forth_problem(request):
-    fill_vehicle_db()
+def fourth_problem(request):
+    _fill_vehicle_db()
     global_logger.error(" forth_problem view called ")
     context = {'message': "Out of stock"}
 
@@ -251,7 +283,7 @@ def forth_problem(request):
 
 @login_required
 def fifth_problem(request):
-    fill_clothing_store_db()
+    _fill_clothing_store_db()
     cursor = connections['problems_db'].cursor()
 
     context = {
@@ -273,7 +305,7 @@ def fifth_problem(request):
 
 @login_required
 def sixth_problem(request):
-    init_secret_db()
+    _init_secret_db()
 
     context = {
         'secret_value': BlindSecret.objects.using("problems_db").filter(id=1)[0].secret
@@ -344,12 +376,10 @@ def eighth_problem(request):
         if 'secret_safe' in secret_pass_request:
             per_flag = True
         for itr in context['result']:
-            #           print(itr)
             if itr[0] == prize_amount:
                 per_flag = True
                 break
         if per_flag:
-            #            print('jere')
             permission = User.objects.using("problems_db").get(pk=request.user.id).role == 'Admin'
             context['result'] = [] if permission is False else context['result']
             context['error'] = "You Don't Have Permission To View This Data" if permission is False else None
@@ -359,5 +389,28 @@ def eighth_problem(request):
 
 @login_required
 def ninth_problem(request):
-    context = {}
-    return render(request, 'problems/9.html', context)
+    _fill_vehicle_db()
+    context = {'baked_cookie': request.COOKIES['connection_time'] > request.COOKIES['cookie_ready_time'],
+               'options': _get_car_manufacturers(Vehicle.objects.using("problems_db").all()),
+               'num_of_items': len(Vehicle.objects.using("problems_db").all())}
+    cursor = connections['problems_db'].cursor()
+    if request.method == 'POST':
+        manufacturer_request = escaping(request.POST.get('dropdown_option'))
+        min_range_request = escaping(request.POST.get('min_input'))
+        max_range_request = escaping(request.POST.get('max_input'))
+        sql = f"SELECT price,num_of_accidents,total_km FROM db_vehicles WHERE manufacturer LIKE '{manufacturer_request}' " \
+              f"AND db_vehicles.price BETWEEN {min_range_request} AND {max_range_request};"
+        try:
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            context['result'] = result
+            context['approve'] = context['baked_cookie'] and len(result) == context['num_of_items']
+        except Exception as e:
+            context['result'] = []
+            context['error'] = e
+
+    response = render(request, "problems/9.html", context)
+    response.set_cookie('connection_time', datetime.datetime.now())
+    response.set_cookie('cookie_ready_time', datetime.datetime.now() + datetime.timedelta(hours=1))
+
+    return response
