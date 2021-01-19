@@ -6,7 +6,15 @@
 {% endblock %}
 {% block content %}
 
-<h4>Protection from SQL Injections</h4>
+<h3>Prevent from SQL Injections</h3>
+<p> To prevent from sql injection there are few options as we talk about in <a href="{% url 'learn' %}" target="_blank">Learn main page</a>
+Here we will show you examples of how to implement  those options. </p>
+<br>
+<h5> Option 1: Use of Prepared Statements (with Parameterized Queries)</h5> <br>
+Option 2: Use of Stored Procedures<br>
+Option 3: Whitelist Input Validation<br>
+Option 4: Escaping All User-Supplied Input<br>
+Option 5: Using external applications.<br><br>
 <br><br><br><br><br>
 
 {% endblock%}

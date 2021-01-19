@@ -52,14 +52,11 @@ WHERE ItemNumber = ItemNumber</pre>
 </p>
 
 <h3><strong>3. Out-band SQL injection</strong></h3>
-<p>The attacker uses a different channel of communication to launch their attacks and to gather their results.</p>
-<p> This attack is less common because it depends on features being enabled on the database server </p>
-<p>
-    <br><br>Click here for more
+<p>The attacker uses a different channel of communication to launch their attacks and to gather their results.<br>
+This attack is less common because it depends on features being enabled on the database server </p>
+<p> Click here for more
     <a href="{% url 'outband' %}" target="_blank">information and examples about out-band injections</a>
 </p>
-
-
 <h3><strong>SQL Injection prevention and mitigation</strong></h3>
 
 Option 1: Use of Prepared Statements (with Parameterized Queries)<br>
@@ -92,6 +89,8 @@ Option 5: Using external applications.<br><br>
 <p> Each database accounts should have least Privileges
     Make sure what the accounts need to do and let them only those right access
     Good thing is to create databases group with specific access to the things you want to let the user do</p>
+<h4>More About Prevention of SQL Injections</h4>
+<a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet" target="_blank">OWASP - SQL Injection Prevention</a>
 
 <h4>More About SQL Injections</h4>
 <a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">OWASP - SQL Injections</a>

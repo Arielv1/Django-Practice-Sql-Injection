@@ -158,11 +158,11 @@ def first_problem(request):
         'num_items': len(Employee.objects.using('problems_db').all())
     }
 
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
 
     if request.method == 'POST':
         input_id_request = request.POST.get("input_id")
-        user_answer = request.POST.get("problem_answer")
+        user_answer = request.POST.get("input_id")
         is_answer = check_answer_input(answers[1], str(user_answer))
         if is_answer:
             update_answer_for_user(request.user, problem_name=problems_names[1])

@@ -59,8 +59,8 @@ def tools(request):
     return render(request, 'learn/tools.html')
 
 
-def protection(request):
-    return render(request, 'learn/protection.html')
+def prevent_sqli(request):
+    return render(request, 'learn/prevent_sqli.html')
 
 
 def check(request):

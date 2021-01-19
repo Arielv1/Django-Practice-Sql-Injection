@@ -1,17 +1,13 @@
 {% extends "home/base.html" %}
-{% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 
-<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'users/main.css' %}">-->
-
-
-<!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>-->
-
-
+<br><br><br><br>
 <div class="content-section">
   <div class="media">
     <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
@@ -28,10 +24,10 @@
   <p><span class="badge badge-info">{{all_solved}}/6 Solved</span>&nbsp;-&nbsp;<span class="badge badge-success"> Easy&nbsp;{{easy_solved}}</span> <span class="badge badge-warning"> Medium&nbsp;{{medium_solved}}</span> <span class="badge badge-danger"> Hard&nbsp;{{hard_solved}}</span> </p>
 </div>
       {% if all_solved != 0 %}
-        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+     <table id="sortTable" class="display">
           <thead>
             <tr>
-              <th class="th-sm">Difficult</th>
+              <th class="data-mdb-sort=true">Difficult</th>
               <th class="th-sm">Name</th>
               <th class="th-sm">Type</th>
               <th class="th-sm">Completed</th>
@@ -55,46 +51,22 @@
             </tr>
           {% endfor %}
           </tbody>
-          <tfoot>
-            <tr>
-            <tr>
-              <th>Difficult</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Completed</th>
-            </tr>
-          </tfoot>
         </table>
+
   {% endif %}
       {% if all_solved == 0 %}
       <p> You have not solved any problems.</p>
 {% endif %}
 
-
 <!--                JS              -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
 
-<!-- jQuery -->
-<script type="text/javascript" src="{% static 'home/js/jquery.min.js' %}"></script>
-<!-- Popper.js -->
-<script type="text/javascript" src="{% static 'home/js/popper.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- Bootstrap -->
-<script type="text/javascript" src="{% static 'home/js/bootstrap.min.js' %}"></script>
-
-<!-- Material Design for Bootstrap -->
-<script type="text/javascript" src="{% static 'home/js/mdb.min.js' %}"></script>
-
-<!-- MDBootstrap Datatables  -->
-<script type="text/javascript" src="{% static 'home/js/addons/datatables2.min.js' %}"></script>
-
-<script type="text/javascript">
-$(document).ready(function () {
-$('#dtBasicExample').DataTable(
-{
-  "searching":false
-}
-);
-$('.dataTables_length').addClass('bs-select');
-});
+<script>
+$('#sortTable').DataTable();
 </script>
 {% endblock content %}

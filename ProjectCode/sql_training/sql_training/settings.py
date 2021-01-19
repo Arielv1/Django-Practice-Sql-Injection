@@ -89,6 +89,7 @@ TEMPLATES = [
         },
     },
 ]
+SITE_ID = 1
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.google.GoogleOAuth2',
 
@@ -167,7 +168,6 @@ USE_TZ = True
 
 FONTAWESOME_CSS_URL = '//cdn.example.com/fontawesome-min.css'  # absolute url
 
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -190,7 +190,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'cyberprojectdjango@gmail.com'
 EMAIL_HOST_PASSWORD = 'xdiedympvrlowcni'
-
 
 # Google sign up Settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '941393807189-f3c8veghn07f4squdgkkf33iidde6qa0.apps.googleusercontent.com'

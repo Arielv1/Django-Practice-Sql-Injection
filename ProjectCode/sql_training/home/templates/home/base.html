@@ -1,6 +1,7 @@
-<!--{% load static %}-->
 <!DOCTYPE html>
 <html>
+{% load static %}
+
 <head>
 
     <!-- Required meta tags -->
@@ -74,7 +75,10 @@
               </div>
             {% endfor %}
           {% endif %}
-          {% block content %}{% endblock %}
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+            {% block scripts %}{% endblock %}
         </div>
       </div>
     </main>
@@ -102,7 +106,6 @@
     </div>
   </div>
   <!-- Footer Elements -->
-
 </footer>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -110,6 +113,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+    console.log('DOM fully loaded and parsed');
+});
+</script>
 <style>
 .problem_description{
 
