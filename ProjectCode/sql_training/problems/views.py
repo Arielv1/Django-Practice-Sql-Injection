@@ -329,6 +329,24 @@ def sixth_problem(request):
 
 @login_required
 def seventh_problem(request):
+    context = {
+        'num_items': len(Employee.objects.using('problems_db').all())
+    }
+    cursor2 = connections['problems_db'].cursor()
+    if request.method == 'POST':
+        first_name_request = request.POST.get("input_first_name")
+        print(request.headers["User-Agent"])
+        user_agent_input = request.headers["User-Agent"]
+        with cursor2 as cursor:
+            sql = f"SELECT * FROM db_employees WHERE first_name LIKE {user_agent_input};"
+            print(sql)
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            print(result)
+            if result is not None and len(result) != 0:
+                context['result'] = result
+            cursor.close()
+
     return render(request, 'problems/7.html')
 
 

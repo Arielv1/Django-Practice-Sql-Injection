@@ -14,7 +14,24 @@
     <button class="btn btn-primary btn-sm" type="submit">Search</button>
 </form>
               <p class="mr-2"> {{ message }}</p>
+    {% if result %}
 
+        <table class="table">
+            <tr>
+                <th class="font-weight-bold text-primary">ID</th>
+                <th class="font-weight-bold text-primary">First Name</th>
+                <th class="font-weight-bold text-primary">Last Name</th>
+            </tr>
+
+            {% for value in result %}
+            <tr>
+                <td class="text-danger">{{value.0}}</td>
+                <td class="text-danger">{{value.1}}</td>
+                <td class="text-danger">{{value.2}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 
 {% if result is not None %}
      {% for value in result %}
