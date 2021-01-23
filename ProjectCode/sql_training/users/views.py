@@ -11,6 +11,27 @@ from django.template.response import TemplateResponse
 global_logger = logging.getLogger(__name__)
 
 
+def _reset_sqlproblems_db():
+    SqlProblem.objects.all().delete()
+
+def _init_sqlproblems_db():
+    global_logger.error("init_sqlproblems_db called")
+    problems = [
+        SqlProblem(1, name="Problem1", score=1, type="IN_BAND", difficult='EASY'),
+        SqlProblem(2, name="Problem2", score=2, type="IN_BAND", difficult='EASY'),
+        SqlProblem(3, name="Problem3", score=3, type="IN_BAND", difficult='EASY'),
+        SqlProblem(4, name="Problem4", score=4, type="BLIND", difficult='MEDIUM'),
+        SqlProblem(5, name="Problem5", score=5, type="OUT_BAND", difficult='MEDIUM'),
+        SqlProblem(6, name="Problem6", score=6, type="BLIND", difficult='HARD'),
+        SqlProblem(7, name="Problem7", score=7, type="IN_BAND", difficult='HARD'),
+        SqlProblem(8, name="Problem8", score=8, type="IN_BAND", difficult='HARD'),
+        SqlProblem(9, name="Problem9", score=9, type="IN_BAND", difficult='HARD'),
+
+    ]
+    for problem in problems:
+        problem.save()
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -26,6 +47,11 @@ def register(request):
 @login_required
 def profile(request):
     global_logger.error(" profile view called ")
+
+    if request.method == 'POST':
+        print("reset called")
+        _reset_sqlproblems_db()
+        _init_sqlproblems_db()
 
     user_problems = UsersProblems.objects.filter(user=request.user.profile)
     print(user_problems)

@@ -34,18 +34,22 @@ def escaping(a_string):
     return escaped
 
 
+def _reset_sqlproblems_db():
+    SqlProblem.objects.all().delete()
+
+
 def _init_sqlproblems_db():
     global_logger.error("init_sqlproblems_db called")
     problems = [
-        SqlProblem(name="Problem1", score=1, type="IN_BAND", difficult='EASY'),
-        SqlProblem(name="Problem2", score=2, type="IN_BAND", difficult='EASY'),
-        SqlProblem(name="Problem3", score=3, type="IN_BAND", difficult='EASY'),
-        SqlProblem(name="Problem4", score=4, type="BLIND", difficult='MEDIUM'),
-        SqlProblem(name="Problem5", score=5, type="OUT_BAND", difficult='MEDIUM'),
-        SqlProblem(name="Problem6", score=6, type="BLIND", difficult='HARD'),
-        SqlProblem(name="Problem7", score=7, type="IN_BAND", difficult='HARD'),
-        SqlProblem(name="Problem8", score=8, type="IN_BAND", difficult='HARD'),
-        SqlProblem(name="Problem9", score=9, type="IN_BAND", difficult='HARD'),
+        SqlProblem(1, name="Problem1", score=1, type="IN_BAND", difficult='EASY'),
+        SqlProblem(2, name="Problem2", score=2, type="IN_BAND", difficult='EASY'),
+        SqlProblem(3, name="Problem3", score=3, type="IN_BAND", difficult='EASY'),
+        SqlProblem(4, name="Problem4", score=4, type="BLIND", difficult='MEDIUM'),
+        SqlProblem(5, name="Problem5", score=5, type="OUT_BAND", difficult='MEDIUM'),
+        SqlProblem(6, name="Problem6", score=6, type="BLIND", difficult='HARD'),
+        SqlProblem(7, name="Problem7", score=7, type="IN_BAND", difficult='HARD'),
+        SqlProblem(8, name="Problem8", score=8, type="IN_BAND", difficult='HARD'),
+        SqlProblem(9, name="Problem9", score=9, type="IN_BAND", difficult='HARD'),
 
     ]
     for problem in problems:
@@ -77,15 +81,6 @@ def _fill_clothing_store_db():
 
 def _fill_vehicle_db():
     items = [
-        Vehicle('111-22-333', 4, 'Toyota', 0, 10564.23, True),
-        Vehicle('165-81-713', 4, 'BMW', 1, 9846.89, False),
-    ]
-    for data in items:
-        data.save(using="problems_db")
-
-
-def _fill_vehicle_db():
-    items = [
         Vehicle('111-22-333', 4, 'Toyota', 5999.99, 10564.23, True),
         Vehicle('165-81-713', 4, 'BMW', 6599.99, 9846.89, False),
         Vehicle('148-879-003', 0, 'Lamborghini', 10999.99, 11003.89, False),
@@ -109,6 +104,7 @@ def _init_secret_db():
     item.save(using="problems_db")
 
 
+
 def check_answer_input(real_answer, user_answer):
     logger = logging.getLogger(__name__)
     logger.error(" problem_login view called ")
@@ -119,7 +115,7 @@ def check_answer_input(real_answer, user_answer):
         return False
 
 
-def init_safe_db():
+def _init_safe_db():
     prize_amount = 10000000
     safe = Safe(1, '4-8-15-23-48', prize_amount)
     safe.save(using="problems_db")
@@ -137,12 +133,12 @@ def init_mockup_user_db(user):
         item.save(using="problems_db")
 
 
-def update_answer_for_user(user, problem_name):
+def update_answer_for_user(user, problem_id):
     global_logger.error("update_answer_for_user called")
     print(user)
-    print(problem_name)
-    problem = SqlProblem.objects.get(name=problem_name)
-    UsersProblems(user=user.profile, problem=problem).save()
+    print(problem_id)
+    problem = SqlProblem.objects.get(id=problem_id)
+    UsersProblems(problem_id, user=user.profile, problem=problem).save()
 
 
 '''
@@ -152,31 +148,31 @@ def update_answer_for_user(user, problem_name):
 
 @login_required
 def first_problem(request):
-    # init_sqlproblems_db()
+    #_reset_sqlproblems_db()
+    #_init_sqlproblems_db()
+    print(len(SqlProblem.objects.all()))
     _fill_employee_database()
     context = {
         'num_items': len(Employee.objects.using('problems_db').all())
     }
 
-    cursor = connections['problems_db_read_user'].cursor()
+    #cursor = connections['problems_db_read_user'].cursor()
+    cursor = connections['problems_db'].cursor()
 
     if request.method == 'POST':
         input_id_request = request.POST.get("input_id")
-        user_answer = request.POST.get("input_id")
-        is_answer = check_answer_input(answers[1], str(user_answer))
-        if is_answer:
-            update_answer_for_user(request.user, problem_name=problems_names[1])
-
         if input_id_request is not None and input_id_request != "":
             sql = f"SELECT * FROM db_employees WHERE id = {input_id_request};"
             try:
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 context['result'] = result
-                context['num_resulted_items'] = len(result)
+                context['correct_answer'] = len(result) == context['num_items']
                 cursor.close()
             except Exception as e:
                 context['error'] = e
+            if context['correct_answer']:
+                update_answer_for_user(request.user, problem_id=1)
     return render(request, 'problems/1.html', context)
 
 
@@ -202,10 +198,6 @@ def second_problem(request):
             if kw in first_name_request or kw in last_name_request:
                 first_name_request = "null"
                 break
-        user_answer = request.POST.get("problem_answer")
-        is_answer = check_answer_input(answers[2], str(user_answer))
-        if is_answer:
-            update_answer_for_user(request.user, problem_name=problems_names[2])
         sql = f"SELECT id, first_name, last_name FROM db_employees WHERE first_name LIKE '{first_name_request}' and " \
               f"last_name LIKE '{last_name_request}' "
         try:
@@ -214,8 +206,11 @@ def second_problem(request):
             cursor.close()
             context['result'] = result
             context['num_resulted_items'] = len(result)
+            context['correct_answer'] = len(result) == context['num_items']
         except Exception as e:
             context['error'] = e
+        if context['correct_answer']:
+            update_answer_for_user(request.user, problem_id=2)
     return render(request, 'problems/2.html', context)
 
 
@@ -251,10 +246,14 @@ def third_problem(request):
         result = cursor.fetchall()
         cursor.close()
         context['result'] = result
-        context['num_resulted_items'] = len(result)
+
+        context['correct_result'] = len(result) == context['num_items']
+        if context['correct_result']:
+            update_answer_for_user(request.user, problem_id=3)
+
     return render(request, 'problems/3.html', context)
 
-
+# TODO - Add solution to problem + check for answer
 @login_required
 def fourth_problem(request):
     _fill_vehicle_db()
@@ -267,7 +266,7 @@ def fourth_problem(request):
         user_answer = request.POST.get("problem_answer")
         is_answer = check_answer_input(answers[4], str(user_answer))
         if is_answer:
-            update_answer_for_user(request.user, problem_name=problems_names[4])
+            update_answer_for_user(request.user, problem_id=4)
         sql = f"SELECT * FROM db_vehicles WHERE lower(manufacturer) LIKE '{manufacturer_request}'"
         try:
             cursor.execute(sql)
@@ -275,12 +274,14 @@ def fourth_problem(request):
             if result is not None and len(result) != 0:
                 context['message'] = "Exists in storage"
             cursor.close()
-        except:
-            context['message'] = 'Invalid Input'
+        except Exception as e:
+            context['message'] = 'Invalid input'
 
     return render(request, 'problems/4.html', context)
 
-
+'''
+    Solution: use burpsuite, modify input to use wild card %
+'''
 @login_required
 def fifth_problem(request):
     _fill_clothing_store_db()
@@ -298,7 +299,9 @@ def fifth_problem(request):
         result = cursor.fetchall()
         cursor.close()
         context['result'] = result
-        context['num_items'] = len(result)
+        context['correct_result'] = context['num_items'] == len(result)
+        if context['correct_result']:
+            update_answer_for_user(request.user, problem_id=5)
 
     return render(request, 'problems/5.html', context)
 
@@ -311,19 +314,19 @@ def sixth_problem(request):
         'secret_value': BlindSecret.objects.using("problems_db").filter(id=1)[0].secret
     }
 
-    cursor2 = connections['problems_db'].cursor()
+    cursor = connections['problems_db'].cursor()
     if request.method == 'POST':
         first_name_request = request.POST.get("input_first_name")
-        with cursor2 as cursor:
-            sql = f"SELECT * FROM db_employees WHERE first_name LIKE '{first_name_request}';"
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            context['result'] = result
-            if result is not None and len(result) != 0:
-                context['message'] = "There's Employee With This Name"
-            else:
-                context['message'] = "No Employee With This Name"
-            cursor.close()
+        sql = f"SELECT * FROM db_employees WHERE first_name LIKE '{first_name_request}';"
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        context['result'] = result
+        if result is not None and len(result) != 0:
+            context['message'] = "There's Employee With This Name"
+        else:
+            context['message'] = "No Employee With This Name"
+        cursor.close()
+
     return render(request, 'problems/6.html', context)
 
 
@@ -368,17 +371,16 @@ def seventh_problem(request):
     1'; select * from information_schema.columns where table_name='db_users' --#
 
     Step #3: Update user privileges, then try to access the secret_safe
-    a'; UPDATE db_users SET role = 'Admin' WHERE db_users.id = 1; select * from db_users; select prize from secret_safe where 1=1 --#
+    a'; UPDATE db_users SET role = 'Admin' WHERE db_users.username = 'ariel'; select * from db_users; select prize from secret_safe where 1=1 --#
 '''
 
 
 @login_required
 def eighth_problem(request):
-    prize_amount = init_safe_db()
+    prize_amount = _init_safe_db()
     init_mockup_user_db(request.user)
     cursor = connections['problems_db'].cursor()
     context = {'secret': Safe.objects.using("problems_db").get(id=1).prize}
-
     if request.method == 'POST':
         secret_pass_request = request.POST.get('secret_password')
         sql = f"SELECT prize FROM secret_safe WHERE secret_pass LIKE '{secret_pass_request}'"
@@ -401,9 +403,20 @@ def eighth_problem(request):
             permission = User.objects.using("problems_db").get(pk=request.user.id).role == 'Admin'
             context['result'] = [] if permission is False else context['result']
             context['error'] = "You Don't Have Permission To View This Data" if permission is False else None
-            context['secret_result'] = None if permission is False else prize_amount
+            context['secret_result'] = None if permission is False else prize_amount == context['secret']
+            if context['secret_result']:
+                update_answer_for_user(request.user, problem_id=8)
     return render(request, 'problems/8.html', context)
 
+
+'''
+    Solution:
+    Step #1: Open burpsuite and change 'connection_time' variable to exceed 'cookie_ready_time'
+    Step #2: 
+    In the minimum price field: 1
+    In the maximum price field: 2 union select price,num_of_accidents,total_km FROM db_vehicles
+    Make sure the condition of step #1 always fulfilled
+'''
 
 @login_required
 def ninth_problem(request):
@@ -423,6 +436,8 @@ def ninth_problem(request):
             result = cursor.fetchall()
             context['result'] = result
             context['approve'] = context['baked_cookie'] and len(result) == context['num_of_items']
+            if context['approve']:
+                update_answer_for_user(request.user, problem_id=9)
         except Exception as e:
             context['result'] = []
             context['error'] = e

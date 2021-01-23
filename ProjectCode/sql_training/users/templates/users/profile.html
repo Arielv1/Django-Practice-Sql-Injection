@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 
 <br><br><br><br>
+
 <div class="content-section">
   <div class="media">
     <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
@@ -22,7 +23,6 @@
 <div id="problems-solved" class="col-sm-12">
   <p><span class="badge badge-info">{{all_solved}}/6 Solved</span>&nbsp;-&nbsp;<span class="badge badge-success"> Easy&nbsp;{{easy_solved}}</span> <span class="badge badge-warning"> Medium&nbsp;{{medium_solved}}</span> <span class="badge badge-danger"> Hard&nbsp;{{hard_solved}}</span> </p>
 </div>
-      {% if all_solved != 0 %}
      <table id="sortTable" class="display">
           <thead>
             <tr>
@@ -51,11 +51,10 @@
           {% endfor %}
           </tbody>
         </table>
-
-  {% endif %}
-      {% if all_solved == 0 %}
-      <p> You have not solved any problems.</p>
-{% endif %}
+<form method="POST">
+    {% csrf_token %}
+   <button class="btn btn-danger btn-block" type="submit">Reset Progress</button>
+</form>
 
 <!--                JS              -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

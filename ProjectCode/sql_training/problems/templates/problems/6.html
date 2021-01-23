@@ -19,12 +19,46 @@
 
     </form>
 
-    {%if secret_value in result%}
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowCodeModal">Hint</button>
+    <div id="CodeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">The Execution Code</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h6>Use third party software or any tool that allows you to view the packets and the packets.</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="ShowCodeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <h6>Are you sure you want to view the code?</h6>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#CodeModal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if secret_value in result %}
         <br>
         <div class="alert alert-success">
           <strong>Success!</strong> You've Got The Right Answer!
         </div>
-    {%endif%}
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#DefendModal">Mitigation Methods</button>
+    {% endif %}
 
 
         <article class="media content-section">

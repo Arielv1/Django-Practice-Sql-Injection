@@ -22,6 +22,10 @@ class ProblemData(models.Model):
     hreference = models.CharField(max_length=200, null=True)
     name = models.CharField(max_length=200, null=True)
     type = models.CharField(max_length=200, null=True)
+    solved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.difficulty} {self.hreference} {self.name} {self.type} {self.solved}"
 
     class Meta:
         db_table = 'db_problem_reference'

@@ -11,15 +11,20 @@
             <hr class="divider">
             <label>ID:</label>
             <input type="text" name="input_id">
+         <button class="btn btn-primary btn-sm" type="submit">Search</button>
         </p>
-        <button class="btn btn-primary btn-sm" type="submit">Search</button>
+
     </form>
 
-    {% if num_items == num_resulted_items %}
-        <br>
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowCodeModal">Show Code</button>
+
+    {% if correct_answer %}
+        <br><br>
         <div class="alert alert-success">
-          <strong>Success!</strong> You've Got The Right Answer!
+                <h6>Success! You've Got The Right Answer!</h6>
         </div>
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#DefendModal">Mitigation Methods</button>
+        <br>
     {% endif %}
 
     {% if error %}
@@ -45,16 +50,19 @@
             {% endfor %}
         </table>
     {% endif %}
-    <button class="btn btn-primary btn-sm" type="button" data-toggle="modal" data-target="#ConfirmModal">Show Code</button>
+
     <div id="CodeModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Modal Header</h4>
+                    <h4 class="modal-title">The Execution Code</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <p> will be picture of the code</p>
+                    <h6><span class="text text-success">SELECT</span> id, first_name, last_name</h6>
+                    <h6><span class="text text-success">FROM</span> db_employees</h6>
+                    <h6><span class="text text-success">WHERE</span> first_name LIKE
+                        '{first_name_request}' AND last_name LIKE '{last_name_request}'</h6>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -62,29 +70,54 @@
             </div>
         </div>
     </div>
-        <div id="ConfirmModal" class="modal fade" role="dialog">
+    <div id="ShowCodeModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p> Are you sure you want to show the code?</p>
+                    <p>
+                        <h6>Are you sure you want to view the code?</h6>
+                    </p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" type="button" data-dismiss="modal" data-toggle="modal" data-target="#CodeModal">Yes</button>
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#CodeModal">Yes</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
     </div>
-<!--    <form onsubmit="App.change(); return false">-->
-<!--        <button type="submit" class="btn btn-primary">Change</button>-->
-<!--    </form>-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="{% static 'problems/js/jquery-3.5.1.min.js' %}"></script>
-    <script src="{% static 'problems/js/jquery-ui-folder/jquery-ui.js' %}"></script>
-    <script src="{% static 'problems/js/problem_1.js' %}"></script>
-    <script src="{% static 'problems/js/custom.js' %}"></script>
-<!--    <link href="{% static 'home/css/bootstrap.min.css' %}" rel="stylesheet">-->
-
+    <div id="DefendModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Defending</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h6>Possible ways to mitigate this attack:</h6>
+                    <h6>1. Use escaping for transforming special symbols such as '*' to nullify their power in SQL queries</h6>
+                    <h6>2. Check for specific key words such as 'select' and 'union', if a key word is present execute a stored SQL query for avoiding using users' input</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="ShowDefendSolutionModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <h6>Are you sure you want to view the defended code?</h6>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#DefendModal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 {% endblock content %}

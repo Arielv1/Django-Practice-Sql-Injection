@@ -1,4 +1,7 @@
-<nav class="navbar navbar-expand-sm bg-info navbar-dark fixed-top second-nav">
+
+
+<body>
+<nav id="gradsecdondarynavbar" class="navbar navbar-expand-sm bg-info navbar-dark fixed-top second-nav">
     <div class="container">
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar2">
@@ -16,13 +19,17 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'outband' %}">Out-Band</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'prevent_sqli' %}">Mitigation</a>
-                </li>
-
             </ul>
         </div>
     </div>
 </nav>
 <br>
 <br>
+</body>
+
+<style>
+#gradsecdondarynavbar {
+  background-color: blue; /* For browsers that do not support gradients */
+  background-image: linear-gradient(180deg, rgb(0, 180, 230), rgb(170, 230, 255));
+}
+</style>
