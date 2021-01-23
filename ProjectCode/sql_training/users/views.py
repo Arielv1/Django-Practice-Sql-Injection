@@ -38,6 +38,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, f'Your account has been created! You are now able to log in')
+            _init_sqlproblems_db()
             return redirect('login')
     else:
         form = UserRegisterForm()
