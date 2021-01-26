@@ -224,19 +224,20 @@ def second_problem(request):
 @login_required
 def third_problem(request):
     _fill_clothing_store_db()
-    key_words = ['or', 'and', '#', 'join', ';']
+    # key_words = ['or', 'and', '#', 'join', ';']
     context = {
         'num_items': len(ClothingStore.objects.using('problems_db').all()),
     }
     cursor = connections['problems_db'].cursor()
 
     if request.method == 'POST':
-        item_name_request = request.POST.get("item_name").lower()
-        for kw in key_words:
-            if kw in item_name_request:
-                item_name_request = "1"
-                break
+        item_name_request = escaping(request.POST.get("item_name"))
+        # for kw in key_words:
+        #     if kw in item_name_request:
+        #         item_name_request = "1"
+        #         break
         sql = f"SELECT * FROM db_clothing_shop WHERE barcode = {item_name_request}"
+        print(sql)
         try:
             cursor.execute(sql)
         except Exception as e:
@@ -246,7 +247,7 @@ def third_problem(request):
         result = cursor.fetchall()
         cursor.close()
         context['result'] = result
-
+        print(result)
         context['correct_result'] = len(result) == context['num_items']
         if context['correct_result']:
             update_answer_for_user(request.user, problem_id=3)
@@ -267,12 +268,16 @@ def fourth_problem(request):
         is_answer = check_answer_input(answers[4], str(user_answer))
         if is_answer:
             update_answer_for_user(request.user, problem_id=4)
-        sql = f"SELECT * FROM db_vehicles WHERE lower(manufacturer) LIKE '{manufacturer_request}'"
+        sql = f"SELECT * FROM db_vehicles WHERE manufacturer LIKE '{manufacturer_request}'"
         try:
             cursor.execute(sql)
             result = cursor.fetchall()
+            print(result)
             if result is not None and len(result) != 0:
                 context['message'] = "Exists in storage"
+            else:
+                context['message'] = 'Invalid input'
+
             cursor.close()
         except Exception as e:
             context['message'] = 'Invalid input'
@@ -318,17 +323,24 @@ def sixth_problem(request):
     if request.method == 'POST':
         first_name_request = request.POST.get("input_first_name")
         sql = f"SELECT * FROM db_employees WHERE first_name LIKE '{first_name_request}';"
+        print(sql)
         cursor.execute(sql)
         result = cursor.fetchall()
         context['result'] = result
         if result is not None and len(result) != 0:
-            context['message'] = "There's Employee With This Name"
+            print("found")
+            context['message'] = "There is Employee With This Name"
         else:
             context['message'] = "No Employee With This Name"
         cursor.close()
 
     return render(request, 'problems/6.html', context)
 
+'''
+   Solution:
+   Step #1: try to get error message that reveals db name
+   Step #2: 1 union select * from db_clothing_shop
+'''
 
 @login_required
 def seventh_problem(request):
