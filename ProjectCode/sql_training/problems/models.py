@@ -80,8 +80,12 @@ class User(models.Model):
     password = models.CharField(max_length=200, null=True)
     role = models.CharField(max_length=200, null=True)
 
+    def __str__(self):
+        return f"{self.username} {self.email} {self.password} {self.role}\n"
     class Meta:
         db_table = 'db_users'
+
+
 
 class UserRole(Enum):
     USER = 'User'

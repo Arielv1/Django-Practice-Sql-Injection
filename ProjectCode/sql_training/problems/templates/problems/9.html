@@ -13,36 +13,7 @@
             Sorry it's on a cookie break - check again in an hour.</h6>
         </strong>
 
-    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowCodeModal">Hint</button>
-    <div id="CodeModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Hints</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <h6>Use any tool that allows you to track and view the details of cookies, then modify the value of a specific variable there so the condition mentioned in the problem will be met</h6>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="ShowCodeModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <p>
-                        <h6>Are you sure you want to get the hints?</h6>
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#CodeModal">Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                </div>
-            </div>
+
         </div>
     </div>
     {% else %}
@@ -74,8 +45,8 @@
                 <div class="alert alert-success">
                   <strong>Success!</strong> You've Got The Right Answer!
                 </div>
-                <button class="btn btn-primary" type="submit">Mitigation Methods</button>
              {% endif %}
+
             {% if result %}
                 <table class="table">
                     <tr>
@@ -95,7 +66,90 @@
             {% endif %}
     {% endif %}
 
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowHintModal">Hint</button>
+    <div id="ShowHintModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <h6>Are you sure you want to get the hints?</h6>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#HintModal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="HintModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Hints</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h6>Find a way to view and modify the data of your cookies</h6>
+                    <hr>
+                    <h6>At every stage of the problem, make sure the initial condition set by the problem is met regarding the cookie</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowCodeModal">Show Code</button>
+    <div id="ShowCodeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <h6>Are you sure you want to view the code?</h6>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#CodeModal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div id="CodeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">The Executed Code</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                     <h6><span class="text text-warning">def escaping(a_string):</span></h6>
+                    <h6 style="margin-left:10px">escaped = a_string.translate(str.maketrans({"=": r"\=",</h6>
+                    <h6 style="margin-left:320px">"]": r"\]",</h6>
+                    <h6 style="margin-left:320px">  "\\": r"\\",</h6>
+                    <h6 style="margin-left:320px">  "^": r"\^",</h6>
+                    <h6 style="margin-left:320px">  ";": r"\;",</h6>
+                    <h6 style="margin-left:320px">  "*": r"\["</h6>
+                    <h6 style="margin-left:320px">}))</h6>
+                    <h6 style="margin-left:10px">return escaped</h6>
+                    <hr>
+                   <h6>manufacturer_request = <span class="text text-warning">  escaping(request.POST.get('dropdown_option'))</span></h6>
+                    <hr>
+                   <h6>min_range_request = <span class="text text-warning">  escaping(request.POST.get('min_input'))</span></h6>
+                   <h6>max_range_request = <span class="text text-warning"> escaping(request.POST.get('max_input'))</span></h6>
+                   <hr>
+                    <h6><span class="text text-success"> sql = f"SELECT price,num_of_accidents,total_km FROM db_vehicles WHERE manufacturer LIKE '{manufacturer_request}' AND db_vehicles.price BETWEEN {min_range_request} AND {max_range_request};"</span></h6>
+                    <hr>
+                    <h6><span class="text text-danger">response.set_cookie('connection_time', datetime.datetime.now())</span></h6>
+                    <h6><span class="text text-danger">response.set_cookie('cookie_ready_time', datetime.datetime.now() + datetime.timedelta(hours=1))</span></h6>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
 </body>
 {% endblock content %}
 

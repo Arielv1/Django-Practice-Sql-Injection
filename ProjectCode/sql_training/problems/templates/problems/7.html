@@ -8,30 +8,113 @@
         <hr class="divider">
         <label>ID:</label>
         <input type="text" name="input_first_name">
-
+     <button class="btn btn-primary btn-sm" type="submit">Search</button>
     </p>
 
-    <button class="btn btn-primary btn-sm" type="submit">Search</button>
 </form>
-              <p class="mr-2"> {{ message }}</p>
-    {% if result %}
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowHintModal">Hint</button>
+    <div id="ShowHintModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <h6>Are you sure you want to view the code?</h6>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#HintModal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="HintModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Hints</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h6>Find an input that fits <span class="text text-danger">all possible strings</span></h6>
 
-        <table class="table">
-            <tr>
-                <th class="font-weight-bold text-primary">ID</th>
-                <th class="font-weight-bold text-primary">First Name</th>
-                <th class="font-weight-bold text-primary">Last Name</th>
-            </tr>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            {% for value in result %}
-            <tr>
-                <td class="text-danger">{{value.0}}</td>
-                <td class="text-danger">{{value.1}}</td>
-                <td class="text-danger">{{value.2}}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowCodeModal">Show Code</button>
+    <div id="ShowCodeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <h6>Are you sure you want to view the code?</h6>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#CodeModal">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="CodeModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">The Executed Code</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                   <h6>user_agent_input = <span class="text text-warning">request.headers["User-Agent"]</span></h6>
+                    <h6><span class="text text-success">sql = f"SELECT * FROM db_employees WHERE first_name LIKE {user_agent_input};"</span></h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  {% if correct_answer %}
+        <br>
+        <div class="alert alert-success">
+          <strong>Success!</strong> You've Got The Right Answer!
+        </div>
     {% endif %}
+
+    <p class="mr-2"> {{ message }}</p>
+
+{% if result %}
+
+    <table class="table">
+        <tr>
+            <th class="font-weight-bold text-primary">ID</th>
+            <th class="font-weight-bold text-primary">First Name</th>
+            <th class="font-weight-bold text-primary">Last Name</th>
+        </tr>
+
+        {% for value in result %}
+        <tr>
+            <td class="text-danger">{{value.0}}</td>
+            <td class="text-danger">{{value.1}}</td>
+            <td class="text-danger">{{value.2}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+{% if error %}
+    <br>
+    <div class="alert alert-danger">
+      <strong>{{error}}</strong>
+    </div>
+{% endif %}
 
 {% if result is not None %}
      {% for value in result %}

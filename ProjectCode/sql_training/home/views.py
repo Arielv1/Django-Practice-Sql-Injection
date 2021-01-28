@@ -2,7 +2,7 @@ import logging
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Difficulty, InjectionTypes, ProblemData
+from .models import Difficulty, InjectionTypes, ProblemsContentTable
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
@@ -46,15 +46,15 @@ def contact_us(request):
 
 def fill_references():
     items = [
-        ProblemData(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'In Band'),
-        ProblemData(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band'),
-        ProblemData(3, Difficulty.EASY.value, 'problems/3', 'Third Problem', 'In Band'),
-        ProblemData(4, Difficulty.MEDIUM.value, 'problems/4', 'Fourth Problem', 'Blind'),
-        ProblemData(5, Difficulty.MEDIUM.value, 'problems/5', 'Fifth Problem', 'Out Band'),
-        ProblemData(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Blind'),
-        ProblemData(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
-        ProblemData(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'In Band'),
-        ProblemData(9, Difficulty.HARD.value, 'problems/9', 'Ninth Problem', 'TBD'),
+        ProblemsContentTable(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'In Band - Introduction'),
+        ProblemsContentTable(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band - Escaping'),
+        ProblemsContentTable(3, Difficulty.MEDIUM.value, 'problems/3', 'Third Problem', 'In Band'),
+        ProblemsContentTable(4, Difficulty.MEDIUM.value, 'problems/4', 'Fourth Problem', 'Blind'),
+        ProblemsContentTable(5, Difficulty.MEDIUM.value, 'problems/5', 'Fifth Problem', 'Out Band'),
+        ProblemsContentTable(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Blind'),
+        ProblemsContentTable(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
+        ProblemsContentTable(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'In Band'),
+        ProblemsContentTable(9, Difficulty.HARD.value, 'problems/9', 'Ninth Problem', 'TBD'),
     ]
     for data in items:
         data.save()
@@ -68,5 +68,6 @@ def problems_list(request):
 
     response.set_cookie('connection_time', datetime.datetime.now())
     response.set_cookie('cookie_ready_time', datetime.datetime.now() + datetime.timedelta(hours=1))
-
+    response.set_cookie('autherized', False)
+    response.set_cookie('show_login', 0==1)
     return response

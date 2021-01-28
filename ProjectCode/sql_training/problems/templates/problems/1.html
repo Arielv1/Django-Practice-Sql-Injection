@@ -16,14 +16,17 @@
 
     </form>
 
-    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowCodeModal">Show Code</button>
+    <div>
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowHintNodal">Hint</button>
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ShowCodeModal">Show Code</button>
+    </div>
+
 
     {% if correct_answer %}
         <br><br>
         <div class="alert alert-success">
                 <h6>Success! You've Got The Right Answer!</h6>
         </div>
-        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#DefendModal">Mitigation Methods</button>
         <br>
     {% endif %}
 
@@ -51,25 +54,7 @@
         </table>
     {% endif %}
 
-    <div id="CodeModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">The Execution Code</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <h6><span class="text text-success">SELECT</span> id, first_name, last_name</h6>
-                    <h6><span class="text text-success">FROM</span> db_employees</h6>
-                    <h6><span class="text text-success">WHERE</span> first_name LIKE
-                        '{first_name_request}' AND last_name LIKE '{last_name_request}'</h6>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div id="ShowCodeModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -85,17 +70,15 @@
             </div>
         </div>
     </div>
-    <div id="DefendModal" class="modal fade" role="dialog">
+    <div id="CodeModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Defending</h4>
+                    <h4 class="modal-title">The Executed Code</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <h6>Possible ways to mitigate this attack:</h6>
-                    <h6>1. Use escaping for transforming special symbols such as '*' to nullify their power in SQL queries</h6>
-                    <h6>2. Check for specific key words such as 'select' and 'union', if a key word is present execute a stored SQL query for avoiding using users' input</h6>
+                    <h6><span class="text text-success">sql = f"SELECT * <br> FROM db_employees <br>WHERE id = {input_id_request};"</span></h6>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -103,21 +86,47 @@
             </div>
         </div>
     </div>
-    <div id="ShowDefendSolutionModal" class="modal fade" role="dialog">
+
+
+    <div id="ShowHintNodal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
                     <p>
-                        <h6>Are you sure you want to view the defended code?</h6>
+                        <h6>Are you sure want to receive the hints?</h6>
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#DefendModal">Yes</button>
+                    <button name="confirm" class="btn btn-default" type="button" data-dismiss="modal" data-toggle="modal" data-target="#HintNodal">Yes</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="HintNodal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Hints</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <h6>Try all sorts of inputs, see what result you're getting - sometimes even <span class="text text-warning">errors</span> can provide useful insight.</h6>
+                    <hr>
+                    <h6>There're certain <span class="text text-warning"> keywords and operators</span>  in SQL that are used to <span class="text text-warning">search for any value</span> with no filter</h6>
+                    <hr>
+                    <h6>The name of the current database is <span class="text text-warning">db_employees</span></h6>
+                    <hr>
+                    <h6>In our <span class="text text-warning">Learn/In-Band</span> section, there's an example with a solution similar to this problem.</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 {% endblock content %}
