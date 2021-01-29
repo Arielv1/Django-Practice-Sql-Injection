@@ -8,13 +8,84 @@
 
 <h3>Prevent from SQL Injections</h3>
 <p> To prevent from sql injection there are few options as we talk about in <a href="{% url 'learn' %}" target="_blank">Learn main page</a>
-Here we will show you examples of how to implement  those options. </p>
+Here we will show you examples of how to implement the main options we showed you in Learn Page. </p>
 <br>
-<h5> Option 1: Use of Prepared Statements (with Parameterized Queries)</h5> <br>
-Option 2: Use of Stored Procedures<br>
-Option 3: Whitelist Input Validation<br>
-Option 4: Escaping All User-Supplied Input<br>
-Option 5: Using external applications.<br><br>
+<h4> Option 1: Use of Prepared Statements (with Parameterized Queries)</h4> <br>
+
+ <h5>    Java example: </h5>
+<p> String custname = request.getParameter("customerName");
+// Perform input validation to detect attacks
+String query = "SELECT account_balance FROM user_data WHERE user_name = ? ";
+PreparedStatement pstmt = connection.prepareStatement( query );
+pstmt.setString( 1, custname);
+ResultSet results = pstmt.executeQuery( );
+</p>
+<h5> Python example with mysql:  </h5>
+<code>
+    cursor = connection.cursor(prepared=True)
+    sql_insert_query = """ INSERT INTO Employee
+                       (id, Name, Joining_date, salary) VALUES (%s,%s,%s,%s)"""
+
+    insert_tuple_1 = (1, "Json", "2021-03-23", 9000)
+    cursor.execute(sql_insert_query, insert_tuple_1)
+    connection.commit()
+</code>
+<h4> Option 2: Use of Stored Procedures</h4> <br>
+<p> There is a Java code but as we said the stored Procedure must be defined in the database.
+    the sp_getAccountBalance is the stored Procedure.
+</p>
+<code>
+    String custname = request.getParameter("customerName");
+try {
+  CallableStatement cs = connection.prepareCall("{call sp_getAccountBalance(?)}");
+  cs.setString(1, custname);
+  ResultSet results = cs.executeQuery();
+  // … result set handling
+} catch (SQLException se) {
+  // … logging and error handling
+}
+</code>
+<h4> Option 3: Whitelist Input Validation </h4> <br>
+this is java example but easy to write in every language
+<code>
+    String tableName;
+switch(PARAM):
+  case "Value1": tableName = "fooTable";
+                 break;
+  case "Value2": tableName = "barTable";
+                 break;
+  ...
+  default      : throw new InputValidationException("unexpected value provided"
+                                                  + " for table name");
+</code>
+<h4> Option 4: Escaping All User-Supplied Input </h4> <br>
+for some databases have function for escaping.
+there is 2 examples:
+Python example:
+<code>
+    def escaping(a_string):
+    escaped = a_string.translate(str.maketrans({"=": r"\=",
+                                                "]": r"\]",
+                                                "\\": r"\\",
+                                                "^": r"\^",
+                                                ";": r"\;",
+                                                ".": r"\.",
+                                                "*": r"\["
+                                                }))
+    return escaped
+</code>
+
+<h6> Mysql example: </h6>
+<code> escaped = mysql_real_escape_string(a_string)</code>
+<h6> PostgreSQL example:</h6>
+
+<code> escaped = pg_escape_string(a_string) </code>
+
+Most of the examples took from OWASP Website.
+for more info better check this link
+<a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html#introduction" target="_blank">SQL injection Primary Defenses</a><br>
+
 <br><br><br><br><br>
+
 
 {% endblock%}

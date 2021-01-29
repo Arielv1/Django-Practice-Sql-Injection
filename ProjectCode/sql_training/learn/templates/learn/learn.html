@@ -66,23 +66,24 @@ Option 4: Escaping All User-Supplied Input<br>
 Option 5: Using external applications.<br><br>
 <h4><strong>Prepared Statements </strong></h4>
 <p> These are SQL statements that are sent to and parsed by the database server separately from any parameters.</p>
-<p> The Query sent to server before the data input. and only when the execute happens it add up to the query.
+<p> The Query sent to server before the data input sent to him, and only when the execute happens the data input will be added up to the query.
     Which means that attacker cant alter the database.
     This methods cannot used on Dynamic queries where the query using input on field names or dynamic table names.
     and sometimes can be slower compare to other approaches.</p>
+<p> This methods count as best practice which means every time you can you need to use this method!!!!!</p>
 
 <h4><strong> Stored Procedures </strong></h4>
 <p> The difference between prepared statements and stored procedures is
     that the SQL code for a stored procedure is defined and stored in the database itself, and then called from the application
-    Stored Procedures also should be check which privileges they using sometimes it can be admin rule
+    Stored Procedures also should be check which privileges they using, sometimes it can be admin privileges
     which you prefer to avoid it..</p>
 <h4><strong>Whitelist Input Validation </strong></h4>
 <p> Check the user input on specific list of options that should be valid.
-    This option is good on Dynamic Query when Prepared Statement cant be used.</p>
+    This option is good on Dynamic Query when Prepared Statement cant be used or at least less safe.</p>
 <h4><strong>Escaping All User-Supplied Input </strong></h4>
 <p> This technique should only be used as a last resort,
     This method is to escape special characters so the sql statement will not get alter by attacker
-    using special character like. ' or ".  </p>
+    using special character like:  \ ' or ".  </p>
 <h4><strong>Using external applications </strong></h4>
 <p> Just to let you know readers there is more options. like Web application firewalls.</p>
 <h4><strong> Least Privilege </strong></h4>
