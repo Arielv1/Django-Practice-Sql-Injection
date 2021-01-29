@@ -256,11 +256,10 @@ def third_problem(request):
     return render(request, 'problems/3.html', context)
 
 
-# TODO - add hints
 @login_required
 def fourth_problem(request):
     _fill_vehicle_db()
-    context = {'message': "Out of stock"}
+    context = {}
 
     cursor = connections['problems_db'].cursor()
     if request.method == 'POST':
@@ -271,6 +270,8 @@ def fourth_problem(request):
             result = cursor.fetchall()
             if result is not None and len(result) != 0:
                 context['message'] = "Exists in storage"
+            else:
+                context = {'message': "Out of stock"}
             cursor.close()
             context['correct_answer'] = manufacturer_request.lower() == 'postgres'
             if context['correct_answer']:
@@ -310,7 +311,6 @@ def fifth_problem(request):
     return render(request, 'problems/5.html', context)
 
 
-# TODO - fix hints in html
 @login_required
 def sixth_problem(request):
     _init_secret_db()

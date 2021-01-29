@@ -13,70 +13,68 @@ Here we will show you examples of how to implement the main options we showed yo
 <h4> Option 1: Use of Prepared Statements (with Parameterized Queries)</h4> <br>
 
  <h5>    Java example: </h5>
-<p> String custname = request.getParameter("customerName");
-// Perform input validation to detect attacks
-String query = "SELECT account_balance FROM user_data WHERE user_name = ? ";
-PreparedStatement pstmt = connection.prepareStatement( query );
-pstmt.setString( 1, custname);
-ResultSet results = pstmt.executeQuery( );
-</p>
+<code> String custname = request.getParameter("customerName"); <br>
+// Perform input validation to detect attacks <br>
+String query = "SELECT account_balance FROM user_data WHERE user_name = ? "; <br>
+PreparedStatement pstmt = connection.prepareStatement( query ); <br>
+pstmt.setString( 1, custname); <br>
+ResultSet results = pstmt.executeQuery( ); <br>
+</code>
 <h5> Python example with mysql:  </h5>
 <code>
-    cursor = connection.cursor(prepared=True)
-    sql_insert_query = """ INSERT INTO Employee
-                       (id, Name, Joining_date, salary) VALUES (%s,%s,%s,%s)"""
-
-    insert_tuple_1 = (1, "Json", "2021-03-23", 9000)
-    cursor.execute(sql_insert_query, insert_tuple_1)
-    connection.commit()
+    cursor = connection.cursor(prepared=True) <br>
+    sql_insert_query = """ INSERT INTO Employee <br>
+                       (id, Name, Joining_date, salary) VALUES (%s,%s,%s,%s)""" <br>
+    insert_tuple_1 = (1, "Json", "2021-03-23", 9000)<br>
+    cursor.execute(sql_insert_query, insert_tuple_1)<br>
+    connection.commit()<br>
 </code>
 <h4> Option 2: Use of Stored Procedures</h4> <br>
 <p> There is a Java code but as we said the stored Procedure must be defined in the database.
     the sp_getAccountBalance is the stored Procedure.
 </p>
 <code>
-    String custname = request.getParameter("customerName");
-try {
-  CallableStatement cs = connection.prepareCall("{call sp_getAccountBalance(?)}");
-  cs.setString(1, custname);
-  ResultSet results = cs.executeQuery();
-  // … result set handling
-} catch (SQLException se) {
-  // … logging and error handling
-}
+    String custname = request.getParameter("customerName");<br>
+try {<br>
+  CallableStatement cs = connection.prepareCall("{call sp_getAccountBalance(?)}");<br>
+  cs.setString(1, custname);<br>
+  ResultSet results = cs.executeQuery();<br>
+  // … result set handling<br>
+} catch (SQLException se) {<br>
+  // … logging and error handling<br>
+}<br>
 </code>
 <h4> Option 3: Whitelist Input Validation </h4> <br>
-this is java example but easy to write in every language
+this is java example but easy to write in every language<br>
 <code>
-    String tableName;
-switch(PARAM):
-  case "Value1": tableName = "fooTable";
-                 break;
-  case "Value2": tableName = "barTable";
-                 break;
-  ...
-  default      : throw new InputValidationException("unexpected value provided"
-                                                  + " for table name");
+    String tableName;<br>
+switch(PARAM):<br>
+  case "Value1": tableName = "fooTable";<br>
+                 break;<br>
+  case "Value2": tableName = "barTable";<br>
+                 break;<br>
+  default      : throw new InputValidationException("unexpected value provided"<br>
+                                                  + " for table name");<br>
 </code>
 <h4> Option 4: Escaping All User-Supplied Input </h4> <br>
-for some databases have function for escaping.
-there is 2 examples:
-Python example:
+<p> for some databases there is already a functions for escaping.<br>
+there is 3 examples: <br>
+
+<h6> Python example: </h6>
+</p>
 <code>
     def escaping(a_string):
-    escaped = a_string.translate(str.maketrans({"=": r"\=",
-                                                "]": r"\]",
-                                                "\\": r"\\",
-                                                "^": r"\^",
-                                                ";": r"\;",
-                                                ".": r"\.",
-                                                "*": r"\["
-                                                }))
-    return escaped
+    <p class="padd_code"> escaped = a_string.translate(str.maketrans({"=": r"\=",</p>
+    <p class="padd_code"> "]": r"\]",</p>
+    <p class="padd_code"> "\\": r"\\",</p>
+    <p class="padd_code"> "^": r"\^",</p>
+    <p class="padd_code"> ";": r"\;"</p>
+    <p class="padd_code"> }))</p>
+    return escaped<br>
 </code>
-
+<br>
 <h6> Mysql example: </h6>
-<code> escaped = mysql_real_escape_string(a_string)</code>
+<code> escaped = mysql_real_escape_string(a_string)</code><br>
 <h6> PostgreSQL example:</h6>
 
 <code> escaped = pg_escape_string(a_string) </code>
@@ -87,5 +85,9 @@ for more info better check this link
 
 <br><br><br><br><br>
 
-
+<style>
+    .padd_code {
+  margin-left: 25px;
+}
+</style>
 {% endblock%}

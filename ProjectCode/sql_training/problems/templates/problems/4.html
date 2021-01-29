@@ -35,11 +35,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Hints - needs to fix</h4>
+                    <h4 class="modal-title">Hints</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <h6>The <span class="text text-danger">information schema</span> has many uses, it will surely help you.</h6>
+                    <h6>The there is function to get the database name.</h6>
+                    <hr>
+                    <h6>Also check how you can get the chars one by one (kind of brute force attack) by analyze the response</h6>
+                    <hr>
+                    <h6>Better write a code that do the brute force attack</h6>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -82,12 +86,13 @@
             </div>
         </div>
     </div>
+    <br> <br>
 
+    {% if message %}
    <article class="media content-section">
-        <div class="article-metadata">
           <p class="mr-2"> {{ message }}</p>
-        </div>
     </article>
+    {% endif %}
 
     {% if correct_answer %}
         <div class="alert alert-success">
