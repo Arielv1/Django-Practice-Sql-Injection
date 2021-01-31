@@ -70,6 +70,9 @@ class Safe(models.Model):
     secret_pass = models.CharField(max_length=200, null=True)
     prize = models.IntegerField(null=True)
 
+    def __str__(self):
+        return f"{self.secret_pass} {self.prize}"
+
     class Meta:
         db_table = 'secret_safe'
 

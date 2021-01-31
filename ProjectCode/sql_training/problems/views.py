@@ -205,6 +205,7 @@ def second_problem(request):
             result = cursor.fetchall()
             cursor.close()
             context['result'] = result
+            print(result)
             context['correct_answer'] = len(result) == context['num_items']
             if context['correct_answer']:
                 update_answer_for_user(request.user, problem_id=2)
@@ -413,62 +414,63 @@ def seventh_problem(request):
 # TODO - separate to two stages, faux login as super-admin without update method
 @login_required
 def eighth_problem(request):
-    prize_amount = _init_safe_db()
+    #User.objects.using("problems_db").delete()
+    _init_safe_db()
     init_mockup_user_db(request.user)
     context = {'secret': Safe.objects.using("problems_db").get(id=1).prize,
-               'show_login_form:': request.COOKIES['show_login']}
+               'logged_as_admin': request.session['adminLogged']}
+
+    context['show_login_form'] = permission_flag = request.session['loginForm']
+
     cursor = connections['problems_db'].cursor()
 
-    login_page_setup = False
     if request.method == 'POST':
-        username_request = request.POST.get('username')
-        password_request = request.POST.get('password')
+
         btn_login = request.POST.get('login')
         btn_search = request.POST.get('search')
 
         if btn_search:
-            secret_pass_request = request.POST.get('secret_password')
-            sql = f"SELECT prize FROM secret_safe WHERE secret_pass LIKE '{secret_pass_request}'"
+            search_request = request.POST.get('secret_password')
+            sql = f"SELECT prize FROM secret_safe WHERE secret_pass  LIKE '{search_request}'"
             try:
                 cursor.execute(sql)
                 result = cursor.fetchall()
                 context['result'] = result
+
+                for itr in result:
+                    for val in itr:
+                        if val == context['secret'] and not context['logged_as_admin']:
+                            print("hide 2")
+                            permission_flag = True
+                            context['acquired_secret'] = permission_flag
+                            result.clear()
+                            break
+                        elif val == context['secret'] and context['logged_as_admin']:
+                            context['acquired_secret'] = True
+                            update_answer_for_user(request.user, problem_id=8)
+                            break
+
+                if permission_flag:
+                    context['show_login_form'] = True
+                    request.session['loginForm'] = True
+
             except Exception as e:
                 context['result'] = []
                 context['error'] = e
             cursor.close()
-            per_flag, permission = False, True
-            if 'secret_safe' in secret_pass_request:
-                per_flag = True
-            for itr in context['result']:
-                if itr[0] == prize_amount:
-                    per_flag = True
-                    break
-            if per_flag:
-                if request.COOKIES['autherized']:
-                    login_page_setup = True
-                else:
-                    print("has access to secret")
+
+            pass
 
         if btn_login:
-            sql = f"SELECT * FROM db_users WHERE username LIKE '{username_request}' AND password LIKE '{password_request}'"
-            try:
-                cursor.execute(sql)
-                result = cursor.fetchall()
-                context['result'] = result
-                user = User.objects.using("problems_db").all().filter(username=username_request,
-                                                                      password=password_request, role='Admin')
-                if user:
-                    request.set_cookie['autherized'] = True
-            except Exception as e:
-                context['error'] = e
+            username_request = request.POST.get('username')
+            password_request = request.POST.get('password')
+            user = User.objects.using("problems_db").all().filter(username=username_request, password=password_request, role='Admin')
 
-    response = render(request, "problems/8.html", context)
-    response.set_cookie('show_login', login_page_setup)
-    print('login_page_setup', login_page_setup)
-    print(request.COOKIES)
-    print('context\n',context)
-    return response
+            if user:
+                request.session['adminLogged'] = True
+                context['logged_as_admin'] = True
+
+    return render(request, "problems/8.html", context)
 
 
 '''@login_required
