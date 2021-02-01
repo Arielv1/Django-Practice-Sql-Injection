@@ -70,8 +70,6 @@ def problems_list(request):
 
     response.set_cookie('connection_time', datetime.datetime.now())
     response.set_cookie('cookie_ready_time', datetime.datetime.now() + datetime.timedelta(hours=1))
-    response.set_cookie('autherized', False)
-    print("in problems list setting cookies")
-    response.set_cookie('show_login', 0==1)
+    response.set_cookie('show_login', False)
 
     return response
