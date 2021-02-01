@@ -5,7 +5,109 @@
 
 {% endblock %}
 {% block content %}
-<h4>Tools for SQL Injections</h4>
-<br><br><br><br><br>
+<h4>Detection Tools for SQL Injections</h4>
+In this page i will give you a brief information on how to use sqlmap and Vega 2 free tools that can help you detect vulnerabilities of sql injections<br>
 
+<section>
+    <h3> lets start with sqlamp </h3>
+    sqlmap is one of the most popular open-source testing tools to preform sql injection.<br>
+
+    so in order to use sqlmap you need to download it :).<br>
+    and the command to test vulnerabilities is:<br>
+    <code> sqlmap -u URL</code><br>
+    The URL will work if you can pass data in the URL for example:<br>
+    <code> http://www.example.com/problems/1?id=22 </code>this will pass the variable id with value of 22<br>
+    as you can see variable come after the question mark ?<br>
+        In the process, sqlmap can ask various questions and you need to answer y (i.e. Yes) or n (i.e. No).<br>
+    Example of an basic run:<br>
+    <code> sqlmap -u http://www.example.com/problems/1?id=22</code>
+    <br><br>
+    <img src="https://miloserdov.org/wp-content/uploads/2018/06/03-7-1.jpg" width="1050">
+    <br><br>
+    as you can see we may have vulnerabilities that can be exploited with the parameter id.<br>
+    so we can learn that the website is vulnerable to sql injection.<br>
+    also in this result we can see that the database used is MySql so sqlmap ask us if we want to check on more databases.<br>
+    This is basic checks that you can do using sqlmap i will show you more things and commands that you can do:<br>
+    there is alot more then only sql injections on sqlmap :)<br>
+
+    To get a list of databases, use the --dbs option.<br>
+    For example:<br>
+    <code> sqlmap -u http://www.example.com/fproblems/1?id=22 --dbs</code><br>
+    lets say two databases were found:<br>
+    [*] information_schema<br>
+    [*] main_example<br><br>
+    If you want to get the list of tables in the main_example database. To do this, use the --tables option.<br>
+    you need to specify the database after the -D option:<br>
+    <code> sqlmap -u http://www.example.com/problems/1?id=22  -D main_example --tables</code><br>
+    To print the entire contents, use the --dump option. It can be specified along with the database,<br>
+    and then the entire database will be dumped, or you can restrict the data to one table or even one column.<br>
+    for example:<br>
+    <code> sqlmap -u http://www.example.com/problems/1?id=22  -D main_example -T users --dump</code><br>
+    <br>
+    For more info on how to use sqlmap look here: <br><br>
+    <a href="https://miloserdov.org/?p=1320" target="_blank">sqlmap usage guide</a><br>
+</section>
+<br><br>
+<section>
+
+<h2 class="step"><a id="jump-step4" class="anchor"></a>Vega</h2>
+    <p>
+Vega is also free and open-source but unlike sqlmap vega have graphical user interface.
+Vega is Vulnerability scanner and offer in 1 click alot of information.
+after scanning you will get alerts grouped by types High , Medium , Low , Info
+you need to remember not every alert is an Vulnerability it might be false-positive alert ,
+which means it is not vulnerability, but it is recommended to look on every alert to know why vega put it as alert.
+it is really easy to use and not needed a guide. but i will show you how to do a basic search.
+After installing vega , click on "Start new Scan" , Window will be opened then enter a URL and click on Next
+    </p>
+    <figure><figure class="whtGallery pad-2" id="39206120docPartGal880051" role="group"><div class="gallery-layout" style="overflow: visible; height: 449px; width: auto;">   <div class="gallery-layout-container"><figure class="gal-row gal-row-f gal-wa" data-index="0" style="background: rgb(255, 255, 255); width: 594px;"><a href="https://img.wonderhowto.com/img/original/09/30/63741893705390/0/637418937053900930.jpg" rel="nofollow" target="_blank"><img src="https://img.wonderhowto.com/img/09/30/63741893705390/0/scan-websites-for-potential-vulnerabilities-using-vega-vulnerability-scanner-kali-linux.w1456.jpg" alt="" style="width: auto; max-width: 600px; height: 443px; margin-left: 0px;"></a></figure></div>
+        <div class="white-out" style="display: none;">
+            <div style="display: none;"></div>
+        </div></div></figure></figure><aside class="whtaph-rightbox whtaph-728">
+    <aside class="whtaph rightbox" data-unit-type="rightbox"></aside></aside>
+    <p>Vega has dozens of modules designed to find a wide range of common web server vulnerabilities such as SQL, XSS, and XML injection vulnerabilities.
+        If you want to enable all of the scanner modules, make sure "Injection Modules" is checked.
+        If not, expand "Injection Modules" and select the ones you want, and deselect the ones you don't.</p>
+    <p>You could click "Next" a few times to adjust <em>Authentication Options</em> or <em>Parameters</em>,else click "Finish" to start scanning the website.</p>
+    <aside class="whtaph-rightbox whtaph-728"><aside class="whtaph rightbox" data-unit-type="rightbox"></aside></aside>
+    <figure><figure class="whtGallery pad-2" id="8931955docPartGal880053" role="group">
+        <div class="gallery-layout" style="overflow: visible; height: 448px; width: auto;">
+            <div class="gallery-layout-container"><figure class="gal-row gal-row-f gal-wa" data-index="0" style="background: rgb(255, 255, 255); width: 594px;"><a href="https://img.wonderhowto.com/img/original/99/60/63741893748311/0/637418937483119960.jpg" rel="nofollow" target="_blank"><img src="https://img.wonderhowto.com/img/99/60/63741893748311/0/scan-websites-for-potential-vulnerabilities-using-vega-vulnerability-scanner-kali-linux.w1456.jpg" alt="" style="width: auto; max-width: 600px; height: 442px; margin-left: 0px;"></a></figure>
+    </div>
+        <div class="white-out" style="display: none;">
+            <div style="display: none;"></div>
+        </div></div></figure></figure>
+
+<p>When the scan is complete, Vega will show you a summary of the alerts. Looking like this:</p>
+<aside class="whtaph-rightbox whtaph-728"><aside class="whtaph rightbox" data-unit-type="rightbox"></aside></aside>
+<figure><figure class="whtGallery pad-2" id="40845376docPartGal880057" role="group">
+    <div class="gallery-layout" style="overflow: visible; height: 390px; width: auto;">   <div class="gallery-layout-container">
+        <figure class="gal-row gal-row-f gal-wa" data-index="0" style="background: rgb(255, 255, 255); width: 514px;">
+            <a href="https://img.wonderhowto.com/img/original/12/10/63741893965390/0/637418939653901210.jpg" rel="nofollow" target="_blank"><img src="https://img.wonderhowto.com/img/12/10/63741893965390/0/scan-websites-for-potential-vulnerabilities-using-vega-vulnerability-scanner-kali-linux.w1456.jpg" alt="" style="width: auto; max-width: 520px; height: 384px; margin-left: 0px;"></a>
+        </figure>
+    </div>
+        <div class="white-out" style="display: none;">
+            <div style="display: none;"></div>
+        </div></div></figure></figure>
+
+<p>Vega does a great job explaining what each alert means, their impact on our websites, and ways to remedy the vulnerabilities.
+    It also includes useful references that may help us better understand how to deal with the vulnerabilities.</p>
+<p>Clicking on one of the alerts will display much more useful information.
+for an example:</p>
+<figure><figure class="whtGallery pad-2" id="7896575docPartGal880059" role="group"><div class="gallery-layout" style="overflow: visible; height: 389px; width: auto;">   <div class="gallery-layout-container"><figure class="gal-row gal-row-f gal-wa" data-index="0" style="background: rgb(255, 255, 255); width: 514px;"><a href="https://img.wonderhowto.com/img/original/48/51/63741894011624/0/637418940116244851.jpg" rel="nofollow" target="_blank"><img src="https://img.wonderhowto.com/img/48/51/63741894011624/0/scan-websites-for-potential-vulnerabilities-using-vega-vulnerability-scanner-kali-linux.w1456.jpg" alt="" style="width: auto; max-width: 520px; height: 383px;"></a></figure></div>
+    <div class="white-out" style="display: none;">
+        <div style="display: none;"></div>
+    </div></div></figure></figure>
+    For more Info on how to install and configure Vega you can look here:
+    <ul>
+        <li>
+            <a href="https://null-byte.wonderhowto.com/how-to/scan-websites-for-potential-vulnerabilities-using-vega-vulnerability-scanner-kali-linux-0181887/" target="_blank">Using the Vega Scanner</a><br>
+        </li>
+        <li>
+            <a href="https://subgraph.com/vega/documentation/Vega-Scanner/index.en.html" target="_blank">how-to scan-websites-for-potential-vulnerabilities-using-vega-vulnerability</a><br>
+        </li>
+    </ul>
+
+</section>
+<br><br><br><br><br>
 {% endblock%}
