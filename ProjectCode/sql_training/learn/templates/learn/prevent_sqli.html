@@ -6,83 +6,92 @@
 {% endblock %}
 {% block content %}
 
-<h3>Prevent from SQL Injections</h3>
-<p> To prevent from sql injection there are few options as we talk about in <a href="{% url 'learn' %}" target="_blank">Learn main page</a>
-Here we will show you examples of how to implement the main options we showed you in Learn Page. </p>
-<br>
-<h4> Option 1: Use of Prepared Statements (with Parameterized Queries)</h4> <br>
+<body>
+    <div>
+        <h3>Prevent from SQL Injections</h3>
+        <hr>
+    </div>
+    <div>
+        <h6>To prevent from sql injection there are few options as we talk about in <a href="{% url 'learn' %}" target="_blank">Learn main page</a>
+        Here we will show you examples of how to implement the main options we showed you in Learn Page.</h6>
+        <hr>
+    </div>
 
- <h5>    Java example: </h5>
-<code> String custname = request.getParameter("customerName"); <br>
-// Perform input validation to detect attacks <br>
-String query = "SELECT account_balance FROM user_data WHERE user_name = ? "; <br>
-PreparedStatement pstmt = connection.prepareStatement( query ); <br>
-pstmt.setString( 1, custname); <br>
-ResultSet results = pstmt.executeQuery( ); <br>
-</code>
-<h5> Python example with mysql:  </h5>
-<code>
-    cursor = connection.cursor(prepared=True) <br>
-    sql_insert_query = """ INSERT INTO Employee <br>
-                       (id, Name, Joining_date, salary) VALUES (%s,%s,%s,%s)""" <br>
-    insert_tuple_1 = (1, "Json", "2021-03-23", 9000)<br>
-    cursor.execute(sql_insert_query, insert_tuple_1)<br>
-    connection.commit()<br>
-</code>
-<h4> Option 2: Use of Stored Procedures</h4> <br>
-<p> There is a Java code but as we said the stored Procedure must be defined in the database.
-    the sp_getAccountBalance is the stored Procedure.
-</p>
-<code>
-    String custname = request.getParameter("customerName");<br>
-try {<br>
-  CallableStatement cs = connection.prepareCall("{call sp_getAccountBalance(?)}");<br>
-  cs.setString(1, custname);<br>
-  ResultSet results = cs.executeQuery();<br>
-  // … result set handling<br>
-} catch (SQLException se) {<br>
-  // … logging and error handling<br>
-}<br>
-</code>
-<h4> Option 3: Whitelist Input Validation </h4> <br>
-this is java example but easy to write in every language<br>
-<code>
-    String tableName;<br>
-switch(PARAM):<br>
-  case "Value1": tableName = "fooTable";<br>
-                 break;<br>
-  case "Value2": tableName = "barTable";<br>
-                 break;<br>
-  default      : throw new InputValidationException("unexpected value provided"<br>
-                                                  + " for table name");<br>
-</code>
-<h4> Option 4: Escaping All User-Supplied Input </h4> <br>
-<p> for some databases there is already a functions for escaping.<br>
-there is 3 examples: <br>
-
-<h6> Python example: </h6>
-</p>
-<code>
-    def escaping(a_string):
-    <p class="padd_code"> escaped = a_string.translate(str.maketrans({"=": r"\=",</p>
-    <p class="padd_code"> "]": r"\]",</p>
-    <p class="padd_code"> "\\": r"\\",</p>
-    <p class="padd_code"> "^": r"\^",</p>
-    <p class="padd_code"> ";": r"\;"</p>
-    <p class="padd_code"> }))</p>
-    return escaped<br>
-</code>
-<br>
-<h6> Mysql example: </h6>
-<code> escaped = mysql_real_escape_string(a_string)</code><br><br>
-<h6> PostgreSQL example:</h6>
-
-<code> escaped = pg_escape_string(a_string) </code><br><br>
-
-Most of the examples took from OWASP Website.
-for more info better check this link
-<a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html#introduction" target="_blank">SQL injection Primary Defenses</a><br>
-
+    <div>
+        <h4> <span class="text-warning">Option 1: Use of Prepared Statements</span> (with Parameterized Queries)</h4>
+        <div>
+            <h6>A generic SQL template is created in advance and sent to the database. Certain values are left unspecified and are labeled as "?".</h6>
+            <h6 class="text text-success">For example: INSERT INTO MyGuests VALUES(?, ?, ?)</h6>
+                As the databases parses, compiles and executes the SQL command it replaces the "?" labels with actual variables such as rows, columns, table name etc
+        </div>
+        <h5>Java example:</h5>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">String custname = request.getParameter("customerName");<br>// Perform input validation to detect attacks <br>String query = "SELECT account_balance FROM user_data WHERE user_name = ? "; <br>PreparedStatement pstmt = connection.prepareStatement( query ); <br>pstmt.setString( 1, custname); <br>ResultSet results = pstmt.executeQuery( ); <br></pre></div>
+        <h5> Python example with MySQL:</h5>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">cursor = connection.cursor(prepared=True)<br>sql_insert_query = """ INSERT INTO Employee (id, Name, Joining_date, salary)<br>                       VALUES (%s,%s,%s,%s)""" <br>insert_tuple_1 = (1, "Json", "2021-03-23", 9000)<br>cursor.execute(sql_insert_query, insert_tuple_1)<br>connection.commit()<br></pre>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h4 class="text-warning">Option 2: Use of Stored Procedures</h4>
+        <div>
+            <h6>A stored procedure is a prepared SQL code that is saved and can be used repeatedly.</h6>
+            <h6>In a situation where it's needed to write SQL queries over and over again, we'll want to save them as a stored procedure and just call them when needed.</h6>
+            <h6>It's possible pass parameters to a stored procedure, so that the stored procedure can act based on the parameter values that are passed.</h6>
+        </div>
+        <div>
+            <h5>Code Example</h5>
+             <div class="alert alert-secondary">
+                 <pre class="text-danger">String custname = request.getParameter("customerName");<br>try {<br>  CallableStatement cs = connection.prepareCall("{call sp_getAccountBalance(?)}");<br>  cs.setString(1, custname);<br>  ResultSet results = cs.executeQuery();<br>  // … result set handling<br>}catch (SQLException se) {<br>  // … logging and error handling<br>}</pre>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h4 class="text-warning">Option 3: Whitelist Input Validation</h4>
+        <div>
+            <h6>The crux of Whitelisting is limiting the actions the users can partake, thus limiting any possible input.</h6>
+            <h6>On the one hand this approach helps with dealing and mitigating against SQL injections since it's much easier to plan and prepare against,
+                on the other hand it may come at the cost of worsening the user experience.</h6>
+            <h5>Example in Java</h5>
+            <div class="alert alert-secondary">
+                <pre class="text-danger">String tableName;<br>switch(PARAM) {<br>  case "Value1":<br>      tableName = "fooTable";<br>      break;<br>  case "Value2":<br>      tableName = "barTable";<br>      break;<br>  default:<br>      throw new InputValidationException("unexpected value provided for table name");<br>}</pre>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h4 class="text-warning"> Option 4: Escaping All User-Supplied Input </h4>
+        <h6>Escaping is method of identifying specific symbols, letters or variables that are deemed harmful and modifying them in such a way that'll make them lose their functionality</h6>
+        <h6>Examples of such symbols are: <span class="text-danger">* , ;</span> and ofcourse they could also be words and statements such as <span class="text-danger">and</span> or <span class="text-danger">or</span></h6>
+        <h6>Some databases have built in functions for escaping</h6>
+        <h5> Python example: </h5>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">def escaping(a_string):
+    escaped = a_string.translate(str.maketrans({"=": r"\=",
+                                             "]": r"\]",
+                                             "\\": r"\\",
+                                             "^": r"\^",
+                                             ";": r"\;"
+                                              }))
+    return escaped</pre>
+        </div>
+        <h5> Mysql example: </h5>
+        <div class="alert alert-secondary">
+            <pre class="text-danger"> escaped = mysql_real_escape_string(a_string)</pre>
+        </div>
+         <h5> PostgreSQL example:</h5>
+        <div class="alert alert-secondary">
+            <pre class="text-danger"> escaped = pg_escape_string(a_string)</pre>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h6>Examples and information regarding SQL prevention taken from OWASP, for more details and information check</h6>
+        <a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html#introduction" target="_blank">SQL injection Primary Defenses</a><br>
+    </div>
+</body>
 <style>
     .padd_code {
   margin-left: 25px;

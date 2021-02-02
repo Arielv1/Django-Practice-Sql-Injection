@@ -9,92 +9,128 @@
 {% endblock %}
 {% block content %}
 
-<h3>What is SQL Injection</h3>
-<p>SQL Injection, also known as SQLI, is a common attack vector that uses malicious SQL code execution for backend database manipulation.</p>
-<h2>What are SQL queries</h2>
-<p>SQL is a standardized language used to access and manipulate databases to build customizable data views for each user.
-    SQL queries are used to execute commands, such as data retrieval, updates, and record removal. Different SQL elements implement these tasks, e.g.
-    , queries using the SELECT statement to retrieve data, based on user-provided parameters.</p>
-<pre>SELECT ItemName, ItemDescription
-FROM Items
-WHERE ItemNumber = ItemNumber</pre>
-<p>
-    The commands are different for each database for example:
+<body>
+    <div>
+        <h3>What is SQL Injection</h3>
+        <p>SQL Injection, also known as SQLi, is a common attack vector that uses malicious SQL code execution for backend database manipulation.</p>
+    </div>
+    <hr>
+    <div>
+        <h2>What are SQL queries</h2>
+          <p>SQL is a standardized language used to access and manipulate databases to build customizable data views for each user.
+        SQL queries are used to execute commands, such as data retrieval, updates, and record removal. Different SQL elements implement these tasks, e.g.
+        , queries using the SELECT statement to retrieve data, based on user-provided parameters.</p>
+        <div class="alert alert-secondary">
+            <pre>SELECT ItemName, ItemDescription<br>FROM Items<br>WHERE ItemNumber = ItemNumber</pre>
+        </div>
+        <p>The commands are different for each database for example:
     Using postgre database you will need to do this command to get the name of the database:Select current_database()</p>
-<p> Using MySQL database will be this command: Select database()</p>
-<p>
-    For more details regarding general SQL commands see references at the bottom of the page.
-    <br>See also:
-    <a href="https://www.sqltutorial.org/sql-cheat-sheet/" target="_blank">SQL Commands Cheat Sheet</a><br>
-</p>
+         <p> Using MySQL database will be this command: Select database()</p>
+        <p>
+        For more details regarding general SQL commands see references at the bottom of the page.
+        <br>See also:
+        <a href="https://www.sqltutorial.org/sql-cheat-sheet/" target="_blank">SQL Commands Cheat Sheet</a><br>
+        </p>
+    </div>
+    <hr>
+    <div>
+        <h2>Types of SQL Injection</h2>
+        <p> SQL Injections typically fall under three categories: In-band SQLi (Classic),
+            Blind SQL injection and Out-of-band SQL injection.<br>
+            You can classify SQL injections types based on the methods they use to access backend.
+            <br><br>For useful SQL Injection commands for various databases see:
+            <a href="https://portswigger.net/web-security/sql-injection/cheat-sheet" target="_blank">SQL Injection Cheat Sheet</a>
+        </p>
+        <h3 class="text-warning">1. In-Band SQL Injection</h3>
+        <p>The attacker uses the same channel of communication to launch their attacks and to gather their results
+
+           <br>In-band SQLi’s simplicity and efficiency make it one of the most common types of SQLi attack.
+            <br>See:
+            <a href="{% url 'inband' %}" target="_blank">Examples for in-band injections</a>
+        </p>
+        <h3 class="text-warning">2. Blind SQL Injection</h3>
+        <p> The attacker sends data payloads to the server and observes the response and behavior of the server to learn more about its structure.
+            This method is called blind SQL injection because the data is not transferred from the website database to the attacker,
+            thus the attacker cannot see information about the attack in-band
+            <br>Click the following link for:
+            <a href="{% url 'blind' %}" target="_blank">Examples for blind injections</a>
+        </p>
+
+        <h3 class="text-warning">3. Out-band SQL injection</h3>
+        <p>The attacker uses a different channel of communication to launch their attacks and to gather their results.<br>
+        This attack is less common because it depends on features being enabled on the database server </p>
+        <p> Click here for more
+            <a href="{% url 'outband' %}" target="_blank">information and examples about out-band injections</a>
+        </p>
+    </div>
+    <hr>
+    <div>
+        <h3>SQL Injection prevention and mitigation</h3>
+        <p> 1: Use of Prepared Statements (with Parameterized Queries).<br>
+            2: Use of Stored Procedures.<br>
+            3: Whitelist Input Validation.<br>
+            4: Escaping All User-Supplied Input.<br>
+            5: Using external applications.</p>
+    </div>
+    <hr>
+    <div>
+        <h4>Prepared Statements</h4>
+        <p> These are SQL statements that are sent to and parsed by the database server separately from any parameters.</p>
+        <p> The Query sent to server before the data input sent to him, and only when the execute happens the data input will be added up to the query.
+            Which means that attacker cant alter the database.
+            This methods cannot used on Dynamic queries where the query using input on field names or dynamic table names.
+            and sometimes can be slower compare to other approaches.</p>
+        <p> This methods is regarded as best practice, it's recommended you use it whenever possible</p>
+    </div>
+    <hr>
+    <div>
+        <h4>Stored Procedures</h4>
+        <p> The difference between prepared statements and stored procedures is
+            that the SQL code for a stored procedure is defined and stored in the database itself, and then called from the application.<br>
+            Stored Procedures should also check which privileges the users are using, on certain scenarios a user can have admin privileges which is best avoided.</p>
+    </div>
+    <hr>
+    <div>
+        <h4>Whitelist Input Validation</h4>
+        <p>A technique which limits the options of the users and as a result limits the possible potential of SQL injections.<br>
+        Whitelisting is used in this situation to check the users' input from a pre-defined allowed input list - for example checking which
+        item was selected from a list.</p>
+    </div>
+    <hr>
+    <div>
+        <h4>Escaping All User-Supplied Input</h4>
+        <p>A method that alters and modifies the users' input in order to 'escape' from potentially dangerous key codes,
+            label and variables such as <span class="text-danger"> \ '</span> or <span class="text-danger">*</span></p>
+    </div>
+    <hr>
+    <div>
+        <h4>Least Privilege</h4>
+        <p>
+            A defensive technique in which the users are grouped and are given privileges which SQL commends that can perform
+            based upon in which group they're part of.<br>
+
+        </p>
+    </div>
+    <hr>
+    <div>
+        <h4>Using external applications </h4>
+        <p> Just to let you dear readers know that there are more options, like Web application firewalls.</p>
+    </div>
+    <hr>
+    <div>
+        <h4>More About Prevention of SQL Injections</h4>
+        <a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet" target="_blank">OWASP - SQL Injection Prevention</a>
+        <br><br>
+        <h4>More About SQL Injections</h4>
+        <a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">OWASP - SQL Injections</a>
+    </div>
+</body>
 
 
-<h2>Types of SQL Injection</h2>
-<p> SQL Injections typically fall under three categories: In-band SQLi (Classic),
-    Blind SQL injection and Out-of-band SQL injection.<br>
-    You can classify SQL injections types based on the methods they use to access backend.
-    <br><br>For useful SQL Injection commands for various databases see:
-    <a href="https://portswigger.net/web-security/sql-injection/cheat-sheet" target="_blank">SQL Injection Cheat Sheet</a>
-</p>
-<h3><strong>1. In-Band SQL Injection</strong></h3>
-<p>The attacker uses the same channel of communication to launch their attacks and to gather their results.
-   <br>In-band SQLi’s simplicity and efficiency make it one of the most common types of SQLi attack.
-    <br>See:
-    <a href="{% url 'inband' %}" target="_blank">Examples for in-band injections</a>
-</p>
 
-<h3><strong>2. Blind SQL Injection</strong></h3>
-<p> The attacker sends data payloads to the server and observes the response and behavior of the server to learn more about its structure.
-    This method is called blind SQL injection because the data is not transferred from the website database to the attacker,
-    thus the attacker cannot see information about the attack in-band
-    <br>Click the following link for:
-    <a href="{% url 'blind' %}" target="_blank">Examples for blind injections</a>
-</p>
 
-<h3><strong>3. Out-band SQL injection</strong></h3>
-<p>The attacker uses a different channel of communication to launch their attacks and to gather their results.<br>
-This attack is less common because it depends on features being enabled on the database server </p>
-<p> Click here for more
-    <a href="{% url 'outband' %}" target="_blank">information and examples about out-band injections</a>
-</p>
-<h3><strong>SQL Injection prevention and mitigation</strong></h3>
 
-Option 1: Use of Prepared Statements (with Parameterized Queries)<br>
-Option 2: Use of Stored Procedures<br>
-Option 3: Whitelist Input Validation<br>
-Option 4: Escaping All User-Supplied Input<br>
-Option 5: Using external applications.<br><br>
-<h4><strong>Prepared Statements </strong></h4>
-<p> These are SQL statements that are sent to and parsed by the database server separately from any parameters.</p>
-<p> The Query sent to server before the data input sent to him, and only when the execute happens the data input will be added up to the query.
-    Which means that attacker cant alter the database.
-    This methods cannot used on Dynamic queries where the query using input on field names or dynamic table names.
-    and sometimes can be slower compare to other approaches.</p>
-<p> This methods count as best practice which means every time you can you need to use this method!!!!!</p>
 
-<h4><strong> Stored Procedures </strong></h4>
-<p> The difference between prepared statements and stored procedures is
-    that the SQL code for a stored procedure is defined and stored in the database itself, and then called from the application
-    Stored Procedures also should be check which privileges they using, sometimes it can be admin privileges
-    which you prefer to avoid it..</p>
-<h4><strong>Whitelist Input Validation </strong></h4>
-<p> Check the user input on specific list of options that should be valid.
-    This option is good on Dynamic Query when Prepared Statement cant be used or at least less safe.</p>
-<h4><strong>Escaping All User-Supplied Input </strong></h4>
-<p> This technique should only be used as a last resort,
-    This method is to escape special characters so the sql statement will not get alter by attacker
-    using special character like:  \ ' or ".  </p>
-<h4><strong>Using external applications </strong></h4>
-<p> Just to let you know readers there is more options. like Web application firewalls.</p>
-<h4><strong> Least Privilege </strong></h4>
-<p> Each database accounts should have least Privileges
-    Make sure what the accounts need to do and let them only those right access
-    Good thing is to create databases group with specific access to the things you want to let the user do</p>
-<h4>More About Prevention of SQL Injections</h4>
-<a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet" target="_blank">OWASP - SQL Injection Prevention</a>
-
-<h4>More About SQL Injections</h4>
-<a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">OWASP - SQL Injections</a>
 
 {% endblock content %}
 
