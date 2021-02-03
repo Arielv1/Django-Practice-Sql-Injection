@@ -9,7 +9,7 @@ def init_dummy_db():
         DummyUser('user1', 'password1'),
         DummyUser('user2', 'password2')
     ]
-    # TODO - change to learning_db
+
     for item in items:
         item.save(using='problems_db')
 

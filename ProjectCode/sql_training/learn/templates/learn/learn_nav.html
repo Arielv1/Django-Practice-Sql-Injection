@@ -1,36 +1,34 @@
 
 
 <body>
-<nav id="gradsecdondarynavbar" class="navbar navbar-expand-sm bg-info navbar-dark fixed-top second-nav">
-    <div class="container">
+    <nav style="margin-top:25px" id="gradsecdondarynavbar" class="navbar navbar-expand-sm bg-info navbar-dark fixed-top second-nav">
+        <div class="container">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar2">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a href="{% url 'learn' %}" class="navbar-brand">Learn</a>
-        <div class="navbar-collapse collapse" id="navbar2">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'inband' %}">In-Band</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'blind' %}">Blind</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'outband' %}">Out-Band</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'prevent_sqli' %}">Prevention</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'tools' %}">Detection Tools</a>
-                </li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a href="{% url 'learn' %}" class="navbar-brand">Learn</a>
+            <div class="navbar-collapse collapse" id="navbar2">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'inband' %}">In-Band</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blind' %}">Blind</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'outband' %}">Out-Band</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'prevent_sqli' %}">Prevention</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tools' %}">Detection Tools</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
-<br>
-<br>
+    </nav>
 </body>
 
 <style>

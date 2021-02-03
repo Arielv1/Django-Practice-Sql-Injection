@@ -15,14 +15,8 @@ from collections import namedtuple
 from django.contrib.auth.decorators import login_required
 from users.models import UsersProblems, SqlProblem
 
-# TODO put each problem his answer here
-# TODO - delete these
-answers = ["something", "this is_the_answer", "second answer", "3answer", "4answer", "5answer", "6answer"]
-problems_names = ["no problem", "Problem1", "Problem2", "Problem3", "Problem4", "Problem5", "Problem6"]
+
 global_logger = logging.getLogger(__name__)
-
-
-# TODO add solutions.txt file
 
 
 def escaping(a_string):
@@ -52,7 +46,6 @@ def _init_sqlproblems_db():
         SqlProblem(7, name="Problem7", score=7, type="IN_BAND", difficult='HARD'),
         SqlProblem(8, name="Problem8", score=8, type="IN_BAND", difficult='HARD'),
         SqlProblem(9, name="Problem9", score=9, type="IN_BAND", difficult='HARD'),
-
     ]
     for problem in problems:
         problem.save()
@@ -349,7 +342,6 @@ def sixth_problem(request):
     Change 'User-Agent' to E'%\%' and forward the packet.
 '''
 
-# TODO - find way to show success message - context doesnt render
 @login_required
 def seventh_problem(request):
     context = {
@@ -411,7 +403,6 @@ def seventh_problem(request):
 '''
 
 
-# TODO - separate to two stages, faux login as super-admin without update method
 @login_required
 def eighth_problem(request):
     #User.objects.using("problems_db").delete()
@@ -471,41 +462,6 @@ def eighth_problem(request):
                 context['logged_as_admin'] = True
 
     return render(request, "problems/8.html", context)
-
-
-'''@login_required
-def eighth_problem(request):
-    prize_amount = _init_safe_db()
-    init_mockup_user_db(request.user)
-    cursor = connections['problems_db'].cursor()
-    context = {'secret': Safe.objects.using("problems_db").get(id=1).prize}
-    if request.method == 'POST':
-        secret_pass_request = request.POST.get('secret_password')
-        sql = f"SELECT prize FROM secret_safe WHERE secret_pass LIKE '{secret_pass_request}'"
-        try:
-            cursor.execute(sql)
-            result = cursor.fetchall()
-            context['result'] = result
-        except Exception as e:
-            context['result'] = []
-            context['error'] = e
-        cursor.close()
-        per_flag, permission = False, True
-        if 'secret_safe' in secret_pass_request:
-            per_flag = True
-        for itr in context['result']:
-            if itr[0] == prize_amount:
-                per_flag = True
-                break
-        if per_flag:
-            permission = User.objects.using("problems_db").get(pk=request.user.id).role == 'Admin'
-            context['result'] = [] if permission is False else context['result']
-            context['error'] = "You Don't Have Permission To View This Data" if permission is False else None
-            context['secret_result'] = None if permission is False else prize_amount == context['secret']
-            if context['secret_result']:
-                update_answer_for_user(request.user, problem_id=8)
-    return render(request, 'problems/8.html', context)
-'''
 
 '''
     Solution:

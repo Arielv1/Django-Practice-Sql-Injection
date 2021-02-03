@@ -1,15 +1,11 @@
 {% extends "home/base.html" %}
 {% load static %}
-
-
 {% block header %}
-
 {% include 'learn/learn_nav.html' %}
-
 {% endblock %}
 {% block content %}
 
-<body>
+<body style="margin-top:25px">
     <div>
         <h3>What is SQL Injection</h3>
         <p>SQL Injection, also known as SQLi, is a common attack vector that uses malicious SQL code execution for backend database manipulation.</p>
@@ -125,11 +121,6 @@
         <a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">OWASP - SQL Injections</a>
     </div>
 </body>
-
-
-
-
-
 
 
 {% endblock content %}

