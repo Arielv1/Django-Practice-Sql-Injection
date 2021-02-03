@@ -8,7 +8,4 @@ urlpatterns = [
     path('outband', views.outband, name='outband'),
     path('tools', views.tools, name='tools'),
     path('prevent_sqli', views.prevent_sqli, name='prevent_sqli'),
-
-    path('check', views.check, name='check'),
-
 ]

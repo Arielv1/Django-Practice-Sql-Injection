@@ -148,7 +148,7 @@ def first_problem(request):
     }
 
     # cursor = connections['problems_db_read_user'].cursor()
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
 
     if request.method == 'POST':
         input_id_request = request.POST.get("input_id")
@@ -179,7 +179,7 @@ def first_problem(request):
 def second_problem(request):
     _fill_employee_database()
     key_words = ['%', 'union', 'and', 'or', '*']
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
 
     context = {'num_items': len(Employee.objects.using('problems_db').all())}
 
@@ -226,7 +226,7 @@ def third_problem(request):
     context = {
         'num_items': len(ClothingStore.objects.using('problems_db').all()),
     }
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
 
     if request.method == 'POST':
         item_name_request = escaping(request.POST.get("item_name"))
@@ -255,7 +255,7 @@ def fourth_problem(request):
     _fill_vehicle_db()
     context = {}
 
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
     if request.method == 'POST':
         manufacturer_request = request.POST.get("input_manufacturer")
         sql = f"SELECT * FROM db_vehicles WHERE manufacturer LIKE '{manufacturer_request}'"
@@ -284,7 +284,7 @@ def fourth_problem(request):
 @login_required
 def fifth_problem(request):
     _fill_clothing_store_db()
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
 
     context = {
         'items': ClothingItem.get_values(),
@@ -313,7 +313,7 @@ def sixth_problem(request):
         'secret_value': BlindSecret.objects.using("problems_db").filter(id=1)[0].secret
     }
 
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
     if request.method == 'POST':
         first_name_request = request.POST.get("input_first_name")
         sql = f"SELECT * FROM db_employees WHERE first_name LIKE '{first_name_request}';"
@@ -347,7 +347,7 @@ def seventh_problem(request):
     context = {
         'num_items': len(Employee.objects.using('problems_db').all())
     }
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
     if request.method == 'POST':
         first_name_request = request.POST.get("input_first_name")
         user_agent_input = request.headers["User-Agent"]
@@ -413,7 +413,7 @@ def eighth_problem(request):
 
     context['show_login_form'] = permission_flag = request.session['loginForm']
 
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
 
     if request.method == 'POST':
 
@@ -455,7 +455,7 @@ def eighth_problem(request):
         if btn_login:
             username_request = request.POST.get('username')
             password_request = request.POST.get('password')
-            user = User.objects.using("problems_db").all().filter(username=username_request, password=password_request, role='Admin')
+            user = User.objects.using("problems_db_read_user").all().filter(username=username_request, password=password_request, role='Admin')
 
             if user:
                 request.session['adminLogged'] = True
@@ -479,7 +479,7 @@ def ninth_problem(request):
     context = {'baked_cookie': request.COOKIES['connection_time'] > request.COOKIES['cookie_ready_time'],
                'options': _get_car_manufacturers(Vehicle.objects.using("problems_db").all()),
                'num_of_items': len(Vehicle.objects.using("problems_db").all())}
-    cursor = connections['problems_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
     if request.method == 'POST':
         manufacturer_request = escaping(request.POST.get('dropdown_option'))
         min_range_request = escaping(request.POST.get('min_input'))

@@ -11,8 +11,10 @@ from django.template.response import TemplateResponse
 global_logger = logging.getLogger(__name__)
 
 
-def _reset_sqlproblems_db():
-    SqlProblem.objects.all().delete()
+def _reset_sqlproblems_db(user):
+    user_problems = UsersProblems.objects.filter(user=user)
+    user_problems.delete()
+
 
 def _init_sqlproblems_db():
     global_logger.error("init_sqlproblems_db called")
@@ -51,8 +53,7 @@ def profile(request):
 
     if request.method == 'POST':
         print("reset called")
-        _reset_sqlproblems_db()
-        _init_sqlproblems_db()
+        _reset_sqlproblems_db(request.user.profile)
 
     user_problems = UsersProblems.objects.filter(user=request.user.profile)
     print(user_problems)
@@ -62,7 +63,7 @@ def profile(request):
     for problem in all_problems:
         if problem.name not in [user_problem.problem.name for user_problem in user_problems]:
             rest_of_problems.append(problem)
-    result = get_solved_of_difficult(request.user.profile)
+    result = get_profile_progress(request.user.profile)
     all_solved = result[0] + result[1] + result[2]
     context = {
         'user_problems': user_problems,
@@ -71,6 +72,7 @@ def profile(request):
         'easy_solved': result[0],
         'medium_solved': result[1],
         'hard_solved': result[2],
+        'score_gained': result[3],
         'all_solved': all_solved,
 
     }
@@ -101,13 +103,15 @@ def edit_profile(request):
     return render(request, 'users/edit_profile.html', context)
 
 
-def get_solved_of_difficult(user):
+def get_profile_progress(user):
     global_logger.error(" get_solved_of_difficult called ")
     user_problems = UsersProblems.objects.filter(user=user)
     hard_solved = 0
     med_solved = 0
     easy_solved = 0
+    score = 0
     for problem in user_problems:
+        score += problem.problem.score
         if problem.problem.difficult == "Hard":
             hard_solved += 1
         elif problem.problem.difficult == "MEDIUM":
@@ -115,7 +119,7 @@ def get_solved_of_difficult(user):
         else:
             easy_solved += 1
 
-    result = [easy_solved, med_solved, hard_solved]
+    result = [easy_solved, med_solved, hard_solved,score]
     return result
 
 

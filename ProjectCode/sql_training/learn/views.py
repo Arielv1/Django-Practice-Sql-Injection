@@ -22,7 +22,7 @@ def learn(request):
 def inband(request):
     init_dummy_db()
     context = {'num_items': len(DummyUser.objects.using('problems_db').all())}
-    cursor = connections['learning_db'].cursor()
+    cursor = connections['problems_db_read_user'].cursor()
     if request.method == 'POST' and 'btnForm1' in request.POST:
         input1_request = request.POST.get("input1")
         input2_request = request.POST.get("input2")
@@ -61,7 +61,3 @@ def tools(request):
 
 def prevent_sqli(request):
     return render(request, 'learn/prevent_sqli.html')
-
-
-def check(request):
-    return render(request, 'learn/check.html')
