@@ -5,99 +5,92 @@
 {% block content %}
 
 <body>
-    <h3>In-Band (Classic) SQL Injections</h3>
-    <p>
-        In-Band, also known as 'Classic' SQL Injection are performed
+    <div>
+        <h3>In-Band (Classic) SQL Injections</h3>
+        <hr>
+        <h6> In-Band, also known as 'Classic' SQL Injection are performed
         by running SQL commands on the same interface and communication
-        that is used to interact with the database.
-        <br><br>
+        that is used to interact with the database.</h6>
+
+        <h6>
         For example, assume a login interface where the user needs to enter
         his username and a password - The attack will use those two text fields
-        for his injection attempts.
-    </p>
-    <hr class="divider">
-    <p>
-        <h4>1. Base Example</h4>
-
-        Let's continue with our example of login:
-        <br>Assume we have two attributes
-        <span class="text text-success">username</span> and <span class="text text-success">password</span>.
-        <br>Lets further assume that we know the table that user data is stored <span class="text text-success">db_users</span>.
-        <br>If we make another outrages assumption that we know how the SQL commands looks like:
-        <br><br>
-        <div class="alert alert-primary">
-            <pre>SELECT * FROM db_users WHERE first_name LIKE input1 and password LIKE input2</pre>
+        for his injection attempts.</h6>
+    </div>
+    <hr>
+    <div>
+         <h4 class="text-warning">1. Base Example</h4>
+         <h6>Let's continue with our example of login:<br>Assume we have two attributes
+             <span class="text-success">username</span> and <span class="text-success">password</span>.</h6>
+         <h6>Lets further assume that we know the table that user data is stored <span class="text text-success">db_users</span>.
+        <br>If we make another outrages assumption that we know how the SQL commands looks like:</h6>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">SELECT * FROM db_users WHERE first_name LIKE input1 and password LIKE input2</pre>
         </div>
-
-        Where <span class="text text-success">input1</span> and <span class="text text-success">input2</span> are the identifiers of both text fields.
-
-        <br><br>The initial approach should be trying to abuse the commands of the SQL
+        <h6>Where <span class="text-success">input1</span> and <span class="text text-success">input2</span> are the identifiers of both text fields.</h6>
+        <h6>The initial approach should be trying to abuse the commands of the SQL
         languages against it - for this example we can abuse the wildcard: <span class="text text-success">%</span>
         If behind the scenes there's no input checking or validation simply
-        entering <span class="text text-success">%</span> for both input fields will return all the users in the database.
-        <br>
-        <p>
-            <form method="POST">
-                  {% csrf_token %}
-                <p>
-                    <h6>Given the table <span class="text text-success">db_users</span>, please retrieve all of the users</h6>
-                    <label>Username:</label>
-                    <input type="text" name="input1">
-                    <br>
-                    <label>Password:</label>
-                    <input type="text" name="input2">
-                </p>
+        entering <span class="text text-success">%</span> for both input fields will return all the users in the database.</h6>
+        <form method="POST">
+              {% csrf_token %}
+                <h6>Given the table <span class="text text-success">db_users</span>, retrieve all of the users:</h6>
+                <label>Username:</label>
+                <input type="text" name="input1">
+                <br>
+                <label>Password:</label>
+                <input style="margin-left:3px" type="text" name="input2">
+                <br>
                 <button name="btnForm1" class="btn btn-primary btn-sm" type="submit">Search</button>
-                <br><br>
-                <a href="https://www.w3schools.com/sql/sql_wildcards.asp">See more info and tutorials about wildcards</a>
-            </form>
 
-        {% if num_resulted_items == num_items %}
-            <br>
-            <div class="alert alert-success">
-                <pre>Success! You've Got The Right Answer!</pre>
-            </div>
-        {% endif %}
+        </form>
+        <a href="https://www.w3schools.com/sql/sql_wildcards.asp">See more info and tutorials about wildcards</a>
+    </div>
+    {% if num_resulted_items == num_items %}
+        <br>
+        <div class="alert alert-success">
+            <pre>Success! You've Got The Right Answer!</pre>
+        </div>
+    {% endif %}
 
-        {% if error1 %}
-            <br>
-            <div class="alert alert-danger">
-                <pre>{{error1}}</pre>
-            </div>
-        {% endif %}
+    {% if error1 %}
+        <br>
+        <div class="alert alert-danger">
+            <pre>{{error1}}</pre>
+        </div>
+    {% endif %}
 
-        {% if result1 %}
-            <table class="table table-warning">
-                <tr>
-                    <th class="font-weight-bold text-primary">Username</th>
-                    <th class="font-weight-bold text-primary">Password</th>
-                </tr>
+    {% if result1 %}
+        <table class="table table-warning">
+            <tr>
+                <th class="font-weight-bold text-primary">Username</th>
+                <th class="font-weight-bold text-primary">Password</th>
+            </tr>
 
-                {% for entry in result1 %}
-                 <tr>
-                     <td class="text-danger">{{entry.0}}</td>
-                     <td class="text-danger">{{entry.1}}</td>
-                 </tr>
-                {% endfor %}
-            </table>
-        {% endif %}
+            {% for entry in result1 %}
+             <tr>
+                 <td class="text-danger">{{entry.0}}</td>
+                 <td class="text-danger">{{entry.1}}</td>
+             </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
     <hr class="divider">
     <div>
-        <h4>2. Unions And Comments</h4>
-    <h6>Another approach to solve the same problem is using the <span class="text text-success">UNION</span> function:</h6>
+        <h4 class="text-warning">2. Unions And Comments</h4>
+        <h6>Another approach to solve the same problem is using the <span class="text text-success">UNION</span> function:</h6>
         <h6>We'll insert dummy data in the input fields and use the <span class="text text-success">UNION</span> keyword in the
         <span class="text text-success">passwords</span> input field.</h6>
         <h6>Note: Whether the dummy data we insert actually exists in the database or not is irrelevant.
         <br>So the injection will look like this:</h6>
 
-        <div class="alert alert-primary">
-            <pre>Username: a</pre>
-            <pre>Password: b' UNION SELECT * from db_users ;--</pre>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">Username: a<br>Password: b' UNION SELECT * from db_users ;--</pre>
         </div>
 
         <h6>This will be translated as the following SQL query:</h6>
-        <div class="alert alert-primary">
-            <pre class="text-bold">SELECT * FROM db_users <br>WHERE username LIKE 'a' and password LIKE 'b' UNION SELECT * from db_users ;--'</pre>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">SELECT * FROM db_users <br>WHERE username LIKE 'a' and password LIKE 'b' UNION SELECT * from db_users ;--'</pre>
         </div>
         <h6>What's happening here? We're inserting dummy data  <span class="text text-success">a, b</span> into the input fields then run another
         SQL query through <span class="text text-success">UNION</span> to get all the User entries from the database.</h6>
@@ -107,58 +100,54 @@
     </div>
     <hr class="divider">
     <div>
-        <h4>3. Information & Table Schema</h4>
-        <p>
-            <h6>One of the most powerful tools we have in our disposal is the <span class="text text-success">INFORMATION_SCHEMA</span> command:
-            In general, the <span class="text text-success">INFORMATION_SCHEMA</span> provides access to database metadata, information about the database server such as the
-            name of a database or table, the data type of a column, or access privileges.</h6>
+        <h4 class="text-warning">3. Information & Table Schema</h4>
+        <h6>One of the most powerful tools we have in our disposal is the <span class="text text-success">INFORMATION_SCHEMA</span> command:
+        In general, the <span class="text text-success">INFORMATION_SCHEMA</span> provides access to database metadata, information about the database server such as the
+        name of a database or table, the data type of a column, or access privileges.</h6>
+
+        <h6>Some of the more useful commands of the information schema for our purposes are finding the
+        tables names in the database and the column name of a database.</h6>
+
+        <h6>Let's look at how to get all the tables that are available to the public, to everyone:</h6>
+        <div class="alert alert-secondary">
+            <pre class="text-danger"> SELECT table_name FROM information_schema.tables WHERE table_schema LIKE 'public' ORDER BY table_schema,table_name;</pre>
+        </div>
+        <h6>Note: We could change the condition of which tables are returned if we change the
+        <span class="text text-success">LIKE</span> condition to the wildcard notation <span class="text text-success">%</span>.
+        In this case we'll many more tables that include metadata of the database, that are not always useful.</h6>
+        <h6>Another useful command of the <span class="text text-success">INFORMATION_SCHEMA</span> is getting the columns name
+            of a table:</h6>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">SELECT column_name FROM information_schema.columns WHERE table_name='TABLE_NAME'</pre>
+        </div>
+        <h6>Note: Just like before, we could add a wildcard notations not use a
+        <span class="text text-success">WHERE</span> condition at all and get all column names of all the tables.</h6>
+        <h6>Try these commands here:</h6>
+
+        <form method="POST">
+              {% csrf_token %}
+            <input type="text" name="input3">
+            <button name="btnForm2" class="btn btn-primary btn-sm" type="submit">Search</button>
             <br>
-            <h6>Some of the more useful commands of the information schema for our purposes are finding the
-            tables names in the database and the column name of a database.</h6>
+        </form>
+
+        {% if error2 %}
             <br>
-            <h6>Let's look at how to get all the tables that are available to the public, to everyone:</h6>
-            <div class="alert alert-primary">
-                <pre class="text-bold"> SELECT table_name FROM information_schema.tables WHERE table_schema LIKE 'public' ORDER BY table_schema,table_name;</pre>
+            <div class="alert alert-danger">
+                <pre>{{error2}}</pre>
             </div>
-            <h6>Note: We could change the condition of which tables are returned if we change the
-            <span class="text text-success">LIKE</span> condition to the wildcard notation <span class="text text-success">%</span>.
-            In this case we'll many more tables that include metadata of the database, that are not always useful.</h6>
-            <br>
-            <h6>Another useful command of the <span class="text text-success">INFORMATION_SCHEMA</span> is getting the columns name
-                of a table:</h6>
-            <div class="alert alert-primary">
-                <pre class="text-bold">SELECT column_name FROM information_schema.columns WHERE table_name='TABLE_NAME'</pre>
-            </div>
-            <h6>Note: Just like before, we could add a wildcard notations not use a
-            <span class="text text-success">WHERE</span> condition at all and get all column names of all the tables.</h6>
-            <br>
-            <h6>Try these commands here:</h6>
+        {% endif %}
 
-            <form method="POST">
-                  {% csrf_token %}
-                <input type="text" name="input3">
-                <button name="btnForm2" class="btn btn-primary btn-sm" type="submit">Search</button>
-                <br>
-            </form>
-
-            {% if error2 %}
-                <br>
-                <div class="alert alert-danger">
-                    <pre>{{error2}}</pre>
-                </div>
-            {% endif %}
-
-            {% if result2 %}
-                <table class="table table-warning">
-                    {% for entry in result2 %}
-                     <tr>
-                         <td class="text-danger">{{entry.0}}</td>
-                         <td class="text-danger">{{entry.1}}</td>
-                     </tr>
-                    {% endfor %}
-                </table>
-            {% endif %}
-        </p>
+        {% if result2 %}
+            <table class="table table-warning">
+                {% for entry in result2 %}
+                 <tr>
+                     <td class="text-danger">{{entry.0}}</td>
+                     <td class="text-danger">{{entry.1}}</td>
+                 </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
     </div>
 </body>
 {% endblock%}

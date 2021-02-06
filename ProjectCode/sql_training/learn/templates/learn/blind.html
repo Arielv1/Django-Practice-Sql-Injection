@@ -5,65 +5,55 @@
 
 {% endblock %}
 {% block content %}
-<h3>Blind SQL Injections</h3>
+<body>
+    <h3>Blind SQL Injections</h3>
+    <hr>
+    <h6>It is recommended to skim over the overview of what blind SQL Injection is in the base 'Learn' page.</h6>
+    <h6>Blind Sql Injection come handy when websites return no output data. or at least not a normal one.<br>
+        Instead the output is a generic message or value to let the user know if an action was successful or not.
+        It boils downs to either True of False for either the query returned a valid result or not.</h6>
+    <hr>
+    <h4 class="text-warning">Examples</h4>
+    <h6> Lets view a simple SQL query:</h6>
+    <div class="alert alert-secondary">
+        <pre class="text-danger">Select streets from cities where city like '{user_input}'</pre>
+    </div>
 
-<p>
-    It is recommended to skim over the overview of what blind SQL Injection is in the base 'Learn' page.
-    <br><br>
-    Blind Sql Injection come handy when websites return no output data. or at least not a normal one.<br>
-    Instead the output is a generic message or value to let the user know if an action was successful or not.
-    It boils downs to either True of False for either the query returned a valid result or not<br>
-</p>
-<h4>Example</h4>
-
-<h6> Lets view a simple SQL query:</h6>
-<div class="alert alert-primary">
-    <pre>Select streets from cities where city like '{user_input}'</pre>
-</div>
-
-<p> A response from website is can be: <br>
-    There are streets in the city - True, or there aren't streets in this city - False, with the given input
-    <br>
+    <h6>A response from website is can be:</h6>
+    <h6>There are streets in the city - True, or there aren't streets in this city - False, with the given input
     For our example lets use the city of Tel-Aviv and lets assume that it contains no streets at all.
-    If we'll look at a possible input:
-    <span class="text text-success">Tel Aviv' or '1'='1</span>
-    The query will be translated as:
-</p>
+    If we'll look at a possible input: <span class="text-success">Tel Aviv' or '1'='1</span> The query will be translated as:</h6>
 
-<div class="alert alert-primary">
-    <pre>Select streets from cities where city = 'Tel Aviv' or '1'='1'</pre>
-</div>
+    <div class="alert alert-secondary">
+        <pre class="text-danger">SELECT streets FROM cities WHERE city = 'Tel Aviv' OR '1'='1'</pre>
+    </div>
+    <h6>Since this query use the <span class="text-success">'1'='1'</span> logic, it will always yield a 'True' result.</h6>
+    <h6> In this case the website could respond with a generic message of 'There're street by that name.' -
+        That's means the website vulnerable to sql injection and for blind sql injection specifically.<br>
+        blind sql injection in this example is the way to attack.</h6>
 
-<p>
-    Since this querry use the <span class="text text-success">'1'='1'</span> logic, it will always yield a 'True' result.
-    <br>
-    In this case the website could respond with a generic message of 'There're street by that name.' -
-    That's means the website vulnerable to sql injection and for blind sql injection specifically.<br>
-    blind sql injection in this example is the way to attack.
-</p>
-<p>
-    This example is <span class="text text-success">Content-based</span> Blind SQL injection because the attacker knows the answer of the database
-    is based on the response content of the website (True/False type messages).
-</p>
-    There's another type of Blind sql Injection called <span class="text text-success">Time-based</span> -
-    the attacker tries to make a query using a command that makes a delay if the query return True value or vice versa.<br>
-    Lets view an example:
-</p>
-<div class="alert alert-primary">
-    <pre>1 UNION SELECT IF(SUBSTRING(user_password,1,1) = CHAR(50),
-BENCHMARK(5000000,ENCODE('MSG','by 5 seconds')),null)
-FROM users WHERE user_id = 1;</pre>
-</div>
+    <h6>This example is <span class="text-success">Content-based</span> Blind SQL injection because the attacker knows the answer of the database
+        is based on the response content of the website (True/False type messages).</h6>
 
-<p>
-    If the database response takes too long, we may expect that the first character of the users'
-    password with user_id = 1 is the character ‘2’.
-    <br>
-    Using a Substring with <span class="text text-success">BENCHMARK</span> (time delay command) and
-    <span class="text text-primary">IF</span> (to do the checks) gives the attacker option
-    to guess or brute force with a nice script every user password in this example.
-    <br>
-</p>
-<a href="https://owasp.org/www-community/attacks/Blind_SQL_Injection">More about Blind SQL Injections</a>
+    <h6>There's another type of Blind sql Injection called <span class="text-success">Time-based</span> -
+        the attacker tries to make a query using a command that makes a delay if the query return True value or vice versa.<br>
+        Lets view an example:</h6>
+
+    <div class="alert alert-secondary">
+        <pre class="text-danger">1 UNION SELECT IF(SUBSTRING(user_password,1,1) = CHAR(50),<br>BENCHMARK(5000000,ENCODE('MSG','by 5 seconds')),null)<br>FROM users WHERE user_id = 1;</pre>
+    </div>
+
+    <p>
+        If the database response takes too long, we may expect that the first character of the users'
+        password with user_id = 1 is the character ‘2’.
+        <br>
+        Using a Substring with <span class="text text-success">BENCHMARK</span> (time delay command) and
+        <span class="text text-primary">IF</span> (to do the checks) gives the attacker option
+        to guess or brute force with a nice script every user password in this example.
+        <br>
+    </p>
+    <a href="https://owasp.org/www-community/attacks/Blind_SQL_Injection">More about Blind SQL Injections</a>
+
+</body>
 
 {% endblock%}
