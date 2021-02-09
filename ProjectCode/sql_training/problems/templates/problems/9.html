@@ -9,35 +9,33 @@
 
     {% if not baked_cookie %}
         <strong>
-            <h6>Were you trying to access the problem?<br>
-            Sorry it's on a cookie break - check again in an hour.</h6>
+            <span>Were you trying to access the problem?<br>
+            Sorry it's on a cookie break - check again in an hour.</span>
         </strong>
-
-
-        </div>
-    </div>
     {% else %}
             <form class="dropdown" id="drop_down_form" method="POST">
             {% csrf_token %}
-
-            <h6>Using any means necessary, retrieve the entire store catalog.
-            <br>Be careful, there's some escaping involved.</h6>
-
-            <hr class="divider">
-
-            <select name="dropdown_option" class="form-control">
-                 {% for option in options %}
-                     {{option}}
-                    <option value="{{option}}">{{option}}</option>
-                 {% endfor %}
-            </select>
-            <br>
-            <h6></h6>
-            <h6>Price Range</h6>
-            <input class="margin" type="text" placeholder="Enter Minimum Price Here" name="min_input">
-                -
-            <input class="margin" type="text" placeholder="Enter Maximum Price Here" name="max_input">
-            <button class="btn btn-primary" type="submit">Search</button>
+                <div>
+                     <h6>Using any means necessary, retrieve the entire store catalog.
+                      <br>Be careful, there's some escaping involved.</h6>
+                </div>
+                <hr class="divider">
+                <div>
+                    <select name="dropdown_option" class="form-control">
+                     {% for option in options %}
+                         {{option}}
+                        <option value="{{option}}">{{option}}</option>
+                     {% endfor %}
+                     </select>
+                </div>
+                <br>
+                <div>
+                     <h6>Price Range</h6>
+                    <input class="margin" type="text" placeholder="Enter Minimum Price Here" name="min_input">
+                        -
+                    <input class="margin" type="text" placeholder="Enter Maximum Price Here" name="max_input">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
             </form>
 
             {% if approve %}
@@ -48,20 +46,25 @@
              {% endif %}
 
             {% if result %}
-                <table class="table">
-                    <tr>
+                <table class="table table-striped">
+                    <thead class="text-center">
+                      <tr>
                         <th class="font-weight-bold text-primary">Price</th>
                         <th class="font-weight-bold text-primary">Num of accidents</th>
                         <th class="font-weight-bold text-primary">Km</th>
-                    </tr>
+                      </tr>
+                    </thead>
 
-                    {% for value in result %}
-                    <tr>
-                        <td class="text-danger">{{value.0}}</td>
-                        <td class="text-danger">{{value.1}}</td>
-                        <td class="text-danger">{{value.2}}</td>
-                    </tr>
-                    {% endfor %}
+                    <tbody class="text-center">
+                        {% for value in result %}
+                            <tr>
+                                <td class="text-danger">{{value.0}}</td>
+                                <td class="text-danger">{{value.1}}</td>
+                                <td class="text-danger">{{value.2}}</td>
+                            </tr>
+                         {% endfor %}
+                    </tbody>
+
                 </table>
             {% endif %}
     {% endif %}

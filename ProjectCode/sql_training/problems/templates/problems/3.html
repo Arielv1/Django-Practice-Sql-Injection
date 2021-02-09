@@ -109,22 +109,25 @@
     {% endif %}
 
     {% if result %}
-         <table class="table">
-                <tr>
+         <table class="table  table-striped">
+             <thead>
+                  <tr>
                     <th class="font-weight-bold text-primary">Barcode</th>
                     <th class="font-weight-bold text-primary">Item Name</th>
                     <th class="font-weight-bold text-primary">Manufacturer</th>
                     <th class="font-weight-bold text-primary">Price</th>
                 </tr>
-
-            {% for value in result %}
-             <tr>
-                 <td class="text-danger">{{value.0}}</td>
-                 <td class="text-danger">{{value.1}}</td>
-                 <td class="text-danger">{{value.2}}</td>
-                 <td class="text-danger">{{value.3}}</td>
-             </tr>
-            {% endfor %}
+             </thead>
+             <tbody>
+                  {% for value in result %}
+                 <tr>
+                     <td class="text-danger">{{value.0}}</td>
+                     <td class="text-danger">{{value.1}}</td>
+                     <td class="text-danger">{{value.2}}</td>
+                     <td class="text-danger">{{value.3}}</td>
+                 </tr>
+                {% endfor %}
+             </tbody>
          </table>
     {% endif %}
 

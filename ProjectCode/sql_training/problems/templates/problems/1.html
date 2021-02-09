@@ -36,20 +36,23 @@
     {% endif %}
 
     {% if result %}
-        <table class="table">
-            <tr>
-                <th class="font-weight-bold text-primary">ID</th>
-                <th class="font-weight-bold text-primary">First Name</th>
-                <th class="font-weight-bold text-primary">Last Name</th>
-            </tr>
-
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th class="font-weight-bold text-primary">ID</th>
+                    <th class="font-weight-bold text-primary">First Name</th>
+                    <th class="font-weight-bold text-primary">Last Name</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
             {% for value in result %}
-            <tr>
-                <td class="text-danger">{{value.0}}</td>
-                <td class="text-danger">{{value.1}}</td>
-                <td class="text-danger">{{value.2}}</td>
-            </tr>
+               <tr>
+                    <td class="text-danger">{{value.0}}</td>
+                    <td class="text-danger">{{value.1}}</td>
+                    <td class="text-danger">{{value.2}}</td>
+                </tr>
             {% endfor %}
+            </tbody>
         </table>
     {% endif %}
 

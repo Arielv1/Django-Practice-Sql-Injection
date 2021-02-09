@@ -92,22 +92,27 @@
               <strong>Success!</strong> You've Got The Right Answer!
             </div>
         {% endif %}
-        <table class="table">
-            <tr>
-                <th class="font-weight-bold text-primary">Barcode</th>
-                <th class="font-weight-bold text-primary">Item Name</th>
-                <th class="font-weight-bold text-primary">Manufacturer</th>
-                <th class="font-weight-bold text-primary">Price</th>
-            </tr>
+        <table class="table table-striped">
+            <thead class="text-center">
+                <tr>
+                    <th class="font-weight-bold text-primary">Barcode</th>
+                    <th class="font-weight-bold text-primary">Item Name</th>
+                    <th class="font-weight-bold text-primary">Manufacturer</th>
+                    <th class="font-weight-bold text-primary">Price</th>
+                </tr>
+            </thead>
 
-            {% for value in result %}
-            <tr>
-                <td class="text-danger">{{value.0}}</td>
-                <td class="text-danger">{{value.1}}</td>
-                <td class="text-danger">{{value.2}}</td>
-                <td class="text-danger">{{value.3}}$</td>
-            </tr>
-            {% endfor %}
+            <tbody>
+                {% for value in result %}
+                <tr class="text-center">
+                    <td class="text-danger">{{value.0}}</td>
+                    <td class="text-danger">{{value.1}}</td>
+                    <td class="text-danger">{{value.2}}</td>
+                    <td class="text-danger">{{value.3}}$</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
         </table>
     {% endif %}
 

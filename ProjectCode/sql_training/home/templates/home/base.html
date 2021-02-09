@@ -34,6 +34,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'learn' %}">Learn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact_us' %}">Contact Us</a></li>
                 </ul>
                 <ul class="navbar-nav mr-auto">
                     {% if user.is_authenticated %}
@@ -48,6 +49,7 @@
                 </ul>
             </div>
             </div>
+
         </nav>
         <div class="problem_description container">
         {% block problem_description %}{% endblock %}
@@ -69,16 +71,18 @@
                   {% endif %}
                   {% block content %}{% endblock %}
                 </div>
-                  {% comment %}{% endcomment %}
+
               </div>
           </main>
       </div>
+       {% comment %}
         <footer id="fixed-footer">
             <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
               <a class="mx-3" role="button" href="{% url 'about' %}">About</a>
               <a class="mx-3" role="button" href="{% url 'contact_us' %}">Contact Us</a>
           </div>
         </footer>
+          {% endcomment %}
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

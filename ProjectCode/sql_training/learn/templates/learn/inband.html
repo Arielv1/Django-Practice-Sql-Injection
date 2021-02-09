@@ -61,18 +61,22 @@
     {% endif %}
 
     {% if result1 %}
-        <table class="table table-warning">
-            <tr>
-                <th class="font-weight-bold text-primary">Username</th>
-                <th class="font-weight-bold text-primary">Password</th>
-            </tr>
+        <table class="table table-striped">
+            <thead class="text-center">
+                <tr>
+                    <th class="font-weight-bold text-primary">Username</th>
+                    <th class="font-weight-bold text-primary">Password</th>
+                </tr>
+            </thead>
 
-            {% for entry in result1 %}
-             <tr>
-                 <td class="text-danger">{{entry.0}}</td>
-                 <td class="text-danger">{{entry.1}}</td>
-             </tr>
+            <tbody>
+                {% for entry in result1 %}
+                 <tr class="text-center">
+                     <td class="text-danger">{{entry.0}}</td>
+                     <td class="text-danger">{{entry.1}}</td>
+                 </tr>
             {% endfor %}
+            </tbody>
         </table>
     {% endif %}
     <hr class="divider">
