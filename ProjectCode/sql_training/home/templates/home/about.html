@@ -1,21 +1,38 @@
 {% extends "home/base.html" %}
 {% block content %}
-    picture of PAI
-<h2> Welcome Developers and Attackers :) </h2>
-<p> This website made by Michael Hamami And Ariel Vainshtein as part of a graduate final project
-    in software engineering at afeka college</p>
-    ?? guided by Roi Zimon ... more info ???
-<p> PAI main goal is to teach developers to perform sql injection attacks as well as ways to defend
-    against them.
-    When you guys need to think how to exploit website you need to think like attacker this can improve your ideas
-    how to defense against attackers.</p>
+
+<body>
+    <br>
+    <div>
+        <div>
+            <h2>Welcome to PAI - Protection Against Injection</h2>
+        </div>
+        <hr>
+        <div>
+            <h6>This website is all about SQL Injections - what they are, how to perform them, ways to detect and methods to mitigate them.</h6>
+            <h6>You'll be able to <a href="{% url 'learn' %}">Learn<a/> about 3 main types of SQL Injections - <a href="{% url 'inband' %}">InBand</a> <a href="{% url 'outband' %}">OutBand</a> and <a href="{% url 'blind' %}">Blind<a/> SQL injections</h6>
+            <h6>After registering and creating an account you'll be able to practice your knowledge about SQL and SQL injections
+            by solving our problems with ask of your to perform SQL injections in a controlled environment.
+            </h6>
+            <h6>We believe that the best way to learn about SQL injections and how to defend against them in particular is to actually perform the attack yourself - by doing so
+            you gain knowledge about how the attack actually works which makes it easier to know to defend against it.</h6>
+        </div>
+        <br><br><br><br>
+        <div class="alert alert-primary">
+            <h5>This is the thesis and final project of <span class="text-success">Michael Hamami</span> and <span class="text-success">Ariel Vainshtien</span>, Software Engineering degree students of <span class="text-success">Afeka College of Engineering</span></h5>
+        </div>
+    </div>
+    <div>
 
 
+    </div>
+</body>
 
+{% comment %}
     {% include 'home/our_team.html' %}
 
 <h5><strong> <a href="{% url 'contact_us' %}">Contact us</a> if you have any idea for the website or report for a bug</strong></h5>
-
+{% endcomment %}
 {% endblock content %}
 
 
