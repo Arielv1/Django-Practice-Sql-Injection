@@ -3,8 +3,7 @@ from django.shortcuts import render
 from .models import DummyUser
 
 
-# Create your views here.
-def init_dummy_db():
+def _init_dummy_db():
     items = [
         DummyUser('user1', 'password1'),
         DummyUser('user2', 'password2')
@@ -13,14 +12,13 @@ def init_dummy_db():
     for item in items:
         item.save(using='problems_db')
 
+
 def learn(request):
-    # DummyUser.objects.all().delete()
-    init_dummy_db()
+    _init_dummy_db()
     return render(request, 'learn/learn.html')
 
 
 def inband(request):
-    init_dummy_db()
     context = {'num_items': len(DummyUser.objects.using('problems_db').all())}
     cursor = connections['problems_db_read_user'].cursor()
     if request.method == 'POST' and 'btnForm1' in request.POST:

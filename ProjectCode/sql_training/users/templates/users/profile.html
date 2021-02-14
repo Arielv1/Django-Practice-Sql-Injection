@@ -26,7 +26,7 @@
   </p>
 </div>
      <table id="sortTable" class="display">
-          <thead>
+          <thead class="text-center">
             <tr>
               <th class="data-mdb-sort=true">Difficult</th>
               <th class="th-sm">Name</th>
@@ -34,7 +34,7 @@
               <th class="th-sm">Completed</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="text-center">
           {% for problem in user_problems %}
             <tr>
               <td>{{problem.problem.difficult}}</td>

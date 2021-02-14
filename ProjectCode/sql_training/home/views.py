@@ -6,9 +6,7 @@ from .models import Difficulty, InjectionTypes, ProblemsContentTable
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail, BadHeaderError
-import logging, datetime
-
-global_logger = logging.getLogger(__name__)
+import  datetime
 
 
 def home(request):
@@ -20,7 +18,6 @@ def about(request):
 
 
 def contact_us(request):
-    global_logger.error(" contact_us view called ")
     if request.method == 'POST':
         name = request.POST.get('name', '')
         user_email = request.POST.get('email', '')
@@ -44,17 +41,17 @@ def contact_us(request):
     return render(request, 'home/contact_us.html')
 
 
-def fill_references():
+def _fill_problem_references():
     items = [
-        ProblemsContentTable(1, Difficulty.EASY.value, 'problems/1', 'First Problem', 'In Band - Introduction'),
-        ProblemsContentTable(2, Difficulty.EASY.value, 'problems/2', 'Second Problem', 'In Band - Escaping'),
-        ProblemsContentTable(3, Difficulty.MEDIUM.value, 'problems/3', 'Third Problem', 'In Band'),
-        ProblemsContentTable(4, Difficulty.MEDIUM.value, 'problems/4', 'Fourth Problem', 'Blind'),
-        ProblemsContentTable(5, Difficulty.MEDIUM.value, 'problems/5', 'Fifth Problem', 'Out Band'),
-        ProblemsContentTable(6, Difficulty.HARD.value, 'problems/6', 'Sixth Problem', 'Blind'),
-        ProblemsContentTable(7, Difficulty.HARD.value, 'problems/7', 'Seventh Problem', 'Classic'),
-        ProblemsContentTable(8, Difficulty.HARD.value, 'problems/8', 'Eighth Problem', 'In Band'),
-        ProblemsContentTable(9, Difficulty.HARD.value, 'problems/9', 'Ninth Problem', 'TBD'),
+        ProblemsContentTable(1, Difficulty.EASY.value, 'problems/1', 'InBand - Introduction', 'InBand'),
+        ProblemsContentTable(2, Difficulty.EASY.value, 'problems/2', 'InBand - Partial Escaping', 'InBand'),
+        ProblemsContentTable(3, Difficulty.MEDIUM.value, 'problems/3', 'InBand - Complete Problem', 'InBand'),
+        ProblemsContentTable(4, Difficulty.MEDIUM.value, 'problems/4', 'Blind Injection', 'Blind'),
+        ProblemsContentTable(5, Difficulty.MEDIUM.value, 'problems/5', 'OutBand Injection', 'OutBand'),
+        ProblemsContentTable(6, Difficulty.HARD.value, 'problems/6', 'Blind - Crack The Safe', 'Blind'),
+        ProblemsContentTable(7, Difficulty.HARD.value, 'problems/7', 'Blind - User Agents', 'Blind'),
+        ProblemsContentTable(8, Difficulty.HARD.value, 'problems/8', 'InBand - Privilege Bypass', 'InBand'),
+        ProblemsContentTable(9, Difficulty.HARD.value, 'problems/9', 'Combined - Cookies', 'OutBand + InBand'),
     ]
     for data in items:
         data.save()
@@ -63,7 +60,7 @@ def fill_references():
 
 @login_required
 def problems_list(request):
-    context = {'problem_list': fill_references()}
+    context = {'problem_list': _fill_problem_references()}
     request.session['loginForm'] = False
     request.session['adminLogged'] = False
     response = render(request, "home/problems.html", context)

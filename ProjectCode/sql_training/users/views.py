@@ -1,14 +1,9 @@
-import logging
-
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import SqlProblem, UsersProblems, Profile
 from django.contrib.auth.forms import PasswordChangeForm
-from django.template.response import TemplateResponse
-global_logger = logging.getLogger(__name__)
 
 
 def _reset_sqlproblems_db(user):
@@ -17,17 +12,16 @@ def _reset_sqlproblems_db(user):
 
 
 def _init_sqlproblems_db():
-    global_logger.error("init_sqlproblems_db called")
     problems = [
-        SqlProblem(1, name="Problem1", score=1, type="IN_BAND", difficult='EASY'),
-        SqlProblem(2, name="Problem2", score=2, type="IN_BAND", difficult='EASY'),
-        SqlProblem(3, name="Problem3", score=3, type="IN_BAND", difficult='EASY'),
-        SqlProblem(4, name="Problem4", score=4, type="BLIND", difficult='MEDIUM'),
-        SqlProblem(5, name="Problem5", score=5, type="OUT_BAND", difficult='MEDIUM'),
-        SqlProblem(6, name="Problem6", score=6, type="BLIND", difficult='HARD'),
-        SqlProblem(7, name="Problem7", score=7, type="IN_BAND", difficult='HARD'),
-        SqlProblem(8, name="Problem8", score=8, type="IN_BAND", difficult='HARD'),
-        SqlProblem(9, name="Problem9", score=9, type="IN_BAND", difficult='HARD'),
+        SqlProblem(1, name="1. InBand - Introduction", score=1, type="InBand", difficult='EASY'),
+        SqlProblem(2, name="2. InBand - Partial Escaping", score=2, type="InBand", difficult='EASY'),
+        SqlProblem(3, name="3. InBand - Complete Problem", score=3, type="InBand", difficult='EASY'),
+        SqlProblem(4, name="4. Blind Injection", score=4, type="Blind", difficult='MEDIUM'),
+        SqlProblem(5, name="5. OutBand Injection", score=5, type="OutBand", difficult='MEDIUM'),
+        SqlProblem(6, name="6. Blind - Crack The Safe", score=6, type="Blind", difficult='HARD'),
+        SqlProblem(7, name="7. Blind - User Agents", score=7, type="Blind", difficult='HARD'),
+        SqlProblem(8, name="8. InBand - Privilege Bypass", score=8, type="InBand", difficult='HARD'),
+        SqlProblem(9, name="9. Combined - Cookies", score=9, type="	OutBand + InBand", difficult='HARD'),
 
     ]
     for problem in problems:
@@ -49,8 +43,6 @@ def register(request):
 
 @login_required
 def profile(request):
-    global_logger.error(" profile view called ")
-
     if request.method == 'POST':
         print("reset called")
         _reset_sqlproblems_db(request.user.profile)
@@ -82,15 +74,13 @@ def profile(request):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        # instance=request.user fill the fields with the user data
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES,
                                          instance=request.user.profile)
-
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, f'Your account has been been updated')
+            messages.success(request, f'Your account details have been updated')
             return redirect('profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
@@ -104,7 +94,6 @@ def edit_profile(request):
 
 
 def get_profile_progress(user):
-    global_logger.error(" get_solved_of_difficult called ")
     user_problems = UsersProblems.objects.filter(user=user)
     hard_solved = 0
     med_solved = 0
@@ -118,16 +107,12 @@ def get_profile_progress(user):
             med_solved += 1
         else:
             easy_solved += 1
-
     result = [easy_solved, med_solved, hard_solved,score]
     return result
 
 
 @login_required
-def change_password(request,
-                    password_change_form=PasswordChangeForm):
-    logger = logging.getLogger(__name__)
-    logger.error("change_password called :")
+def change_password(request, password_change_form=PasswordChangeForm):
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():

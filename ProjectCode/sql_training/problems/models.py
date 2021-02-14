@@ -2,13 +2,6 @@ from django.db import models
 from enum import Enum
 
 
-# Create your models here.
-class CheckProblems(models.Model):
-    username = models.CharField(max_length=200, null=True)
-    problemnumber = models.CharField(max_length=200, null=True)
-    date_created = models.DateTimeField(auto_now=True)
-
-
 class Employee(models.Model):
     id = models.BigIntegerField(primary_key=True, unique=True, default=0, null=False)
     first_name = models.CharField(max_length=200, null=True)
@@ -85,6 +78,7 @@ class User(models.Model):
 
     def __str__(self):
         return f"{self.username} {self.email} {self.password} {self.role}\n"
+
     class Meta:
         db_table = 'db_users'
 
