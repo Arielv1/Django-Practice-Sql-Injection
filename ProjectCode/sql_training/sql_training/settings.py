@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'problems.apps.ProblemsConfig',
     'learn.apps.LearnConfig',
     'crispy_forms',
-    'sslserver'
+    'sslserver',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
