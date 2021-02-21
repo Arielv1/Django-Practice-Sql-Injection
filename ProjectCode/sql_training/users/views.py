@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import SqlProblem, UsersProblems, Profile
 from django.contrib.auth.forms import PasswordChangeForm
+from django.utils import timezone
 
 
 def _reset_sqlproblems_db(user):
@@ -116,6 +117,9 @@ def change_password(request, password_change_form=PasswordChangeForm):
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
+            profile = Profile.objects.get(user=request.user)
+            profile.password_changed = timezone.now()
+            profile.save()
             form.save()
             messages.success(request, f'The password has been changed successfully')
             return redirect('profile')

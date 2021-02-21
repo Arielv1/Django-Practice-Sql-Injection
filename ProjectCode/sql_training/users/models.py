@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
+from django.utils import timezone
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default_profile_pic.png', upload_to='profile_pics')
+    password_changed = models.DateTimeField(default=timezone.now)
     sqlproblems = models.ManyToManyField('SqlProblem', through='UsersProblems')
 
     def __str__(self):
