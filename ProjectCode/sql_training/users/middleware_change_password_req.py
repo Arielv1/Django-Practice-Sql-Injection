@@ -2,7 +2,7 @@ from .models import Profile
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.conf import settings
+from datetime import timedelta
 
 
 class ChangePasswordCheck:
@@ -32,7 +32,7 @@ class ChangePasswordCheck:
                         profile = Profile.objects.get(user=request.user)
                         if profile:
                             print(profile.password_changed)
-                            timeToExpire = settings.TimeToExpire
+                            timeToExpire = timedelta(seconds=60)
                             LastPassword_Changed = profile.password_changed
                             now_timestamp = timezone.now()
 
