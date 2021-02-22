@@ -148,7 +148,6 @@ def second_problem(request):
             result = cursor.fetchall()
             cursor.close()
             context['result'] = result
-            print(result)
             context['correct_answer'] = len(result) == context['num_items']
             if context['correct_answer']:
                 _update_answer_for_user(request.user, problem_id=2)
@@ -187,8 +186,6 @@ def third_problem(request):
             sql = f"SELECT * FROM db_clothing_shop WHERE item_name LIKE 'a'"
             cursor.execute(sql)
             context['error'] = e
-            print(e)
-        print(sql)
         result = cursor.fetchall()
         cursor.close()
         context['result'] = result
@@ -272,7 +269,6 @@ def sixth_problem(request):
             result = cursor.fetchall()
             context['result'] = result
             if result is not None and len(result) != 0:
-                print("found")
                 context['message'] = "There is Employee With This Name"
             else:
                 context['message'] = "No Employee With This Name"
@@ -310,7 +306,6 @@ def seventh_problem(request):
             context['correct_answer'] = len(result) == context['num_items']
             if context['correct_answer']:
                 _update_answer_for_user(request.user, problem_id=7)
-            print(context['correct_answer'])
         except Exception as e:
             context['error'] = e
     return render(request, 'problems/7.html', context)
@@ -362,7 +357,6 @@ def eighth_problem(request):
                 for itr in result:
                     for val in itr:
                         if val == context['secret'] and not context['logged_as_admin']:
-                            print("hide 2")
                             permission_flag = True
                             context['acquired_secret'] = permission_flag
                             result.clear()

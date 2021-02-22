@@ -32,18 +32,17 @@ class ChangePasswordCheck:
                         profile = Profile.objects.get(user=request.user)
                         if profile:
                             print(profile.password_changed)
-                            timeToExpire = timedelta(seconds=60)
-                            LastPassword_Changed = profile.password_changed
+                            next_change_time = timedelta(seconds=3600)
+                            last_change_time = profile.password_changed
                             now_timestamp = timezone.now()
 
-                            print(now_timestamp > LastPassword_Changed + timeToExpire)
-                            if now_timestamp > LastPassword_Changed + timeToExpire:
+                            print(now_timestamp > next_change_time + last_change_time)
+                            if now_timestamp > next_change_time + last_change_time:
                                 messages.success(request,
                                                  f'Please Change the password the time for this password expired')
                                 return redirect('change_password')
 
-                            print("timeToExpire: {} , now timestamp: {} , LastPassword Changed: {}".format(timeToExpire,
-                                                                                                           now_timestamp,
-                                                                                                           LastPassword_Changed))
+                            print("timeToExpire: {} , now timestamp: {} , LastPassword Changed: {}".format(next_change_time,
+                                                                                                           now_timestamp,                                                                                   last_change_time))
                 except Exception as e:
                     print(e)

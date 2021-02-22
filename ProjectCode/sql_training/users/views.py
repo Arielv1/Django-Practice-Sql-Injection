@@ -45,13 +45,10 @@ def register(request):
 @login_required
 def profile(request):
     if request.method == 'POST':
-        print("reset called")
         _reset_sqlproblems_db(request.user.profile)
 
     user_problems = UsersProblems.objects.filter(user=request.user.profile)
-    print(user_problems)
     all_problems = SqlProblem.objects.all()
-    print(all_problems)
     rest_of_problems = []
     for problem in all_problems:
         if problem.name not in [user_problem.problem.name for user_problem in user_problems]:
