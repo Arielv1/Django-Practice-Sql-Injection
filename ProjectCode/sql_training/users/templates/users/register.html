@@ -17,6 +17,9 @@
                 Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Login</a>
             </small>
         </div>
+        <div class="social">
+            <a href="{% url 'social:begin' 'google-oauth2' %}">Sign in with Google </a>
+        </div>
     </div>
 {% endblock content %}
 #mb=margin bottom , pt=padding top
