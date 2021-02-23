@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'learn.apps.LearnConfig',
     'crispy_forms',
     'sslserver',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -177,6 +178,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'cyberprojectdjango@gmail.com'
 EMAIL_HOST_PASSWORD = 'xdiedympvrlowcni'
+
 
 # Google sign up Settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '941393807189-f3c8veghn07f4squdgkkf33iidde6qa0.apps.googleusercontent.com'

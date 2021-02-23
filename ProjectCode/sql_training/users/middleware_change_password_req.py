@@ -24,6 +24,10 @@ class ChangePasswordCheck:
         EXEMPT_URLS = [
             r'logout',
             r'change_password',
+            r'password_reset',
+            r'password_resetdone',
+            r'resetdone',
+
         ]
         if request.user.is_authenticated:
             if path not in EXEMPT_URLS:

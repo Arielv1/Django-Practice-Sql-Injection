@@ -1,9 +1,16 @@
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.template.response import TemplateResponse
+from django.urls import reverse, reverse_lazy
+from django.views.decorators.csrf import csrf_protect
+from pylint.checkers.typecheck import _
+
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import SqlProblem, UsersProblems, Profile
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.utils import timezone
 
 
@@ -127,3 +134,45 @@ def change_password(request, password_change_form=PasswordChangeForm):
         'title': 'Password change',
     }
     return render(request, 'users/change_password.html', context)
+
+@csrf_protect
+def reset_password(request, is_admin_site=False,
+                   template_name='users/password_reset_form.html',
+                   email_template_name='users/password_reset_email_to_user.html',
+                   subject_template_name='registration/password_reset_subject.txt',
+                   password_reset_form=PasswordResetForm,
+                   token_generator=default_token_generator,
+                   success_url=reverse_lazy('password_reset_done'),
+                   from_email=None,
+                   current_app=None,
+                   extra_context=None,
+                   html_email_template_name=None):
+    if request.method == "POST":
+        form = password_reset_form(request.POST)
+        if form.is_valid():
+            opts = {
+                'domain_override': '127.0.0.1:8000',
+                'use_https': request.is_secure(),
+                'token_generator': default_token_generator,
+                'from_email': from_email,
+                'email_template_name': email_template_name,
+                'subject_template_name': subject_template_name,
+                'request': request,
+                'html_email_template_name': html_email_template_name,
+            }
+            if is_admin_site:
+                opts = dict(opts, domain_override='127.0.0.1:8000')
+            form.save(**opts)
+            return redirect('password_reset_done')
+    else:
+        form = password_reset_form()
+    context = {
+        'form': form,
+    }
+    if extra_context is not None:
+        context.update(extra_context)
+
+    if current_app is not None:
+        request.current_app = current_app
+
+    return TemplateResponse(request, template_name, context)
