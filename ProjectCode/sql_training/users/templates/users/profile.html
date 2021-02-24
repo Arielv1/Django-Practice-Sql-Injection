@@ -2,61 +2,64 @@
 {% load static %}
 {% block content %}
 
-<br><br><br><br>
+<body>
+    <br><br>
 
-<div class="content-section">
-  <div class="media">
-    <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-    <div class="media-body">
-      <h2 class="account-heading">{{ user.username }}</h2>
-      <p class="text-secondary">{{ user.email }}</p>
-      <a href="{% url 'edit_profile' %}" class="btn btn-outline-info waves-effect">Edit Profile</a>
+    <div class="content-section">
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.username }}</h2>
+          <p class="text-secondary">{{ user.email }}</p>
+          <a href="{% url 'edit_profile' %}" class="btn btn-outline-info waves-effect">Edit Profile</a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<br>
-<div id="problems-solved" class="col-sm-12">
-  <p><span class="badge badge-info">{{all_solved}}/9 Solved</span>&nbsp;-&nbsp;
-      <span class="badge badge-success"> Easy&nbsp;{{easy_solved}}</span>
-      <span class="badge badge-warning"> Medium&nbsp;{{medium_solved}}</span>
-      <span class="badge badge-danger"> Hard&nbsp;{{hard_solved}}</span>
-      <span class="badge badge-light"> Score&nbsp;{{score_gained}}</span>
+    <br>
+    <div id="problems-solved" class="col-sm-12">
+      <p><span class="badge badge-info">{{all_solved}}/9 Solved</span>&nbsp;-&nbsp;
+          <span class="badge badge-success"> Easy&nbsp;{{easy_solved}}</span>
+          <span class="badge badge-warning"> Medium&nbsp;{{medium_solved}}</span>
+          <span class="badge badge-danger"> Hard&nbsp;{{hard_solved}}</span>
+          <span class="badge badge-light"> Score&nbsp;{{score_gained}}</span>
 
-  </p>
-</div>
-     <table id="sortTable" class="display">
-          <thead class="text-center">
-            <tr>
-              <th class="data-mdb-sort=true">Difficult</th>
-              <th class="th-sm">Name</th>
-              <th class="th-sm">Type</th>
-              <th class="th-sm">Completed</th>
-            </tr>
-          </thead>
-          <tbody class="text-center">
-          {% for problem in user_problems %}
-            <tr>
-              <td>{{problem.problem.difficult}}</td>
-              <td>{{problem.problem.name}}</td>
-              <td>{{problem.problem.type}}</td>
-               <td>Yes</td>
-            </tr>
-          {% endfor %}
-          {% for problem in rest_of_problems %}
-            <tr>
-              <td>{{problem.difficult}}</td>
-              <td>{{problem.name}}</td>
-              <td>{{problem.type}}</td>
-               <td>No</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-<form method="POST">
-    {% csrf_token %}
-   <button class="btn btn-danger btn-block" type="submit">Reset Progress</button>
-</form>
+      </p>
+    </div>
+         <table id="sortTable" class="display">
+              <thead class="text-center">
+                <tr>
+                  <th class="data-mdb-sort=true">Difficult</th>
+                  <th class="th-sm">Name</th>
+                  <th class="th-sm">Type</th>
+                  <th class="th-sm">Completed</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+              {% for problem in user_problems %}
+                <tr>
+                  <td>{{problem.problem.difficult}}</td>
+                  <td>{{problem.problem.name}}</td>
+                  <td>{{problem.problem.type}}</td>
+                   <td>Yes</td>
+                </tr>
+              {% endfor %}
+              {% for problem in rest_of_problems %}
+                <tr>
+                  <td>{{problem.difficult}}</td>
+                  <td>{{problem.name}}</td>
+                  <td>{{problem.type}}</td>
+                   <td>No</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+    <form method="POST">
+        {% csrf_token %}
+       <button class="btn btn-danger btn-block" type="submit">Reset Progress</button>
+    </form>
+
+</body>
 
 <!--                JS              -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

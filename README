@@ -12,6 +12,8 @@ pip install django-filter
 pip install django-bootstrap3
 pip install django-bootstrap4
 pip install django-sslserver
+pip install django-extensions
+pip install pylint
 pip install user_agent
 
 After cloning the project, open terminal:
